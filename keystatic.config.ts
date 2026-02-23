@@ -58,7 +58,7 @@ export default config({
           defaultDescription: fields.text({ label: 'Descrizione Default', multiline: true }),
         }, { label: 'SEO' }),
         form: fields.object({
-          formspreeId: fields.text({ label: 'Formspree ID' }),
+          web3formsKey: fields.text({ label: 'Web3Forms Access Key' }),
         }, { label: 'Form Contatti' }),
         legal: fields.object({
           piva: fields.text({ label: 'Partita IVA' }),
