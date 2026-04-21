@@ -13,6 +13,13 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
+// ────────────────────────────────────────────────────────────────────────────
+// CUSTOM CURSOR TOGGLE
+// Set to `false` to disable the custom cursor effect site-wide.
+// Native cursor + no dot, in a single switch.
+const CUSTOM_CURSOR = true;
+// ────────────────────────────────────────────────────────────────────────────
+
 const fullTitle = title
   ? `${title}${settings.seo?.titleSuffix || ''}`
   : settings.companyName;
@@ -53,7 +60,7 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
 ---
 
 <!doctype html>
-<html lang="it">
+<html lang="it" data-cursor-fx={CUSTOM_CURSOR ? 'on' : 'off'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -106,10 +113,12 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
       <span class="coupon-brand">REAL GOES VIRAL</span>
     </div>
 
-    <!-- Custom cursor -->
-    <div id="cursor-dot" class="cursor-dot" aria-hidden="true">
-      <span class="label"></span>
-    </div>
+    <!-- Custom cursor (toggle via CUSTOM_CURSOR constant above) -->
+    {CUSTOM_CURSOR && (
+      <div id="cursor-dot" class="cursor-dot" aria-hidden="true">
+        <span class="label"></span>
+      </div>
+    )}
 
     <Header />
     <main id="main-content" class="flex-grow">
@@ -118,43 +127,56 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
     <Footer />
 
     <script>
-      // ---------- Custom cursor ----------
-      const cursor = document.getElementById('cursor-dot');
-      const cursorLabel = cursor?.querySelector<HTMLSpanElement>('.label');
-      let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-      let tx = cx, ty = cy;
+      // ---------- Custom cursor (guarded by data-cursor-fx) ----------
+      if (document.documentElement.dataset.cursorFx === 'on') {
+        const cursor = document.getElementById('cursor-dot');
+        const cursorLabel = cursor?.querySelector<HTMLSpanElement>('.label');
 
-      document.addEventListener('mousemove', (e) => {
-        tx = e.clientX;
-        ty = e.clientY;
-      });
-
-      function raf() {
-        cx += (tx - cx) * 0.18;
-        cy += (ty - cy) * 0.18;
         if (cursor) {
-          cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+          let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+          let tx = cx, ty = cy;
+
+          document.addEventListener('mousemove', (e) => {
+            tx = e.clientX;
+            ty = e.clientY;
+          });
+
+          const raf = () => {
+            cx += (tx - cx) * 0.18;
+            cy += (ty - cy) * 0.18;
+            cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+            requestAnimationFrame(raf);
+          };
+          raf();
+
+          document.addEventListener('mouseleave', () => (cursor.style.opacity = '0'));
+          document.addEventListener('mouseenter', () => (cursor.style.opacity = '1'));
+
+          // Two hover levels:
+          //  - `.is-labeled` + label text  → only on elements with `data-cursor="…"`
+          //  - `.is-hover`                 → subtle enlargement, no label
+          const hoverSelector =
+            'a, button, [role="button"], .portfolio-card, .feature-card, .service-row, input, textarea';
+          document.querySelectorAll<HTMLElement>(hoverSelector).forEach((el) => {
+            el.addEventListener('mouseenter', () => {
+              const raw = el.dataset.cursor;
+              if (raw) {
+                cursor.classList.remove('is-hover');
+                cursor.classList.add('is-labeled');
+                if (cursorLabel) cursorLabel.textContent = raw;
+              } else {
+                cursor.classList.remove('is-labeled');
+                cursor.classList.add('is-hover');
+                if (cursorLabel) cursorLabel.textContent = '';
+              }
+            });
+            el.addEventListener('mouseleave', () => {
+              cursor.classList.remove('is-hover', 'is-labeled');
+              if (cursorLabel) cursorLabel.textContent = '';
+            });
+          });
         }
-        requestAnimationFrame(raf);
       }
-      raf();
-
-      document.addEventListener('mouseleave', () => cursor && (cursor.style.opacity = '0'));
-      document.addEventListener('mouseenter', () => cursor && (cursor.style.opacity = '1'));
-
-      // Hover cursor on interactive elements
-      const hoverSelector = 'a, button, [role="button"], .portfolio-card, .feature-card, .service-row, input, textarea, label';
-      document.querySelectorAll(hoverSelector).forEach((el) => {
-        el.addEventListener('mouseenter', () => {
-          cursor?.classList.add('is-hover');
-          const raw = (el as HTMLElement).dataset.cursor;
-          if (cursorLabel) cursorLabel.textContent = raw || '';
-        });
-        el.addEventListener('mouseleave', () => {
-          cursor?.classList.remove('is-hover');
-          if (cursorLabel) cursorLabel.textContent = '';
-        });
-      });
 
       // ---------- Scroll reveal ----------
       const revealObserver = new IntersectionObserver((entries) => {

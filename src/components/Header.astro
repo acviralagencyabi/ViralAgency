@@ -25,7 +25,7 @@ const articlesMenu = [
 ];
 ---
 
-<header class="nav-root" data-cursor="menu">
+<header id="site-header" class="nav-root">
   <nav class="container-custom">
     <div class="flex items-center justify-between">
       <!-- Logo -->
@@ -150,10 +150,20 @@ const articlesMenu = [
 </style>
 
 <script>
+  const header = document.getElementById('site-header');
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   const menuIconOpen = document.getElementById('menu-icon-open');
   const menuIconClose = document.getElementById('menu-icon-close');
+
+  // Scrolled state for navbar
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 24) header.classList.add('is-scrolled');
+    else header.classList.remove('is-scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
 
   function toggleMenu(open: boolean) {
     if (!mobileMenu) return;
@@ -193,4 +203,19 @@ const articlesMenu = [
       }
     });
   });
+
+  // Close mega-menu after clicking one of its links
+  // (otherwise :focus-within keeps the dropdown open)
+  document.querySelectorAll<HTMLAnchorElement>('.megamenu-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      const item = link.closest('.nav-item') as HTMLElement | null;
+      link.blur();
+      if (item) {
+        item.classList.add('is-dismissed');
+        // Re-enable hover after a moment so user can re-open by hovering
+        setTimeout(() => item.classList.remove('is-dismissed'), 500);
+      }
+    });
+  });
+
 </script>

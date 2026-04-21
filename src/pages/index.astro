@@ -35,9 +35,6 @@ const portfolio = Object.entries(portfolioFiles)
   })
   .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-// Hero-featured item (primo featured, o primo in lista)
-const heroProject = portfolio.find((p) => p.featured) || portfolio[0] || null;
-
 // ---------- Default content for new sections (editabile via Keystatic in seguito) ----------
 const H: any = homepage;
 
@@ -124,73 +121,45 @@ function categoryFor(slug: string): string {
 <Layout title={homepage.seo.title} description={homepage.seo.description}>
 
   <!-- =======================================================================
-       HERO
+       HERO — minimale
        ======================================================================= -->
-  <section id="home" class="section pt-32 pb-12 md:pt-40">
-    <div class="container-custom">
-      <!-- Hero top row: eyebrow + meta -->
-      <div class="flex flex-wrap items-end justify-between gap-4 mb-10 md:mb-14">
+  <section id="home" class="min-h-screen flex flex-col justify-between pt-28 pb-10 md:pt-36">
+    <div class="container-custom flex-1 flex flex-col">
+      <!-- Top meta row -->
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-auto">
         <p class="mono-label text-[var(--muted)]">
-          01 / HOMEPAGE — <span class="text-[var(--ink)]">REAL GOES VIRAL</span>
+          01 / HOMEPAGE
         </p>
-        <p class="mono-label text-[var(--muted)] hidden md:block">
-          MODENA · IT — EST. 2017
+        <p class="mono-label text-[var(--muted)] hidden md:block text-right">
+          MODENA · IT<br />EST. 2017
         </p>
       </div>
 
-      <!-- Frame portfolio -->
-      {heroProject?.image ? (
-        <a
-          href="#portfolio"
-          class="portfolio-card block w-full !aspect-[16/9] reveal-scale"
-          data-cursor="portfolio"
-          aria-label={`Guarda ${heroProject.displayTitle}`}
-        >
-          <Image
-            src={heroProject.image}
-            alt={heroProject.description || heroProject.displayTitle}
-            class="w-full h-full object-cover"
-            width={1600}
-            height={900}
-            loading="eager"
-          />
-          <div class="meta">
-            <div>
-              <span class="tag">{categoryFor(heroProject.slug)} · In primo piano</span>
-              <span class="title block mt-1">{heroProject.description || heroProject.displayTitle}</span>
-            </div>
-            <span class="tag">↗ Case Study</span>
-          </div>
-        </a>
-      ) : (
-        <div class="portfolio-card !aspect-[16/9] flex items-center justify-center">
-          <span class="mono-label text-[var(--paper)]">hero placeholder</span>
-        </div>
-      )}
-
-      <!-- Main statement -->
-      <div class="mt-10 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <h1 class="lg:col-span-9 h-display text-[clamp(3rem,10vw,9rem)]">
-          <span class="line-reveal"><span>REAL GOES</span></span><br />
-          <span class="line-reveal" style="--line-delay: 0.12s"><span>VIRAL<span class="inline-block align-top text-[var(--electric)]">.</span></span></span>
+      <!-- Main statement: gigantic title, nothing else -->
+      <div class="my-auto py-10 md:py-16">
+        <h1 class="h-display text-[clamp(3rem,13vw,11rem)] leading-[0.9]">
+          <span class="line-reveal block"><span>REAL</span></span>
+          <span class="line-reveal block" style="--line-delay: 0.1s"><span>GOES</span></span>
+          <span class="line-reveal block" style="--line-delay: 0.2s">
+            <span>VIRAL<span class="inline-block align-top text-[var(--electric)]">.</span></span>
+          </span>
         </h1>
-        <div class="lg:col-span-3 flex flex-col justify-end gap-6">
-          <p class="quote-big text-[var(--ink)]">
-            Agenzia di comunicazione &amp; marketing.
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <a href="#servizi" class="btn-primary magnetic-btn" data-cursor="scopri">
-              Scopri <span class="btn-arrow">↗</span>
-            </a>
-            <a href="#contatti" class="btn-outline" data-cursor="scrivici">Contattaci</a>
-          </div>
-        </div>
       </div>
 
-      <!-- Scroll hint -->
-      <div class="mt-14 md:mt-20 flex items-center justify-between text-[var(--muted)]">
-        <span class="mono-label">Scroll per esplorare</span>
-        <ArrowDown class="w-5 h-5 animate-bounce" />
+      <!-- Bottom row: tagline + single CTA + scroll hint -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end mt-auto">
+        <p class="md:col-span-5 quote-big text-[var(--ink)]">
+          Agenzia di comunicazione &amp; marketing.
+        </p>
+        <div class="md:col-span-4">
+          <a href="#manifesto" class="btn-primary magnetic-btn" data-cursor="scopri">
+            Inizia <span class="btn-arrow">↗</span>
+          </a>
+        </div>
+        <a href="#manifesto" class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
+          <span class="mono-label">Scroll</span>
+          <ArrowDown class="w-4 h-4 animate-bounce" />
+        </a>
       </div>
     </div>
   </section>
