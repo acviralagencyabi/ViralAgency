@@ -607,7 +607,6 @@ button:hover .btn-arrow,
   height: 10px;
   border-radius: 999px;
   background: #ffffff;
-  color: #ffffff;
   pointer-events: none;
   z-index: 100;
   transform: translate(-50%, -50%);
@@ -634,12 +633,15 @@ button:hover .btn-arrow,
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   opacity: 0;
   transition: opacity 0.2s ease;
-  color: #ffffff;
+  /* Dark color so that, against the white pill under mix-blend-difference,
+     the label inverts to the opposite contrast and stays readable on any bg. */
+  color: #000000;
   white-space: nowrap;
   pointer-events: none;
 }
