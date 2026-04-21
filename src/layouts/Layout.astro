@@ -341,7 +341,7 @@ const schemaOrg = {
               node: n as Text,
               queue: [...text].map((ch) => ({
                 to: ch,
-                end: Math.round((22 + Math.floor(Math.random() * 55)) * speed),
+                end: Math.round((14 + Math.floor(Math.random() * 38)) * speed),
               })),
             });
           }
@@ -376,31 +376,19 @@ const schemaOrg = {
 
         const targets = document.querySelectorAll<HTMLElement>('.section-title');
 
-        // First reveal on scroll-into-view
-        const locks = new WeakSet<Element>();
+        // Fire once, the first time the title enters the viewport. No hover re-trigger.
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
               const el = entry.target as HTMLElement;
-              if (locks.has(el)) return;
-              locks.add(el);
-              scrambleRoot(el, 1, () => locks.delete(el));
+              scrambleRoot(el, 1);
               io.unobserve(el);
             });
           },
           { threshold: 0.35 }
         );
         targets.forEach((el) => io.observe(el));
-
-        // Hover re-trigger (slightly faster)
-        targets.forEach((el) => {
-          el.addEventListener('mouseenter', () => {
-            if (locks.has(el)) return;
-            locks.add(el);
-            scrambleRoot(el, 0.75, () => locks.delete(el));
-          });
-        });
       }
     </script>
   </body>
