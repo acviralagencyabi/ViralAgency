@@ -508,38 +508,59 @@ button:hover .btn-arrow,
 .active .line-reveal > span { transform: translateY(0); }
 
 /* =========================================================================
-   Coupon stamp (page-load + click)
+   Page-load intro — black overlay, white matrix-scramble wordmark
    ========================================================================= */
 
-.coupon-stamp {
+.intro-overlay {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-4deg);
-  z-index: 200;
+  inset: 0;
+  z-index: 150;
+  background: #000000;
+  display: grid;
+  place-items: center;
   pointer-events: none;
-  background: var(--paper);
-  color: var(--ink);
-  border: 2px dashed var(--ink);
-  padding: 1.2rem 1.8rem;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  box-shadow: 8px 8px 0 var(--electric);
-  animation: coupon-in 0.55s var(--ease-out) both, coupon-out 0.6s var(--ease-in-out) 1.3s forwards;
-  text-align: center;
+  animation: intro-overlay-out 0.55s cubic-bezier(0.4, 0, 0.2, 1) 1.3s forwards;
 }
-.coupon-stamp .coupon-num { font-size: 1.6rem; letter-spacing: 0.06em; display: block; }
-.coupon-stamp .coupon-label { font-size: 0.7rem; opacity: 0.7; display: block; }
-.coupon-stamp .coupon-brand { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 0; font-weight: 700; display: block; margin-top: 0.3rem; }
 
-@keyframes coupon-in {
-  from { opacity: 0; transform: translate(-50%, -50%) rotate(-12deg) scale(0.6); }
-  to { opacity: 1; transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
+.intro-brand {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  opacity: 0.96;
 }
-@keyframes coupon-out {
-  from { opacity: 1; filter: blur(0); }
-  to { opacity: 0; filter: blur(12px); transform: translate(-50%, -50%) rotate(-4deg) scale(1.05); }
+
+.intro-brand .dot {
+  color: var(--electric);
+  margin-left: 1px;
+}
+
+@keyframes intro-overlay-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* =========================================================================
+   Lenis — smooth scroll bootstrap CSS
+   ========================================================================= */
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+/* =========================================================================
+   Matrix text scramble
+   ========================================================================= */
+
+.scramble-host {
+  /* Avoid layout shift while characters cycle */
+  font-variant-numeric: tabular-nums;
 }
 
 /* Click burst — pixels */

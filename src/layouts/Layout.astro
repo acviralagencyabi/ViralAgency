@@ -53,10 +53,6 @@ const schemaOrg = {
   "priceRange": "€€"
 };
 
-// Coupon stamp data
-const now = new Date();
-const couponNum = String(Math.floor(Math.random() * 9000) + 1000);
-const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' });
 ---
 
 <!doctype html>
@@ -102,15 +98,11 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
     <!-- Skip link -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
-    <!-- Page-load curtain -->
-    <div class="page-curtain" aria-hidden="true"></div>
-
-    <!-- Page-load coupon stamp -->
-    <div class="coupon-stamp" aria-hidden="true">
-      <span class="coupon-label">Ricevuta N°</span>
-      <span class="coupon-num mono-num">{couponNum}</span>
-      <span class="coupon-label">{couponDate} — Modena, IT</span>
-      <span class="coupon-brand">REAL GOES VIRAL</span>
+    <!-- Page-load intro overlay (matrix scramble on black) -->
+    <div class="intro-overlay" aria-hidden="true">
+      <div class="intro-brand">
+        <span class="intro-scramble" data-text="REAL GOES VIRAL">REAL GOES VIRAL</span><span class="dot">.</span>
+      </div>
     </div>
 
     <!-- Custom cursor (toggle via CUSTOM_CURSOR constant above) -->
@@ -127,6 +119,43 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
     <Footer />
 
     <script>
+      // ---------- Intro matrix scramble (page-load wordmark) ----------
+      {
+        const el = document.querySelector<HTMLElement>('.intro-scramble');
+        if (el) {
+          const target = el.dataset.text || el.textContent || '';
+          const chars = '!<>-_\\/[]{}—=+*^?#$%&0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+          const len = target.length;
+          const queue: { to: string; end: number }[] = [];
+          for (let i = 0; i < len; i++) {
+            const end = 8 + Math.floor(Math.random() * 24); // frames
+            queue.push({ to: target[i], end });
+          }
+
+          // Pre-fill with a full scramble so the text is already "alive" at paint-in
+          el.textContent = target
+            .split('')
+            .map((c) => (c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]))
+            .join('');
+
+          let frame = 0;
+          const tick = () => {
+            let out = '';
+            let done = 0;
+            for (const q of queue) {
+              if (q.to === ' ') { out += ' '; done++; continue; }
+              if (frame >= q.end) { out += q.to; done++; }
+              else { out += chars[Math.floor(Math.random() * chars.length)]; }
+            }
+            el.textContent = out;
+            if (done === queue.length) return;
+            frame++;
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      }
+
       // ---------- Custom cursor (guarded by data-cursor-fx) ----------
       if (document.documentElement.dataset.cursorFx === 'on') {
         const cursor = document.getElementById('cursor-dot');
@@ -216,11 +245,10 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
         setTimeout(() => burst.remove(), 900);
       });
 
-      // ---------- Remove page-load coupon/curtain after animation ----------
+      // ---------- Remove page-load intro after animation ----------
       setTimeout(() => {
-        document.querySelector('.page-curtain')?.remove();
-        document.querySelector('.coupon-stamp')?.remove();
-      }, 2200);
+        document.querySelector('.intro-overlay')?.remove();
+      }, 1700);
 
       // ---------- Magnetic buttons ----------
       document.querySelectorAll<HTMLElement>('.magnetic-btn').forEach((btn) => {
@@ -258,6 +286,98 @@ const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-d
         });
       }, { threshold: 0.5 });
       counters.forEach((c) => counterObserver.observe(c));
+
+      // ---------- Lenis smooth scroll (team99-style inertia) ----------
+      import('lenis').then(({ default: Lenis }) => {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReduced) return;
+
+        const lenis = new Lenis({
+          duration: 1.15,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 1.4,
+        });
+
+        const rafLoop = (time: number) => {
+          lenis.raf(time);
+          requestAnimationFrame(rafLoop);
+        };
+        requestAnimationFrame(rafLoop);
+
+        // Intercept anchor links → smooth scroll via Lenis
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener('click', (e) => {
+            const href = anchor.getAttribute('href');
+            if (!href || href === '#') return;
+            const target = document.querySelector(href);
+            if (!target) return;
+            e.preventDefault();
+            e.stopPropagation();
+            lenis.scrollTo(target as HTMLElement, { offset: -60 });
+          }, true);
+        });
+      });
+
+      // ---------- Matrix text scramble on hover ----------
+      {
+        const SCRAMBLE_CHARS = '!<>-_\\/[]{}—=+*^?#0123456789ABCDEF';
+
+        const firstTextNode = (el: Element): Text | null => {
+          for (const child of el.childNodes) {
+            if (child.nodeType === Node.TEXT_NODE && child.textContent && child.textContent.trim()) {
+              return child as Text;
+            }
+          }
+          return null;
+        };
+
+        const scrambleLock = new Set<Element>();
+
+        const scrambleTargets =
+          '.nav-link, .megamenu-link > span:first-child, .sv-title, .mm-link';
+
+        document.querySelectorAll<HTMLElement>(scrambleTargets).forEach((el) => {
+          el.addEventListener('mouseenter', () => {
+            if (scrambleLock.has(el)) return;
+            const node = firstTextNode(el);
+            if (!node || !node.textContent) return;
+
+            const original = node.textContent;
+            const len = original.length;
+            const queue: { to: string; start: number; end: number }[] = [];
+            for (let i = 0; i < len; i++) {
+              const start = Math.floor(Math.random() * 6);
+              const end = start + 4 + Math.floor(Math.random() * 8);
+              queue.push({ to: original[i], start, end });
+            }
+            scrambleLock.add(el);
+
+            let frame = 0;
+            const tick = () => {
+              let out = '';
+              let done = 0;
+              for (const q of queue) {
+                if (q.to === ' ') { out += ' '; done++; continue; }
+                if (frame >= q.end) { out += q.to; done++; }
+                else if (frame >= q.start) {
+                  out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+                } else {
+                  out += q.to;
+                }
+              }
+              node.textContent = out;
+              if (done === queue.length) {
+                scrambleLock.delete(el);
+                return;
+              }
+              frame++;
+              requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+          });
+        });
+      }
     </script>
   </body>
 </html>
