@@ -128,7 +128,8 @@ const schemaOrg = {
           const len = target.length;
           const queue: { to: string; end: number }[] = [];
           for (let i = 0; i < len; i++) {
-            const end = 8 + Math.floor(Math.random() * 24); // frames
+            // Slower: ~250ms → ~1100ms per letter at 60fps
+            const end = 15 + Math.floor(Math.random() * 50);
             queue.push({ to: target[i], end });
           }
 
@@ -248,7 +249,7 @@ const schemaOrg = {
       // ---------- Remove page-load intro after animation ----------
       setTimeout(() => {
         document.querySelector('.intro-overlay')?.remove();
-      }, 1700);
+      }, 2500);
 
       // ---------- Magnetic buttons ----------
       document.querySelectorAll<HTMLElement>('.magnetic-btn').forEach((btn) => {
@@ -319,62 +320,85 @@ const schemaOrg = {
         });
       });
 
-      // ---------- Matrix text scramble on hover ----------
+      // ---------- Matrix scramble on section titles ----------
       {
-        const SCRAMBLE_CHARS = '!<>-_\\/[]{}—=+*^?#0123456789ABCDEF';
+        const CHARS = '!<>-_\\/[]{}—=+*^?#$%&0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
-        const firstTextNode = (el: Element): Text | null => {
-          for (const child of el.childNodes) {
-            if (child.nodeType === Node.TEXT_NODE && child.textContent && child.textContent.trim()) {
-              return child as Text;
-            }
+        // Scramble every text node inside a root, in sync.
+        // Punctuation and whitespace pass through untouched.
+        const scrambleRoot = (root: Element, speed: number, onDone?: () => void) => {
+          const items: Array<{
+            node: Text;
+            queue: Array<{ to: string; end: number }>;
+          }> = [];
+
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          let n: Node | null;
+          while ((n = walker.nextNode())) {
+            const text = (n as Text).textContent || '';
+            if (!text.trim()) continue;
+            items.push({
+              node: n as Text,
+              queue: [...text].map((ch) => ({
+                to: ch,
+                end: Math.round((22 + Math.floor(Math.random() * 55)) * speed),
+              })),
+            });
           }
-          return null;
+          if (!items.length) {
+            onDone?.();
+            return;
+          }
+
+          const maxEnd = items.reduce(
+            (acc, it) => Math.max(acc, ...it.queue.map((q) => q.end)),
+            0
+          );
+
+          let frame = 0;
+          const tick = () => {
+            for (const it of items) {
+              let out = '';
+              for (const q of it.queue) {
+                // Preserve layout: whitespace, line breaks, punctuation
+                if (/[\s\n\r.,!?—–\-]/.test(q.to)) { out += q.to; continue; }
+                if (frame >= q.end) out += q.to;
+                else out += CHARS[Math.floor(Math.random() * CHARS.length)];
+              }
+              it.node.textContent = out;
+            }
+            if (frame >= maxEnd) { onDone?.(); return; }
+            frame++;
+            requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
         };
 
-        const scrambleLock = new Set<Element>();
+        const targets = document.querySelectorAll<HTMLElement>('.section-title');
 
-        const scrambleTargets =
-          '.nav-link, .megamenu-link > span:first-child, .sv-title, .mm-link';
+        // First reveal on scroll-into-view
+        const locks = new WeakSet<Element>();
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              if (locks.has(el)) return;
+              locks.add(el);
+              scrambleRoot(el, 1, () => locks.delete(el));
+              io.unobserve(el);
+            });
+          },
+          { threshold: 0.35 }
+        );
+        targets.forEach((el) => io.observe(el));
 
-        document.querySelectorAll<HTMLElement>(scrambleTargets).forEach((el) => {
+        // Hover re-trigger (slightly faster)
+        targets.forEach((el) => {
           el.addEventListener('mouseenter', () => {
-            if (scrambleLock.has(el)) return;
-            const node = firstTextNode(el);
-            if (!node || !node.textContent) return;
-
-            const original = node.textContent;
-            const len = original.length;
-            const queue: { to: string; start: number; end: number }[] = [];
-            for (let i = 0; i < len; i++) {
-              const start = Math.floor(Math.random() * 6);
-              const end = start + 4 + Math.floor(Math.random() * 8);
-              queue.push({ to: original[i], start, end });
-            }
-            scrambleLock.add(el);
-
-            let frame = 0;
-            const tick = () => {
-              let out = '';
-              let done = 0;
-              for (const q of queue) {
-                if (q.to === ' ') { out += ' '; done++; continue; }
-                if (frame >= q.end) { out += q.to; done++; }
-                else if (frame >= q.start) {
-                  out += SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-                } else {
-                  out += q.to;
-                }
-              }
-              node.textContent = out;
-              if (done === queue.length) {
-                scrambleLock.delete(el);
-                return;
-              }
-              frame++;
-              requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
+            if (locks.has(el)) return;
+            locks.add(el);
+            scrambleRoot(el, 0.75, () => locks.delete(el));
           });
         });
       }
