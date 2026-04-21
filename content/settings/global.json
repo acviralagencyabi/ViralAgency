@@ -4,9 +4,9 @@
   "logoNavbar": "/src/assets/images/uploads/global/logoNavbar.png",
   "logoHero": "/src/assets/images/uploads/global/logoHero.png",
   "colors": {
-    "primary": "#8B5CF6",
-    "secondary": "#6D28D9",
-    "accent": "#EC4899"
+    "primary": "#0B1F3A",
+    "secondary": "#0A0A0A",
+    "accent": "#1F4BFF"
   },
   "contact": {
     "email": "info@viralagency.it",

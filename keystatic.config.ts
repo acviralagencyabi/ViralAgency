@@ -1,9 +1,7 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 
-// Determina se siamo in ambiente locale (dev) o produzione
 const isLocal = process.env.NODE_ENV === 'development' || import.meta.env?.DEV;
 
-// Storage: local in dev, github in produzione
 const storage = isLocal
   ? { kind: 'local' as const }
   : {
@@ -15,7 +13,7 @@ export default config({
   storage,
 
   ui: {
-    brand: { name: 'Viral Digital Agency' },
+    brand: { name: 'REAL GOES VIRAL' },
   },
 
   singletons: {
@@ -38,9 +36,9 @@ export default config({
           publicPath: '/src/assets/images/uploads/',
         }),
         colors: fields.object({
-          primary: fields.text({ label: 'Colore Primario', defaultValue: '#8B5CF6' }),
-          secondary: fields.text({ label: 'Colore Secondario', defaultValue: '#6D28D9' }),
-          accent: fields.text({ label: 'Colore Accent', defaultValue: '#EC4899' }),
+          primary: fields.text({ label: 'Colore Primario (Deep)', defaultValue: '#0B1F3A' }),
+          secondary: fields.text({ label: 'Colore Secondario (Ink)', defaultValue: '#0A0A0A' }),
+          accent: fields.text({ label: 'Colore Accent (Electric)', defaultValue: '#1F4BFF' }),
         }, { label: 'Colori' }),
         contact: fields.object({
           email: fields.text({ label: 'Email' }),
@@ -78,11 +76,11 @@ export default config({
           description: fields.text({ label: 'Descrizione SEO', multiline: true }),
         }, { label: 'SEO' }),
 
-        // Hero Section
+        // --- Sezioni storiche (mantenute per non rompere dati esistenti) ---
         hero: fields.object({
-          badge: fields.text({ label: 'Badge (testo sopra titolo)' }),
-          title: fields.text({ label: 'Titolo Principale' }),
-          subtitle: fields.text({ label: 'Sottotitolo', multiline: true }),
+          badge: fields.text({ label: 'Badge (non usato nel nuovo design, lasciato per compat.)' }),
+          title: fields.text({ label: 'Titolo (non usato)' }),
+          subtitle: fields.text({ label: 'Sottotitolo (non usato)', multiline: true }),
           ctaPrimary: fields.object({
             text: fields.text({ label: 'Testo' }),
             link: fields.text({ label: 'Link' }),
@@ -91,57 +89,118 @@ export default config({
             text: fields.text({ label: 'Testo' }),
             link: fields.text({ label: 'Link' }),
           }, { label: 'CTA Secondario' }),
-        }, { label: 'Hero Section' }),
+        }, { label: 'Hero (legacy)' }),
 
-        // About Section
         about: fields.object({
           badge: fields.text({ label: 'Badge' }),
           title: fields.text({ label: 'Titolo' }),
           description: fields.text({ label: 'Descrizione', multiline: true }),
           backgroundImage: fields.text({ label: 'URL Immagine Background' }),
-        }, { label: 'About Section' }),
+        }, { label: 'About (legacy)' }),
 
-        // Services Section
         services: fields.object({
           badge: fields.text({ label: 'Badge' }),
           title: fields.text({ label: 'Titolo' }),
           subtitle: fields.text({ label: 'Sottotitolo' }),
           description: fields.text({ label: 'Descrizione', multiline: true }),
-        }, { label: 'Sezione Servizi' }),
+        }, { label: 'Sezione Servizi (legacy)' }),
 
-        // Trailer/Video Section
         trailer: fields.object({
           badge: fields.text({ label: 'Badge' }),
           title: fields.text({ label: 'Titolo' }),
           videoUrl: fields.text({ label: 'URL Video (YouTube/Vimeo)' }),
           backgroundImage: fields.text({ label: 'URL Immagine Background' }),
           playButtonText: fields.text({ label: 'Testo sotto play button' }),
-        }, { label: 'Sezione Trailer/Video' }),
+        }, { label: 'Trailer (legacy)' }),
 
-        // Portfolio Section
         portfolio: fields.object({
           badge: fields.text({ label: 'Badge' }),
           title: fields.text({ label: 'Titolo' }),
           subtitle: fields.text({ label: 'Sottotitolo' }),
         }, { label: 'Sezione Portfolio' }),
 
-        // Social Section
         social: fields.object({
           badge: fields.text({ label: 'Badge' }),
           title: fields.text({ label: 'Titolo' }),
         }, { label: 'Sezione Social' }),
 
-        // Contact Section
         contact: fields.object({
           title: fields.text({ label: 'Titolo' }),
           description: fields.text({ label: 'Descrizione', multiline: true }),
         }, { label: 'Sezione Contatti' }),
+
+        // --- NUOVE SEZIONI (REAL GOES VIRAL) ---
+
+        manifesto: fields.object({
+          eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '01 — Manifesto' }),
+          title: fields.text({ label: 'Titolo (multilinea, usa \\n)', multiline: true }),
+          body: fields.text({ label: 'Corpo', multiline: true }),
+          kpis: fields.array(
+            fields.object({
+              num: fields.number({ label: 'Numero', defaultValue: 0 }),
+              suffix: fields.text({ label: 'Suffisso', defaultValue: '' }),
+              label: fields.text({ label: 'Etichetta' }),
+            }),
+            {
+              label: 'KPI',
+              itemLabel: (props) => `${props.fields.num.value}${props.fields.suffix.value} — ${props.fields.label.value}`,
+            }
+          ),
+        }, { label: 'Manifesto (Chi siamo)' }),
+
+        servicesList: fields.array(
+          fields.object({
+            num: fields.text({ label: 'Numero (es. 01)', defaultValue: '01' }),
+            title: fields.text({ label: 'Titolo' }),
+            desc: fields.text({ label: 'Descrizione breve', multiline: true }),
+          }),
+          {
+            label: 'Servizi (lista editoriale)',
+            itemLabel: (props) => `${props.fields.num.value} — ${props.fields.title.value}`,
+          }
+        ),
+
+        team: fields.array(
+          fields.object({
+            name: fields.text({ label: 'Nome' }),
+            role: fields.text({ label: 'Ruolo' }),
+            initials: fields.text({ label: 'Iniziali (es. MR)' }),
+          }),
+          {
+            label: 'Team',
+            itemLabel: (props) => `${props.fields.name.value} — ${props.fields.role.value}`,
+          }
+        ),
+
+        reviews: fields.array(
+          fields.object({
+            quote: fields.text({ label: 'Citazione', multiline: true }),
+            author: fields.text({ label: 'Autore' }),
+            role: fields.text({ label: 'Ruolo / Azienda' }),
+          }),
+          {
+            label: 'Recensioni',
+            itemLabel: (props) => `${props.fields.author.value}`,
+          }
+        ),
+
+        articles: fields.array(
+          fields.object({
+            tag: fields.text({ label: 'Tag (Intervista, Approfondimento…)' }),
+            title: fields.text({ label: 'Titolo' }),
+            date: fields.text({ label: 'Data (visualizzata)' }),
+            href: fields.text({ label: 'Link', defaultValue: '#' }),
+          }),
+          {
+            label: 'Articoli in evidenza',
+            itemLabel: (props) => props.fields.title.value,
+          }
+        ),
       },
     }),
   },
 
   collections: {
-    // Portfolio Items (Gallery)
     portfolio: collection({
       label: 'Portfolio',
       slugField: 'title',

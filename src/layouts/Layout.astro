@@ -3,7 +3,6 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Import settings from Tina
 import settings from '../../content/settings/global.json';
 
 interface Props {
@@ -14,26 +13,17 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
-// Build full title with suffix from settings
 const fullTitle = title
   ? `${title}${settings.seo?.titleSuffix || ''}`
   : settings.companyName;
 
 const metaDescription = description || settings.seo?.defaultDescription || '';
 
-// Canonical URL
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-// OG Image - default to logo or a placeholder
 const ogImage = image || '/uploads/image.png';
 const ogImageURL = new URL(ogImage, Astro.site);
 
-// Get brand colors from settings (fallbacks defined in global.css)
-const primaryColor = settings.colors?.primary;
-const secondaryColor = settings.colors?.secondary;
-const accentColor = settings.colors?.accent;
-
-// Schema.org JSON-LD
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -52,12 +42,14 @@ const schemaOrg = {
     "postalCode": "41033",
     "addressCountry": "IT"
   },
-  "sameAs": [
-    settings.social?.facebook,
-    settings.social?.instagram
-  ].filter(Boolean),
+  "sameAs": [settings.social?.facebook, settings.social?.instagram].filter(Boolean),
   "priceRange": "€€"
 };
+
+// Coupon stamp data
+const now = new Date();
+const couponNum = String(Math.floor(Math.random() * 9000) + 1000);
+const couponDate = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' });
 ---
 
 <!doctype html>
@@ -68,8 +60,15 @@ const schemaOrg = {
     <meta name="description" content={metaDescription} />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
@@ -86,22 +85,31 @@ const schemaOrg = {
     <meta name="twitter:description" content={metaDescription} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Schema.org JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
 
     <title>{fullTitle}</title>
-
-    <!-- Inject brand colors as CSS variables (only if defined in settings) -->
   </head>
   <body class="min-h-screen flex flex-col">
-    <!-- Skip to content link for accessibility -->
+    <!-- Skip link -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
-    <!-- Cursor glow effect -->
-    <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
+    <!-- Page-load curtain -->
+    <div class="page-curtain" aria-hidden="true"></div>
+
+    <!-- Page-load coupon stamp -->
+    <div class="coupon-stamp" aria-hidden="true">
+      <span class="coupon-label">Ricevuta N°</span>
+      <span class="coupon-num mono-num">{couponNum}</span>
+      <span class="coupon-label">{couponDate} — Modena, IT</span>
+      <span class="coupon-brand">REAL GOES VIRAL</span>
+    </div>
+
+    <!-- Custom cursor -->
+    <div id="cursor-dot" class="cursor-dot" aria-hidden="true">
+      <span class="label"></span>
+    </div>
 
     <Header />
     <main id="main-content" class="flex-grow">
@@ -109,77 +117,125 @@ const schemaOrg = {
     </main>
     <Footer />
 
-    <!-- Cursor glow & animations script -->
     <script>
-      // Cursor glow effect
-      const cursorGlow = document.getElementById('cursor-glow');
-      let mouseX = 0, mouseY = 0;
-      let glowX = 0, glowY = 0;
+      // ---------- Custom cursor ----------
+      const cursor = document.getElementById('cursor-dot');
+      const cursorLabel = cursor?.querySelector<HTMLSpanElement>('.label');
+      let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      let tx = cx, ty = cy;
 
       document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        tx = e.clientX;
+        ty = e.clientY;
       });
 
-      // Smooth animation for cursor glow
-      function animateCursor() {
-        glowX += (mouseX - glowX) * 0.1;
-        glowY += (mouseY - glowY) * 0.1;
+      function raf() {
+        cx += (tx - cx) * 0.18;
+        cy += (ty - cy) * 0.18;
+        if (cursor) {
+          cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+        }
+        requestAnimationFrame(raf);
+      }
+      raf();
 
-        if (cursorGlow) {
-          cursorGlow.style.left = glowX + 'px';
-          cursorGlow.style.top = glowY + 'px';
+      document.addEventListener('mouseleave', () => cursor && (cursor.style.opacity = '0'));
+      document.addEventListener('mouseenter', () => cursor && (cursor.style.opacity = '1'));
+
+      // Hover cursor on interactive elements
+      const hoverSelector = 'a, button, [role="button"], .portfolio-card, .feature-card, .service-row, input, textarea, label';
+      document.querySelectorAll(hoverSelector).forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+          cursor?.classList.add('is-hover');
+          const raw = (el as HTMLElement).dataset.cursor;
+          if (cursorLabel) cursorLabel.textContent = raw || '';
+        });
+        el.addEventListener('mouseleave', () => {
+          cursor?.classList.remove('is-hover');
+          if (cursorLabel) cursorLabel.textContent = '';
+        });
+      });
+
+      // ---------- Scroll reveal ----------
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.15 });
+
+      document
+        .querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger-children, .line-reveal')
+        .forEach((el) => revealObserver.observe(el));
+
+      // ---------- Click pixel burst ----------
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        // Only burst on interactive elements
+        if (!target.closest('a, button, [role="button"], .portfolio-card, .service-row')) return;
+
+        const burst = document.createElement('div');
+        burst.className = 'click-burst';
+        burst.style.left = e.clientX + 'px';
+        burst.style.top = e.clientY + 'px';
+
+        const variants = ['', 'alt', 'ink'];
+        for (let i = 0; i < 14; i++) {
+          const px = document.createElement('span');
+          px.className = 'px ' + variants[i % 3];
+          const angle = (Math.PI * 2 * i) / 14 + Math.random() * 0.4;
+          const dist = 40 + Math.random() * 60;
+          px.style.setProperty('--dx', `${Math.cos(angle) * dist}px`);
+          px.style.setProperty('--dy', `${Math.sin(angle) * dist}px`);
+          px.style.animationDelay = `${Math.random() * 0.05}s`;
+          burst.appendChild(px);
         }
 
-        requestAnimationFrame(animateCursor);
-      }
-      animateCursor();
-
-      // Hide cursor glow when mouse leaves window
-      document.addEventListener('mouseleave', () => {
-        if (cursorGlow) cursorGlow.style.opacity = '0';
-      });
-      document.addEventListener('mouseenter', () => {
-        if (cursorGlow) cursorGlow.style.opacity = '1';
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 900);
       });
 
-      // Scroll reveal animation with Intersection Observer
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
-      };
+      // ---------- Remove page-load coupon/curtain after animation ----------
+      setTimeout(() => {
+        document.querySelector('.page-curtain')?.remove();
+        document.querySelector('.coupon-stamp')?.remove();
+      }, 2200);
 
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            // Optional: unobserve after animation
-            // revealObserver.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-
-      // Observe all reveal elements
-      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger-children').forEach(el => {
-        revealObserver.observe(el);
-      });
-
-      // Magnetic button effect
-      document.querySelectorAll('.magnetic-btn').forEach(btn => {
-        btn.addEventListener('mousemove', (e: Event) => {
-          const mouseEvent = e as MouseEvent;
+      // ---------- Magnetic buttons ----------
+      document.querySelectorAll<HTMLElement>('.magnetic-btn').forEach((btn) => {
+        btn.addEventListener('mousemove', (e: MouseEvent) => {
           const rect = btn.getBoundingClientRect();
-          const x = mouseEvent.clientX - rect.left - rect.width / 2;
-          const y = mouseEvent.clientY - rect.top - rect.height / 2;
-
-          (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
         });
-
         btn.addEventListener('mouseleave', () => {
-          (btn as HTMLElement).style.transform = 'translate(0, 0)';
+          btn.style.transform = 'translate(0, 0)';
         });
       });
+
+      // ---------- KPI counter ----------
+      const counters = document.querySelectorAll<HTMLElement>('[data-counter]');
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          const target = parseFloat(el.dataset.counter || '0');
+          const suffix = el.dataset.suffix || '';
+          const duration = 1400;
+          const start = performance.now();
+          const from = 0;
+          function step(now: number) {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const val = from + (target - from) * eased;
+            el.textContent = (Number.isInteger(target) ? Math.round(val).toString() : val.toFixed(1)) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+          counterObserver.unobserve(el);
+        });
+      }, { threshold: 0.5 });
+      counters.forEach((c) => counterObserver.observe(c));
     </script>
   </body>
 </html>

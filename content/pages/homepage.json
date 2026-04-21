@@ -1,20 +1,14 @@
 {
   "seo": {
-    "title": "Viral Digital Agency Modena",
-    "description": "Viral Digital Agency Modena – Foto e video di alta qualità per i social media. Fai decollare la tua presenza online!"
+    "title": "REAL GOES VIRAL — Agenzia di comunicazione & marketing",
+    "description": "Agenzia di comunicazione e marketing a Modena. Storytelling, contenuti, performance. Facciamo rumore dove conta."
   },
   "hero": {
     "badge": "La tua agenzia di Marketing",
     "title": "Dicci ciò che vuoi e noi faremo meglio!",
     "subtitle": "Viviamo nell'era social e tu non l'hai ancora capito. Muoviti a polverizzare la tua concorrenza online prima che lo facciano loro.",
-    "ctaPrimary": {
-      "text": "Scopri di più",
-      "link": "#servizi"
-    },
-    "ctaSecondary": {
-      "text": "Contattaci",
-      "link": "#contatti"
-    }
+    "ctaPrimary": { "text": "Scopri di più", "link": "#servizi" },
+    "ctaSecondary": { "text": "Contattaci", "link": "#contatti" }
   },
   "about": {
     "badge": "Su di noi",
@@ -35,16 +29,78 @@
     "playButtonText": "Clicca per vedere il nostro showreel"
   },
   "portfolio": {
-    "badge": "i nostri lavori",
-    "title": "Portfolio",
-    "subtitle": "Our Gallery"
+    "badge": "02 — Portfolio",
+    "title": "I lavori migliori, cliente per cliente.",
+    "subtitle": "Case study selezionati"
   },
   "social": {
-    "badge": "seguici sui nostri social",
+    "badge": "Seguici",
     "title": "Restiamo connessi"
   },
   "contact": {
-    "title": "Contattaci",
-    "description": "Sei pronto a far decollare la tua presenza online? Contattaci per una consulenza gratuita."
-  }
+    "title": "Partiamo?",
+    "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino."
+  },
+  "manifesto": {
+    "eyebrow": "01 — Manifesto",
+    "title": "Facciamo rumore dove conta.\nCreiamo storie che si diffondono.",
+    "body": "Siamo un'agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.",
+    "kpis": [
+      { "num": 120, "suffix": "+", "label": "Progetti consegnati" },
+      { "num": 48, "suffix": "M", "label": "Views generate" },
+      { "num": 9, "suffix": "", "label": "Anni di esperienza" },
+      { "num": 97, "suffix": "%", "label": "Clienti che tornano" }
+    ]
+  },
+  "servicesList": [
+    { "num": "01", "title": "Storytelling", "desc": "Narrativa di brand, content strategy, tone of voice." },
+    { "num": "02", "title": "Social Media", "desc": "Gestione, community, advertising su Meta e TikTok." },
+    { "num": "03", "title": "Foto e Video", "desc": "Shooting, reel, campagne, produzione in-house." },
+    { "num": "04", "title": "Performance Marketing", "desc": "Google, Meta, YouTube, tracking e ottimizzazione." },
+    { "num": "05", "title": "Sito & Identità", "desc": "Siti, branding, sistema visivo, UI." },
+    { "num": "06", "title": "Consulenza", "desc": "Strategia, posizionamento, audit, formazione." }
+  ],
+  "team": [
+    { "name": "Marco Rossi", "role": "Founder & Creative Director", "initials": "MR" },
+    { "name": "Giulia Bianchi", "role": "Head of Content", "initials": "GB" },
+    { "name": "Andrea Verdi", "role": "Art Director", "initials": "AV" },
+    { "name": "Sara Neri", "role": "Performance Lead", "initials": "SN" }
+  ],
+  "reviews": [
+    {
+      "quote": "Hanno preso il nostro brand e l'hanno fatto diventare conversazione. Engagement triplicato in sei mesi.",
+      "author": "Laura P.",
+      "role": "Marketing Manager, FoodCo"
+    },
+    {
+      "quote": "Velocità, qualità e una visione chiara. Non un'agenzia, un reparto marketing esterno.",
+      "author": "Davide S.",
+      "role": "CEO, Atelier 24"
+    },
+    {
+      "quote": "Ci hanno rimesso in pista dopo un rebranding andato male. Hanno capito in due chiamate.",
+      "author": "Federica M.",
+      "role": "Founder, Nord Studio"
+    }
+  ],
+  "articles": [
+    {
+      "tag": "Intervista",
+      "title": "Come costruire una community che compra davvero",
+      "date": "22 Apr 2026",
+      "href": "#"
+    },
+    {
+      "tag": "Approfondimento",
+      "title": "Il declino delle ads generiche (e cosa farne)",
+      "date": "10 Apr 2026",
+      "href": "#"
+    },
+    {
+      "tag": "Case Study",
+      "title": "Una campagna virale non la pianifichi: la costruisci",
+      "date": "28 Mar 2026",
+      "href": "#"
+    }
+  ]
 }

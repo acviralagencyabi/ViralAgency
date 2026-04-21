@@ -1,134 +1,195 @@
 ---
-import { Image } from 'astro:assets';
-// Carica impostazioni globali usando import statico (compatibile con Cloudflare Workers)
 import globalSettings from '../../content/settings/global.json';
-import logoNavbarImage from '../assets/images/uploads/global/logoNavbar.png';
 
-const navItems = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+
+const portfolioMenu = [
+  { label: 'Case Study', href: '#portfolio' },
+  { label: 'Clienti', href: '#clienti' },
+  { label: 'Lavori Selezionati', href: '#portfolio' },
+  { label: 'In Evidenza', href: '#portfolio' },
+];
+
+const aboutMenu = [
+  { label: 'Storia', href: '#manifesto' },
   { label: 'Servizi', href: '#servizi' },
-  { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Social', href: '#social' },
-  { label: 'Contatti', href: '#contatti' },
+  { label: 'Il Team', href: '#team' },
+  { label: 'Recensioni', href: '#recensioni' },
+];
+
+const articlesMenu = [
+  { label: 'Interviste', href: '#articoli' },
+  { label: 'Approfondimenti', href: '#articoli' },
+  { label: 'News', href: '#articoli' },
+  { label: 'Tutti gli Articoli', href: '#articoli' },
 ];
 ---
 
-<header class="bg-header backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-dark-light">
+<header class="nav-root" data-cursor="menu">
   <nav class="container-custom">
-    <div class="flex items-center justify-between h-16 md:h-20">
-      <!-- Logo / Company Name -->
-      <a href="#home" class="flex items-center group">
-        <Image src={logoNavbarImage} alt={globalSettings.companyName} class="h-14 w-auto group-hover:opacity-80 transition-opacity img-darken" />
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#home" class="inline-flex items-center gap-2" aria-label={globalSettings.companyName}>
+        <span class="h-display text-sm sm:text-base tracking-tight leading-none">REAL GOES VIRAL</span>
+        <span class="nav-dot" aria-hidden="true"></span>
       </a>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden lg:flex items-center gap-6">
-        {navItems.map((item) => (
-          <a
-            href={item.href}
-            class="text-gray-400 hover:text-white font-medium transition-all duration-300 text-sm uppercase tracking-wider"
-          >
-            {item.label}
-          </a>
-        ))}
+      <!-- Desktop nav -->
+      <div class="hidden lg:flex items-center gap-1">
+        <div class="nav-item">
+          <a href="#portfolio" class="nav-link">Portfolio</a>
+          <div class="megamenu">
+            <p class="mono-label mb-3">I nostri lavori per ogni cliente</p>
+            <div class="megamenu-grid">
+              {portfolioMenu.map((item) => (
+                <a href={item.href} class="megamenu-link">
+                  <span>{item.label}</span>
+                  <span class="arr">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="#manifesto" class="nav-link">Chi siamo</a>
+          <div class="megamenu">
+            <p class="mono-label mb-3">Storytelling, team & servizi</p>
+            <div class="megamenu-grid">
+              {aboutMenu.map((item) => (
+                <a href={item.href} class="megamenu-link">
+                  <span>{item.label}</span>
+                  <span class="arr">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-item">
+          <a href="#articoli" class="nav-link">Articoli</a>
+          <div class="megamenu">
+            <p class="mono-label mb-3">Interviste & approfondimenti</p>
+            <div class="megamenu-grid">
+              {articlesMenu.map((item) => (
+                <a href={item.href} class="megamenu-link">
+                  <span>{item.label}</span>
+                  <span class="arr">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Mobile Menu Button -->
+      <!-- Right: Contatti mailto -->
+      <div class="hidden lg:flex items-center gap-3">
+        <a href={`mailto:${email}`} class="nav-link is-cta" data-cursor="scrivici">
+          Contatti <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <!-- Mobile button -->
       <button
         type="button"
-        class="lg:hidden p-2 text-gray-400 hover:text-white transition-colors"
+        class="lg:hidden p-2"
         id="mobile-menu-button"
         aria-label="Menu"
+        aria-expanded="false"
       >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-            id="menu-icon-open"
-          />
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-            id="menu-icon-close"
-            class="hidden"
-          />
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7h16M4 17h16" id="menu-icon-open" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" id="menu-icon-close" class="hidden" />
         </svg>
       </button>
-    </div>
-
-    <!-- Mobile Navigation -->
-    <div
-      id="mobile-menu"
-      class="hidden lg:hidden pb-6"
-    >
-      <div class="flex flex-col gap-2 pt-4 border-t border-white/10">
-        {navItems.map((item) => (
-          <a
-            href={item.href}
-            class="text-gray-400 hover:text-white hover:bg-white/5 font-medium transition-all py-3 px-4 rounded-lg text-sm uppercase tracking-wider"
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
     </div>
   </nav>
 </header>
 
+<!-- Mobile full-screen overlay (outside nav-root to avoid blend-mode bugs) -->
+<div
+  id="mobile-menu"
+  class="hidden fixed inset-0 z-50 bg-[var(--ink)] text-[var(--paper)] overflow-y-auto"
+  aria-hidden="true"
+>
+  <div class="container-custom pt-24 pb-12 min-h-screen flex flex-col">
+    <div class="flex-1">
+      <p class="mono-label opacity-60 mb-8">Menu</p>
+      <nav class="flex flex-col gap-5">
+        <a href="#portfolio" class="mm-link">Portfolio <span>↗</span></a>
+        <a href="#manifesto" class="mm-link">Chi siamo <span>↗</span></a>
+        <a href="#servizi" class="mm-link">Servizi <span>↗</span></a>
+        <a href="#articoli" class="mm-link">Articoli <span>↗</span></a>
+        <a href={`mailto:${email}`} class="mm-link">Contatti <span>↗</span></a>
+      </nav>
+    </div>
+    <div class="pt-8 mt-8 border-t border-white/10">
+      <p class="mono-label opacity-60 mb-2">Scrivici</p>
+      <a href={`mailto:${email}`} class="h-display text-2xl block">{email}</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mm-link {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(245, 243, 238, 0.1);
+    transition: padding 0.3s var(--ease-out);
+  }
+  .mm-link:hover { padding-left: 1rem; color: var(--electric); }
+  .mm-link span { font-family: var(--font-mono); font-size: 1.2rem; opacity: 0.5; }
+</style>
+
 <script>
-  // Mobile menu toggle
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
   const menuIconOpen = document.getElementById('menu-icon-open');
   const menuIconClose = document.getElementById('menu-icon-close');
 
-  menuButton?.addEventListener('click', () => {
-    const isOpen = mobileMenu?.classList.contains('hidden');
-
-    if (isOpen) {
-      mobileMenu?.classList.remove('hidden');
+  function toggleMenu(open: boolean) {
+    if (!mobileMenu) return;
+    if (open) {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.setAttribute('aria-hidden', 'false');
       menuIconOpen?.classList.add('hidden');
       menuIconClose?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     } else {
-      mobileMenu?.classList.add('hidden');
+      mobileMenu.classList.add('hidden');
+      mobileMenu.setAttribute('aria-hidden', 'true');
       menuIconOpen?.classList.remove('hidden');
       menuIconClose?.classList.add('hidden');
+      document.body.style.overflow = '';
     }
+    menuButton?.setAttribute('aria-expanded', String(open));
+  }
+
+  menuButton?.addEventListener('click', () => {
+    toggleMenu(mobileMenu?.classList.contains('hidden') ?? false);
   });
 
-  // Close mobile menu when clicking a link
-  const mobileLinks = mobileMenu?.querySelectorAll('a');
-  mobileLinks?.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
-      menuIconOpen?.classList.remove('hidden');
-      menuIconClose?.classList.add('hidden');
-    });
+  mobileMenu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => toggleMenu(false));
   });
 
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Smooth scroll for in-page anchors
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', (e) => {
-      e.preventDefault();
-      const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
-      if (href) {
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   });

@@ -7,97 +7,107 @@ const accessKey = settings.form?.web3formsKey || '';
 <form
   action="https://api.web3forms.com/submit"
   method="POST"
-  class="space-y-6 glass-card-light p-8 md:p-10"
+  class="cf-form"
   id="contact-form"
 >
   <input type="hidden" name="access_key" value={accessKey} />
   <input type="hidden" name="subject" value={`Nuovo contatto da ${settings.companyName}`} />
   <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label for="name" class="form-label">
-        Nome
-      </label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        required
-        class="form-input"
-        placeholder="Il tuo nome"
-      />
-    </div>
 
-    <div>
-      <label for="surname" class="form-label">
-        Cognome
-      </label>
-      <input
-        type="text"
-        id="surname"
-        name="surname"
-        required
-        class="form-input"
-        placeholder="Il tuo cognome"
-      />
+  <div class="cf-header">
+    <span class="mono-label text-white/60">Form contatti</span>
+    <span class="mono-label text-white/40">N° {String(Math.floor(Math.random() * 9000) + 1000)}</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+    <div class="cf-field">
+      <label for="name" class="cf-label">Nome</label>
+      <input type="text" id="name" name="name" required class="cf-input" placeholder="Il tuo nome" />
+    </div>
+    <div class="cf-field">
+      <label for="surname" class="cf-label">Cognome</label>
+      <input type="text" id="surname" name="surname" required class="cf-input" placeholder="Il tuo cognome" />
     </div>
   </div>
 
-  <div>
-    <label for="email" class="form-label">
-      Email
-    </label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      required
-      class="form-input"
-      placeholder="La tua email"
-    />
+  <div class="cf-field">
+    <label for="email" class="cf-label">Email</label>
+    <input type="email" id="email" name="email" required class="cf-input" placeholder="nome@esempio.it" />
   </div>
 
-  <div>
-    <label for="message" class="form-label">
-      Messaggio
-    </label>
-    <textarea
-      id="message"
-      name="message"
-      required
-      rows="5"
-      class="form-input resize-none"
-      placeholder="Scrivi il tuo messaggio..."
-    ></textarea>
+  <div class="cf-field">
+    <label for="message" class="cf-label">Messaggio</label>
+    <textarea id="message" name="message" required rows="5" class="cf-input resize-none" placeholder="Raccontaci il tuo progetto"></textarea>
   </div>
 
-  <div>
-    <button
-      type="submit"
-      class="btn-primary w-full text-lg py-4"
-    >
-      Invia
-    </button>
-  </div>
+  <button type="submit" class="btn-pill w-full justify-center mt-2" data-cursor="invia">
+    Invia richiesta <span class="btn-arrow">↗</span>
+  </button>
 
-  <!-- Success/Error messages -->
-  <div id="form-success" class="hidden p-4 bg-green-100 text-green-700 rounded-xl border border-green-200">
-    <div class="flex items-center gap-3">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <span>Grazie per averci contattato! Ti risponderemo al più presto.</span>
-    </div>
+  <div id="form-success" class="hidden cf-msg cf-msg-ok">
+    Grazie. Ti rispondiamo entro 24 ore.
   </div>
-  <div id="form-error" class="hidden p-4 bg-red-100 text-red-700 rounded-xl border border-red-200">
-    <div class="flex items-center gap-3">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      <span>Si è verificato un errore. Riprova o contattaci direttamente via email.</span>
-    </div>
+  <div id="form-error" class="hidden cf-msg cf-msg-err">
+    Errore. Scrivici direttamente via email.
   </div>
 </form>
+
+<style>
+  .cf-form {
+    background: rgba(245, 243, 238, 0.04);
+    border: 1px solid rgba(245, 243, 238, 0.14);
+    padding: 0;
+    backdrop-filter: blur(8px);
+  }
+  .cf-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(245, 243, 238, 0.14);
+  }
+  .cf-field {
+    padding: 1.25rem;
+    border-top: 1px solid rgba(245, 243, 238, 0.1);
+  }
+  .cf-field:first-child { border-top: 0; }
+  .grid > .cf-field + .cf-field { border-left: 1px solid rgba(245, 243, 238, 0.1); }
+  @media (max-width: 767px) {
+    .grid > .cf-field + .cf-field { border-left: 0; border-top: 1px solid rgba(245, 243, 238, 0.1); }
+  }
+  .cf-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgba(245, 243, 238, 0.6);
+    margin-bottom: 0.5rem;
+  }
+  .cf-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--paper);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    outline: none;
+    padding: 0;
+  }
+  .cf-input::placeholder { color: rgba(245, 243, 238, 0.3); }
+  .cf-input:focus { color: var(--paper); }
+  .cf-msg {
+    margin: 1.25rem;
+    padding: 1rem;
+    border: 1px dashed currentColor;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .cf-msg-ok { color: #9fffd5; }
+  .cf-msg-err { color: #ff9a8b; }
+  form > button[type="submit"] { margin: 1.25rem; width: calc(100% - 2.5rem); }
+</style>
 
 <script>
   const form = document.getElementById('contact-form') as HTMLFormElement;
@@ -106,29 +116,23 @@ const accessKey = settings.form?.web3formsKey || '';
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const formData = new FormData(form);
 
     try {
       const response = await fetch(form.action, {
         method: 'POST',
         body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+        headers: { Accept: 'application/json' },
       });
-
       if (response.ok) {
         form.reset();
         successMsg?.classList.remove('hidden');
         errorMsg?.classList.add('hidden');
-        setTimeout(() => {
-          successMsg?.classList.add('hidden');
-        }, 5000);
+        setTimeout(() => successMsg?.classList.add('hidden'), 5000);
       } else {
         throw new Error('Form submission failed');
       }
-    } catch (error) {
+    } catch (_error) {
       errorMsg?.classList.remove('hidden');
       successMsg?.classList.add('hidden');
     }

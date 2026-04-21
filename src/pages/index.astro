@@ -2,39 +2,30 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { MapPin, Phone, Mail, Video, ArrowDown, Instagram, Facebook, Camera, Megaphone } from 'lucide-astro';
+import { ArrowDown, Instagram, Facebook, MapPin, Phone, Mail } from 'lucide-astro';
 
-// Carica dati da Keystatic (import statici compatibili con Cloudflare)
 import homepage from '../../content/pages/homepage.json';
 import globalSettings from '../../content/settings/global.json';
 
-// Import immagini statiche per ottimizzazione
-import logoHeroImage from '../assets/images/uploads/global/logoHero.png';
-import playButtonImage from '../assets/images/uploads/play-button.png';
-
-// Import dinamico portfolio JSON files
+// Portfolio JSON
 const portfolioFiles = import.meta.glob<{ default: any }>(
   '/content/portfolio/*.json',
   { eager: true }
 );
 
-// Import dinamico immagini portfolio per ottimizzazione Astro
+// Portfolio images (optimized)
 const portfolioImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/portfolio/**/*.{png,jpg,jpeg,gif,webp}',
   { eager: true }
 );
 
-// Portfolio items - caricati staticamente
 const portfolio = Object.entries(portfolioFiles)
   .map(([filePath, mod]) => {
-    // Estrai slug dal path: /content/portfolio/{slug}.json
     const slug = filePath.split('/').pop()?.replace('.json', '') || '';
-    // Il campo title è un oggetto { name, slug } oppure stringa
     const titleData = mod.default.title;
     const displayTitle = typeof titleData === 'object' ? titleData.name : titleData;
-    // L'immagine nel JSON è il path completo: /src/assets/images/portfolio/{slug}/image.png
     const imagePath = mod.default.image;
-    const imageModule = portfolioImages[imagePath];
+    const imageModule = imagePath ? portfolioImages[imagePath] : null;
     return {
       ...mod.default,
       slug,
@@ -43,176 +34,264 @@ const portfolio = Object.entries(portfolioFiles)
     };
   })
   .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+// Hero-featured item (primo featured, o primo in lista)
+const heroProject = portfolio.find((p) => p.featured) || portfolio[0] || null;
+
+// ---------- Default content for new sections (editabile via Keystatic in seguito) ----------
+const H: any = homepage;
+
+const manifesto = H.manifesto || {
+  eyebrow: '01 — Manifesto',
+  title: 'Facciamo rumore dove conta.\nCreiamo storie che si diffondono.',
+  body:
+    'Siamo un’agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.',
+  kpis: [
+    { num: 120, suffix: '+', label: 'Progetti consegnati' },
+    { num: 48, suffix: 'M', label: 'Views generate' },
+    { num: 9, suffix: '', label: 'Anni di esperienza' },
+    { num: 97, suffix: '%', label: 'Clienti che tornano' },
+  ],
+};
+
+const servicesList = H.servicesList || [
+  { num: '01', title: 'Storytelling', desc: 'Narrativa di brand, content strategy, tone of voice.' },
+  { num: '02', title: 'Social Media', desc: 'Gestione, community, advertising su Meta e TikTok.' },
+  { num: '03', title: 'Foto e Video', desc: 'Shooting, reel, campagne, produzione in-house.' },
+  { num: '04', title: 'Performance Marketing', desc: 'Google, Meta, YouTube, tracking e ottimizzazione.' },
+  { num: '05', title: 'Sito & Identità', desc: 'Siti, branding, sistema visivo, UI.' },
+  { num: '06', title: 'Consulenza', desc: 'Strategia, posizionamento, audit, formazione.' },
+];
+
+const team = H.team || [
+  { name: 'Marco Rossi', role: 'Founder & Creative Director', initials: 'MR' },
+  { name: 'Giulia Bianchi', role: 'Head of Content', initials: 'GB' },
+  { name: 'Andrea Verdi', role: 'Art Director', initials: 'AV' },
+  { name: 'Sara Neri', role: 'Performance Lead', initials: 'SN' },
+];
+
+const reviews = H.reviews || [
+  {
+    quote:
+      'Hanno preso il nostro brand e l’hanno fatto diventare conversazione. Engagement triplicato in sei mesi.',
+    author: 'Laura P.',
+    role: 'Marketing Manager, FoodCo',
+  },
+  {
+    quote:
+      'Velocità, qualità e una visione chiara. Non un’agenzia, un reparto marketing esterno.',
+    author: 'Davide S.',
+    role: 'CEO, Atelier 24',
+  },
+  {
+    quote:
+      'Ci hanno rimesso in pista dopo un rebranding andato male. Hanno capito in due chiamate.',
+    author: 'Federica M.',
+    role: 'Founder, Nord Studio',
+  },
+];
+
+const articles = H.articles || [
+  {
+    tag: 'Intervista',
+    title: 'Come costruire una community che compra davvero',
+    date: '22 Apr 2026',
+    href: '#',
+  },
+  {
+    tag: 'Approfondimento',
+    title: 'Il declino delle ads generiche (e cosa farne)',
+    date: '10 Apr 2026',
+    href: '#',
+  },
+  {
+    tag: 'Case Study',
+    title: 'Una campagna virale non la pianifichi: la costruisci',
+    date: '28 Mar 2026',
+    href: '#',
+  },
+];
+
+// Category tag helper for portfolio cards
+function categoryFor(slug: string): string {
+  if (slug.includes('vfdc')) return 'Branding';
+  const n = parseInt(slug.replace(/\D/g, ''), 10) || 0;
+  const cats = ['Social', 'Video', 'Campaign', 'Branding', 'Content', 'Shoot'];
+  return cats[n % cats.length];
+}
 ---
 
 <Layout title={homepage.seo.title} description={homepage.seo.description}>
 
-  <!-- Hero Section -->
-  <section
-    id="home"
-    class="relative min-h-screen flex items-center hero-bg overflow-hidden"
-  >
-    <!-- Animated background - color shifting lights -->
-    <div class="hero-animated-bg">
-      <div class="hero-light-3"></div>
-    </div>
-
-    <div class="container-custom relative z-10 pt-20 md:pt-24 pb-8 md:pb-12">
-      <!-- Logo centrato -->
-      <div class="flex justify-center mt-16 md:mt-24 mb-10 md:mb-16">
-        <Image
-          src={logoHeroImage}
-          alt={globalSettings.companyName}
-          class="w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl img-darken"
-          loading="eager"
-        />
+  <!-- =======================================================================
+       HERO
+       ======================================================================= -->
+  <section id="home" class="section pt-32 pb-12 md:pt-40">
+    <div class="container-custom">
+      <!-- Hero top row: eyebrow + meta -->
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-10 md:mb-14">
+        <p class="mono-label text-[var(--muted)]">
+          01 / HOMEPAGE — <span class="text-[var(--ink)]">REAL GOES VIRAL</span>
+        </p>
+        <p class="mono-label text-[var(--muted)] hidden md:block">
+          MODENA · IT — EST. 2017
+        </p>
       </div>
 
-      <!-- Text Content centrato -->
-      <div class="text-center max-w-3xl mx-auto px-2">
-        <p class="text-white/80 text-sm sm:text-lg md:text-xl mb-4 md:mb-6 uppercase tracking-wider md:tracking-widest">{homepage.hero.badge}</p>
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-4 md:mb-6 text-white leading-tight">
-          {homepage.hero.title}
+      <!-- Frame portfolio -->
+      {heroProject?.image ? (
+        <a
+          href="#portfolio"
+          class="portfolio-card block w-full !aspect-[16/9] reveal-scale"
+          data-cursor="portfolio"
+          aria-label={`Guarda ${heroProject.displayTitle}`}
+        >
+          <Image
+            src={heroProject.image}
+            alt={heroProject.description || heroProject.displayTitle}
+            class="w-full h-full object-cover"
+            width={1600}
+            height={900}
+            loading="eager"
+          />
+          <div class="meta">
+            <div>
+              <span class="tag">{categoryFor(heroProject.slug)} · In primo piano</span>
+              <span class="title block mt-1">{heroProject.description || heroProject.displayTitle}</span>
+            </div>
+            <span class="tag">↗ Case Study</span>
+          </div>
+        </a>
+      ) : (
+        <div class="portfolio-card !aspect-[16/9] flex items-center justify-center">
+          <span class="mono-label text-[var(--paper)]">hero placeholder</span>
+        </div>
+      )}
+
+      <!-- Main statement -->
+      <div class="mt-10 md:mt-16 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <h1 class="lg:col-span-9 h-display text-[clamp(3rem,10vw,9rem)]">
+          <span class="line-reveal"><span>REAL GOES</span></span><br />
+          <span class="line-reveal" style="--line-delay: 0.12s"><span>VIRAL<span class="inline-block align-top text-[var(--electric)]">.</span></span></span>
         </h1>
-        <p class="text-base sm:text-lg md:text-xl text-gray-300 mb-6 md:mb-8 leading-relaxed">
-          {homepage.hero.subtitle}
-        </p>
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-          <a href={homepage.hero.ctaPrimary.link} class="btn-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4">
-            {homepage.hero.ctaPrimary.text}
-          </a>
-          <a href={homepage.hero.ctaSecondary.link} class="border-2 border-white/30 text-white hover:bg-white hover:text-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-300 inline-flex items-center justify-center">
-            {homepage.hero.ctaSecondary.text}
-          </a>
+        <div class="lg:col-span-3 flex flex-col justify-end gap-6">
+          <p class="quote-big text-[var(--ink)]">
+            Agenzia di comunicazione &amp; marketing.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="#servizi" class="btn-primary magnetic-btn" data-cursor="scopri">
+              Scopri <span class="btn-arrow">↗</span>
+            </a>
+            <a href="#contatti" class="btn-outline" data-cursor="scrivici">Contattaci</a>
+          </div>
         </div>
       </div>
 
-      <!-- Scroll indicator -->
-      <div class="mt-10 md:mt-16 text-center">
-        <a href="#about" class="text-white/50 hover:text-white transition-colors inline-block" aria-label="Scorri verso il basso">
-          <ArrowDown class="w-6 h-6 md:w-8 md:h-8 mx-auto animate-bounce" />
+      <!-- Scroll hint -->
+      <div class="mt-14 md:mt-20 flex items-center justify-between text-[var(--muted)]">
+        <span class="mono-label">Scroll per esplorare</span>
+        <ArrowDown class="w-5 h-5 animate-bounce" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee section-dark">
+    <div class="marquee-track">
+      <span>
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+      </span>
+      <span aria-hidden="true">
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+        REAL GOES VIRAL <span class="dot"></span>
+      </span>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MANIFESTO / ABOUT
+       ======================================================================= -->
+  <section id="manifesto" class="section">
+    <div class="container-custom grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+      <div class="lg:col-span-4 reveal-left">
+        <p class="eyebrow">{manifesto.eyebrow}</p>
+        <div class="mt-8 rotating-badge">
+          REAL · GOES · VIRAL ·
+        </div>
+      </div>
+
+      <div class="lg:col-span-8 reveal">
+        <h2 class="section-title whitespace-pre-line">
+          {manifesto.title}
+        </h2>
+        <p class="quote-big mt-8 text-[var(--muted)] max-w-2xl">
+          {manifesto.body}
+        </p>
+
+        <!-- KPIs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-14 stagger-children">
+          {manifesto.kpis.map((k: any) => (
+            <div class="kpi">
+              <span class="num mono-num" data-counter={k.num} data-suffix={k.suffix}>0{k.suffix}</span>
+              <span class="label">{k.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       PORTFOLIO
+       ======================================================================= -->
+  <section id="portfolio" class="section section-dark">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <div class="reveal-left">
+          <p class="eyebrow">02 — Portfolio</p>
+          <h2 class="section-title mt-4 max-w-3xl">
+            I lavori migliori,<br />cliente per cliente.
+          </h2>
+        </div>
+        <a href="#contatti" class="btn-outline" data-cursor="scrivici">
+          Il tuo prossimo <span class="btn-arrow">↗</span>
         </a>
       </div>
-    </div>
-  </section>
 
-  <!-- About Section -->
-  <section
-    id="about"
-    class="section bg-cover bg-center bg-no-repeat bg-fixed section-bg-overlay"
-    style={`background-image: url('${homepage.about.backgroundImage}');`}
-  >
-    <div class="container-custom relative z-10">
-      <div class="max-w-3xl mx-auto text-center reveal">
-        <p class="text-white/80 uppercase tracking-widest mb-4">{homepage.about.badge}</p>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-6 md:mb-8">
-          {homepage.about.title}
-        </h2>
-        <p class="text-base sm:text-xl text-white/90 leading-relaxed">
-          {homepage.about.description}
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Our Job Section -->
-  <section id="servizi" class="section bg-gray-50">
-    <div class="container-custom">
-      <div class="max-w-3xl mx-auto text-center reveal">
-        <p class="text-primary uppercase tracking-widest mb-4">{homepage.services.badge}</p>
-        <h2 class="section-title mb-6">{homepage.services.title}</h2>
-        <p class="text-xl text-gray-600 leading-relaxed mb-8">
-          {homepage.services.subtitle}
-        </p>
-        <div class="flex justify-center gap-6">
-          <div class="icon-wrapper">
-            <Camera class="w-8 h-8 text-white" />
-          </div>
-          <div class="icon-wrapper">
-            <Video class="w-8 h-8 text-white" />
-          </div>
-          <div class="icon-wrapper">
-            <Megaphone class="w-8 h-8 text-white" />
-          </div>
-        </div>
-        <p class="text-xl md:text-2xl text-gray-700 leading-relaxed">
-          {homepage.services.description}
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Video/Trailer Section -->
-  <section
-    id="trailer"
-    class="section bg-cover bg-center bg-no-repeat bg-fixed section-bg-overlay section-bg-overlay-60"
-    style={`background-image: url('${homepage.trailer.backgroundImage}');`}
-  >
-    <div class="container-custom relative z-10">
-      <div class="text-center mb-12 reveal">
-        <p class="text-white/80 uppercase tracking-wider sm:tracking-widest mb-3 sm:mb-4 text-sm sm:text-base">{homepage.trailer.badge}</p>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-6 md:mb-8">
-          {homepage.trailer.title}
-        </h2>
-      </div>
-
-      <!-- Video placeholder with play button -->
-      <div class="max-w-4xl mx-auto reveal-scale">
-        <div class="relative aspect-video rounded-2xl overflow-hidden glass-card group cursor-pointer tilt-card">
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-blue-800/50 flex items-center justify-center">
-            <div class="w-24 h-24 md:w-32 md:h-32 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-              <Image
-                src={playButtonImage}
-                alt="Play"
-                width={128}
-                height={128}
-                class="w-full h-full object-contain drop-shadow-2xl img-darken"
-              />
-            </div>
-          </div>
-          <div class="absolute bottom-4 left-4 right-4 text-center">
-            <p class="text-white/80 text-sm">{homepage.trailer.playButtonText}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Portfolio Section -->
-  <section id="portfolio" class="section bg-white">
-    <div class="container-custom">
-      <div class="text-center mb-16 reveal-scale">
-        <p class="text-primary uppercase tracking-widest mb-4">{homepage.portfolio.badge}</p>
-        <h2 class="section-title mb-4">{homepage.portfolio.title}</h2>
-        <p class="text-lg text-gray-600">{homepage.portfolio.subtitle}</p>
-      </div>
-
-      <!-- Gallery Grid with real images -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 stagger-children" id="portfolio-grid">
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 stagger-children" id="portfolio-grid">
         {portfolio.map((item, index) => (
           <button
             type="button"
-            class="group relative aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-lg img-zoom cursor-pointer portfolio-item"
+            class="portfolio-card text-left !aspect-[4/5]"
             data-index={index}
-            aria-label={`Apri ${item.description || item.title}`}
+            data-cursor="apri"
+            aria-label={`Apri ${item.description || item.displayTitle}`}
           >
-{item.image ? (
+            {item.image ? (
               <Image
                 src={item.image}
                 alt={item.description || item.displayTitle}
                 class="w-full h-full object-cover"
                 loading="lazy"
-                width={400}
-                height={400}
+                width={600}
+                height={750}
               />
             ) : (
-              <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-                <span class="text-gray-400">No image</span>
+              <div class="w-full h-full bg-[var(--ink-soft)] flex items-center justify-center">
+                <span class="mono-label text-white/40">no image</span>
               </div>
             )}
-            <div class="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              <p class="text-white text-sm font-medium">{item.description || item.title}</p>
+            <div class="meta">
+              <div>
+                <span class="tag">{categoryFor(item.slug)}</span>
+                <span class="title block mt-1">{item.description || item.displayTitle}</span>
+              </div>
+              <span class="tag">↗</span>
             </div>
           </button>
         ))}
@@ -220,22 +299,22 @@ const portfolio = Object.entries(portfolioFiles)
     </div>
   </section>
 
-  <!-- Lightbox Modal -->
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="lightbox-overlay"></div>
     <button type="button" class="lightbox-close" aria-label="Chiudi">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
     </button>
     <button type="button" class="lightbox-nav lightbox-prev" aria-label="Immagine precedente">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
     </button>
     <button type="button" class="lightbox-nav lightbox-next" aria-label="Immagine successiva">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </button>
@@ -248,13 +327,13 @@ const portfolio = Object.entries(portfolioFiles)
     </div>
   </div>
 
-  <script define:vars={{ portfolioData: portfolio.map(p => ({ image: p.image?.src || '', title: p.description || p.displayTitle })) }}>
+  <script is:inline define:vars={{ portfolioData: portfolio.map((p) => ({ image: p.image?.src || '', title: p.description || p.displayTitle })) }}>
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxCurrent = document.getElementById('lightbox-current');
     const lightboxTotal = document.getElementById('lightbox-total');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    const portfolioItems = document.querySelectorAll('#portfolio-grid .portfolio-card');
 
     let currentIndex = 0;
     const images = portfolioData;
@@ -266,13 +345,11 @@ const portfolio = Object.entries(portfolioFiles)
       lightbox.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
-
     function closeLightbox() {
       lightbox.classList.remove('active');
       lightbox.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
-
     function updateLightbox() {
       const item = images[currentIndex];
       lightboxImage.src = item.image;
@@ -281,141 +358,246 @@ const portfolio = Object.entries(portfolioFiles)
       lightboxCurrent.textContent = currentIndex + 1;
       lightboxTotal.textContent = images.length;
     }
-
     function nextImage() {
       currentIndex = (currentIndex + 1) % images.length;
       updateLightbox();
     }
-
     function prevImage() {
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       updateLightbox();
     }
 
-    // Event listeners
     portfolioItems.forEach((item) => {
       item.addEventListener('click', () => {
         const index = parseInt(item.dataset.index, 10);
         openLightbox(index);
       });
     });
-
     document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
     document.querySelector('.lightbox-overlay').addEventListener('click', closeLightbox);
     document.querySelector('.lightbox-next').addEventListener('click', nextImage);
     document.querySelector('.lightbox-prev').addEventListener('click', prevImage);
 
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!lightbox.classList.contains('active')) return;
-
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowRight') nextImage();
       if (e.key === 'ArrowLeft') prevImage();
     });
 
-    // Touch swipe support
     let touchStartX = 0;
     let touchEndX = 0;
-
-    lightbox.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
+    lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
     lightbox.addEventListener('touchend', (e) => {
       touchEndX = e.changedTouches[0].screenX;
       const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) nextImage();
-        else prevImage();
-      }
+      if (Math.abs(diff) > 50) { if (diff > 0) nextImage(); else prevImage(); }
     }, { passive: true });
   </script>
 
-  <!-- Social Section -->
-  <section id="social" class="section bg-gradient-to-b from-gray-50 to-white">
+  <!-- =======================================================================
+       SERVIZI
+       ======================================================================= -->
+  <section id="servizi" class="section">
     <div class="container-custom">
-      <div class="text-center mb-12 reveal">
-        <p class="text-primary uppercase tracking-widest mb-4">{homepage.social.badge}</p>
-        <h2 class="text-3xl md:text-4xl text-gray-800 mb-4">{homepage.social.title}</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
+        <div class="lg:col-span-5 reveal-left">
+          <p class="eyebrow">03 — Servizi</p>
+          <h2 class="section-title mt-4">Quello che facciamo, ogni giorno.</h2>
+        </div>
+        <div class="lg:col-span-7 reveal lg:pt-20">
+          <p class="quote-big text-[var(--muted)]">
+            Un reparto marketing esterno, completo. Strategia, contenuti, performance.
+            Nessun pacchetto preconfezionato: solo quello che serve al tuo brand.
+          </p>
+        </div>
       </div>
 
-      <div class="flex justify-center gap-6 reveal-scale">
-        {globalSettings.social.instagram && (
-          <a
-            href={globalSettings.social.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 via-red-500 to-orange-500 flex items-center justify-center hover:scale-110 transition-transform duration-300"
-            aria-label="Seguici su Instagram"
-          >
-            <Instagram class="w-5 h-5 text-white" strokeWidth={1} />
+      <div class="mt-8">
+        {servicesList.map((s: any) => (
+          <a href="#contatti" class="service-row" data-cursor="richiedi">
+            <span class="sv-num">{s.num}</span>
+            <div>
+              <span class="sv-title">{s.title}</span>
+              <small>{s.desc}</small>
+            </div>
+            <span class="sv-arrow">↗</span>
           </a>
-        )}
-
-        {globalSettings.social.facebook && (
-          <a
-            href={globalSettings.social.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center hover:scale-110 transition-transform duration-300"
-            aria-label="Seguici su Facebook"
-          >
-            <Facebook class="w-5 h-5 text-white" strokeWidth={1} />
-          </a>
-        )}
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- =======================================================================
+       TEAM
+       ======================================================================= -->
+  <section id="team" class="section section-dark">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <div class="reveal-left">
+          <p class="eyebrow">04 — Team</p>
+          <h2 class="section-title mt-4 max-w-3xl">
+            Persone vere dietro ogni post.
+          </h2>
+        </div>
+        <p class="mono-label text-white/60 max-w-xs">
+          Un team piccolo, selezionato, ossessionato dal risultato.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+        {team.map((m: any) => (
+          <div class="portfolio-card !aspect-[3/4] bg-[var(--ink-soft)]">
+            <div class="w-full h-full flex items-center justify-center">
+              <span class="h-display text-[clamp(3rem,10vw,6rem)] text-white/20 select-none">{m.initials}</span>
+            </div>
+            <div class="meta" style="transform: translateY(0); opacity: 1;">
+              <div>
+                <span class="tag">{m.role}</span>
+                <span class="title block mt-1">{m.name}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       RECENSIONI
+       ======================================================================= -->
+  <section id="recensioni" class="section">
+    <div class="container-custom">
+      <div class="mb-12 reveal-left">
+        <p class="eyebrow">05 — Recensioni</p>
+        <h2 class="section-title mt-4 max-w-3xl">Lo dicono i nostri clienti.</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-b border-[var(--hairline)] stagger-children">
+        {reviews.map((r: any) => (
+          <div class="feature-card border-0 md:border-r md:border-[var(--hairline)] last:md:border-r-0 h-full flex flex-col justify-between gap-8 min-h-[280px]">
+            <p class="quote-big">"{r.quote}"</p>
+            <div>
+              <p class="mono-label text-[var(--ink)]">{r.author}</p>
+              <p class="mono-label text-[var(--muted)] mt-1">{r.role}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       ARTICOLI
+       ======================================================================= -->
+  <section id="articoli" class="section">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <div class="reveal-left">
+          <p class="eyebrow">06 — Articoli</p>
+          <h2 class="section-title mt-4 max-w-3xl">Interviste &amp; approfondimenti.</h2>
+        </div>
+        <a href="#" class="btn-outline" data-cursor="tutti">
+          Tutti gli articoli <span class="btn-arrow">↗</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
+        {articles.map((a: any) => (
+          <a href={a.href} class="feature-card group block" data-cursor="leggi">
+            <p class="mono-label text-[var(--electric)] mb-6">{a.tag}</p>
+            <h3 class="text-2xl md:text-3xl leading-tight mb-8 min-h-[6rem]">{a.title}</h3>
+            <div class="flex items-center justify-between border-t pt-4">
+              <span class="mono-label text-[var(--muted)]">{a.date}</span>
+              <span class="mono-label">Leggi ↗</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       SOCIAL (compact)
+       ======================================================================= -->
+  <section id="social" class="section-tight">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-center justify-between gap-6 border-y border-[var(--hairline)] py-8">
+        <div>
+          <p class="eyebrow">Seguici</p>
+          <p class="h-display text-2xl md:text-3xl mt-2">{homepage.social?.title || 'Restiamo connessi'}</p>
+        </div>
+        <div class="flex items-center gap-3">
+          {globalSettings.social?.instagram && (
+            <a
+              href={globalSettings.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-ghost"
+              data-cursor="instagram"
+              aria-label="Instagram"
+            >
+              <Instagram class="w-4 h-4" strokeWidth={1.5} /> Instagram
+            </a>
+          )}
+          {globalSettings.social?.facebook && (
+            <a
+              href={globalSettings.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-ghost"
+              data-cursor="facebook"
+              aria-label="Facebook"
+            >
+              <Facebook class="w-4 h-4" strokeWidth={1.5} /> Facebook
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       CONTATTI
+       ======================================================================= -->
   <section id="contatti" class="section cta-section noise-overlay">
     <div class="container-custom relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        <!-- Contact Info -->
-        <div class="text-white reveal-left">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-6 md:mb-8">
-            {homepage.contact.title}
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <div class="lg:col-span-6 reveal-left">
+          <p class="eyebrow text-white/70">07 — Contatti</p>
+          <h2 class="section-title mt-4 text-[var(--paper)]">
+            Partiamo?
           </h2>
-          <p class="text-gray-300 text-base sm:text-lg mb-8 md:mb-10 leading-relaxed">
-            {homepage.contact.description}
+          <p class="quote-big mt-6 text-white/80 max-w-xl">
+            {homepage.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
           </p>
 
-          <div class="space-y-6">
+          <div class="mt-12 space-y-6">
+            <a href={`mailto:${globalSettings.contact?.email}`} class="flex items-center gap-4 group" data-cursor="scrivici">
+              <span class="icon-wrapper shrink-0"><Mail class="w-5 h-5" strokeWidth={1.5} /></span>
+              <span>
+                <span class="mono-label text-white/60 block">Email</span>
+                <span class="h-display text-xl group-hover:text-[var(--electric)] transition-colors">{globalSettings.contact?.email}</span>
+              </span>
+            </a>
+            <a href={`tel:${(globalSettings.contact?.phone || '').replace(/\s/g, '')}`} class="flex items-center gap-4 group" data-cursor="chiamaci">
+              <span class="icon-wrapper shrink-0"><Phone class="w-5 h-5" strokeWidth={1.5} /></span>
+              <span>
+                <span class="mono-label text-white/60 block">Telefono</span>
+                <span class="h-display text-xl group-hover:text-[var(--electric)] transition-colors">{globalSettings.contact?.phone}</span>
+              </span>
+            </a>
             <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-lg bg-primary-20 flex items-center justify-center shrink-0">
-                <MapPin class="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <p class="text-white font-semibold mb-1">Indirizzo</p>
-                <p class="text-gray-300">{globalSettings.contact.address}</p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-lg bg-primary-20 flex items-center justify-center shrink-0">
-                <Phone class="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <p class="text-white font-semibold mb-1">Telefono</p>
-                <a href={`tel:${globalSettings.contact.phone.replace(/\s/g, '')}`} class="text-gray-300 hover:text-accent transition-colors">{globalSettings.contact.phone}</a>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-lg bg-primary-20 flex items-center justify-center shrink-0">
-                <Mail class="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <p class="text-white font-semibold mb-1">Email</p>
-                <a href={`mailto:${globalSettings.contact.email}`} class="text-gray-300 hover:text-accent transition-colors">{globalSettings.contact.email}</a>
-              </div>
+              <span class="icon-wrapper shrink-0"><MapPin class="w-5 h-5" strokeWidth={1.5} /></span>
+              <span>
+                <span class="mono-label text-white/60 block">Indirizzo</span>
+                <span class="h-display text-xl">{globalSettings.contact?.address}</span>
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- Contact Form -->
-        <div class="reveal-right">
+        <div class="lg:col-span-6 reveal-right">
           <ContactForm />
         </div>
       </div>
