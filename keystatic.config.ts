@@ -135,6 +135,7 @@ export default config({
           eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '01 — Manifesto' }),
           title: fields.text({ label: 'Titolo (multilinea, usa \\n)', multiline: true }),
           body: fields.text({ label: 'Corpo', multiline: true }),
+          tagline: fields.text({ label: 'Tagline (es. Motor Valley)', multiline: true }),
           kpis: fields.array(
             fields.object({
               num: fields.number({ label: 'Numero', defaultValue: 0 }),
@@ -153,10 +154,34 @@ export default config({
             num: fields.text({ label: 'Numero (es. 01)', defaultValue: '01' }),
             title: fields.text({ label: 'Titolo' }),
             desc: fields.text({ label: 'Descrizione breve', multiline: true }),
+            bullets: fields.array(fields.text({ label: 'Sotto-servizio' }), {
+              label: 'Sotto-servizi',
+              itemLabel: (props) => props.value,
+            }),
           }),
           {
             label: 'Servizi (lista editoriale)',
             itemLabel: (props) => `${props.fields.num.value} — ${props.fields.title.value}`,
+          }
+        ),
+
+        clients: fields.array(
+          fields.text({ label: 'Nome cliente' }),
+          {
+            label: 'Clienti',
+            itemLabel: (props) => props.value || '(vuoto)',
+          }
+        ),
+
+        locations: fields.array(
+          fields.object({
+            city: fields.text({ label: 'Città' }),
+            tag: fields.text({ label: 'Etichetta (es. HQ, Studio Creativo)' }),
+            address: fields.text({ label: 'Indirizzo' }),
+          }),
+          {
+            label: 'Sedi',
+            itemLabel: (props) => `${props.fields.city.value} — ${props.fields.tag.value}`,
           }
         ),
 

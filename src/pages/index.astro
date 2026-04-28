@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { ArrowDown, Instagram, Facebook, MapPin, Phone, Mail } from 'lucide-astro';
+import { ArrowDown, Instagram, Facebook, Phone, Mail } from 'lucide-astro';
 
 import homepage from '../../content/pages/homepage.json';
 import globalSettings from '../../content/settings/global.json';
@@ -43,21 +43,30 @@ const manifesto = H.manifesto || {
   title: 'Facciamo rumore dove conta.\nCreiamo storie che si diffondono.',
   body:
     'Siamo un’agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.',
+  tagline: 'Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia.',
   kpis: [
     { num: 120, suffix: '+', label: 'Progetti consegnati' },
     { num: 48, suffix: 'M', label: 'Views generate' },
-    { num: 9, suffix: '', label: 'Anni di esperienza' },
+    { num: 3, suffix: '', label: 'Anni di esperienza' },
     { num: 97, suffix: '%', label: 'Clienti che tornano' },
   ],
 };
 
 const servicesList = H.servicesList || [
-  { num: '01', title: 'Storytelling', desc: 'Narrativa di brand, content strategy, tone of voice.' },
-  { num: '02', title: 'Social Media', desc: 'Gestione, community, advertising su Meta e TikTok.' },
-  { num: '03', title: 'Foto e Video', desc: 'Shooting, reel, campagne, produzione in-house.' },
-  { num: '04', title: 'Performance Marketing', desc: 'Google, Meta, YouTube, tracking e ottimizzazione.' },
-  { num: '05', title: 'Sito & Identità', desc: 'Siti, branding, sistema visivo, UI.' },
-  { num: '06', title: 'Consulenza', desc: 'Strategia, posizionamento, audit, formazione.' },
+  { num: '01', title: 'Communication', desc: 'Strategia editoriale, posizionamento, tono di voce.', bullets: ['Brand strategy', 'Copywriting & storytelling', 'PR & media relations', 'Content planning'] },
+  { num: '02', title: 'Marketing', desc: 'Performance, funnel, dati. Acquisizione che si misura.', bullets: ['Meta & Google Ads', 'Funnel & lead generation', 'Email automation', 'Tracking & analytics'] },
+  { num: '03', title: 'Social Media Management', desc: 'Community, contenuti, advertising su Meta, TikTok e LinkedIn.', bullets: ['Piano editoriale', 'Creazione reel & post', 'Community management', 'Influencer & creator collab'] },
+  { num: '04', title: 'Graphic & Branding Design', desc: 'Identità visiva, sistema grafico, materiali on/offline.', bullets: ['Logo & brand identity', 'Brand book & sistema visivo', 'Materiali stampa & packaging', 'UI / sito vetrina'] },
+];
+
+const clients = H.clients || [
+  'Ducati Motor', 'Pasta Garofalo', 'Studio Bonaventura', 'Atelier 24', 'FoodCo',
+  'Nord Studio', 'Bottega Lina', 'Riviera Lab', 'Casa del Tè', 'Officine Mecca',
+];
+
+const locations = H.locations || [
+  { city: 'Bologna', tag: 'HQ', address: 'Via … , Bologna (BO)' },
+  { city: 'Modena', tag: 'Studio Creativo', address: 'Piazza Tintori 27, Bastiglia (MO) — 41033' },
 ];
 
 const team = H.team || [
@@ -131,7 +140,7 @@ function categoryFor(slug: string): string {
           01 / HOMEPAGE
         </p>
         <p class="mono-label text-[var(--muted)] hidden md:block text-right">
-          MODENA · IT<br />EST. 2017
+          BOLOGNA · MODENA — IT<br />MOTOR VALLEY
         </p>
       </div>
 
@@ -152,8 +161,8 @@ function categoryFor(slug: string): string {
           Agenzia di comunicazione &amp; marketing.
         </p>
         <div class="md:col-span-4">
-          <a href="#manifesto" class="btn-primary magnetic-btn" data-cursor="scopri">
-            Inizia <span class="btn-arrow">↗</span>
+          <a href="#contatti" class="btn-primary magnetic-btn" data-cursor="prenota">
+            Prenota una Call <span class="btn-arrow">↗</span>
           </a>
         </div>
         <a href="#manifesto" class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
@@ -202,6 +211,13 @@ function categoryFor(slug: string): string {
           {manifesto.body}
         </p>
 
+        {manifesto.tagline && (
+          <p class="mt-8 inline-flex items-start gap-3 max-w-2xl">
+            <span class="mono-label text-[var(--electric)] mt-2 shrink-0">— MOTOR VALLEY</span>
+            <span class="quote-big text-[var(--ink)]">{manifesto.tagline}</span>
+          </p>
+        )}
+
         <!-- KPIs -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-14 stagger-children">
           {manifesto.kpis.map((k: any) => (
@@ -212,6 +228,32 @@ function categoryFor(slug: string): string {
           ))}
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       CLIENTI
+       ======================================================================= -->
+  <section id="clienti" class="section-tight section-divider">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <div class="reveal-left">
+          <p class="eyebrow">— Clienti</p>
+          <h2 class="section-title mt-3 max-w-2xl text-[clamp(1.6rem,3.5vw,2.8rem)]">Brand che ci hanno scelto.</h2>
+        </div>
+        <p class="mono-label text-[var(--muted)] max-w-xs">
+          Una selezione di chi ha visto crescere i propri numeri lavorando con noi.
+        </p>
+      </div>
+
+      <ul class="clients-grid stagger-children">
+        {clients.map((name: string) => (
+          <li class="client-cell" data-cursor="cliente">
+            <span class="client-name">{name}</span>
+            <span class="client-arrow" aria-hidden="true">↗</span>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
@@ -382,15 +424,22 @@ function categoryFor(slug: string): string {
         </div>
       </div>
 
-      <div class="mt-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-[var(--hairline)] stagger-children">
         {servicesList.map((s: any) => (
-          <a href="#contatti" class="service-row" data-cursor="richiedi">
-            <span class="sv-num">{s.num}</span>
-            <div>
-              <span class="sv-title">{s.title}</span>
-              <small>{s.desc}</small>
+          <a href="#contatti" class="service-card" data-cursor="richiedi">
+            <div class="flex items-baseline justify-between gap-4">
+              <span class="mono-label text-[var(--muted)]">{s.num}</span>
+              <span class="sv-arrow mono" aria-hidden="true">↗</span>
             </div>
-            <span class="sv-arrow">↗</span>
+            <h3 class="sv-title mt-4">{s.title}</h3>
+            <p class="text-[var(--muted)] mt-3 max-w-md">{s.desc}</p>
+            {s.bullets && s.bullets.length > 0 && (
+              <ul class="sv-bullets mt-6">
+                {s.bullets.map((b: string) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            )}
           </a>
         ))}
       </div>
@@ -527,7 +576,7 @@ function categoryFor(slug: string): string {
   </section>
 
   <!-- =======================================================================
-       CONTATTI
+       CONTATTI — bianco su blu
        ======================================================================= -->
   <section id="contatti" class="section cta-section noise-overlay">
     <div class="container-custom relative z-10">
@@ -535,33 +584,42 @@ function categoryFor(slug: string): string {
         <div class="lg:col-span-6 reveal-left">
           <p class="eyebrow text-white/70">07 — Contatti</p>
           <h2 class="section-title mt-4 text-[var(--paper)]">
-            Partiamo?
+            Prenota una call.
           </h2>
-          <p class="quote-big mt-6 text-white/80 max-w-xl">
+          <p class="quote-big mt-6 text-white/85 max-w-xl">
             {homepage.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
           </p>
 
           <div class="mt-12 space-y-6">
             <a href={`mailto:${globalSettings.contact?.email}`} class="flex items-center gap-4 group" data-cursor="scrivici">
-              <span class="icon-wrapper shrink-0"><Mail class="w-5 h-5" strokeWidth={1.5} /></span>
+              <span class="contact-icon shrink-0"><Mail class="w-5 h-5" strokeWidth={1.5} /></span>
               <span>
                 <span class="mono-label text-white/60 block">Email</span>
-                <span class="h-display text-xl group-hover:text-[var(--electric)] transition-colors">{globalSettings.contact?.email}</span>
+                <span class="h-display text-xl text-[var(--paper)] group-hover:text-white transition-colors">{globalSettings.contact?.email}</span>
               </span>
             </a>
             <a href={`tel:${(globalSettings.contact?.phone || '').replace(/\s/g, '')}`} class="flex items-center gap-4 group" data-cursor="chiamaci">
-              <span class="icon-wrapper shrink-0"><Phone class="w-5 h-5" strokeWidth={1.5} /></span>
+              <span class="contact-icon shrink-0"><Phone class="w-5 h-5" strokeWidth={1.5} /></span>
               <span>
                 <span class="mono-label text-white/60 block">Telefono</span>
-                <span class="h-display text-xl group-hover:text-[var(--electric)] transition-colors">{globalSettings.contact?.phone}</span>
+                <span class="h-display text-xl text-[var(--paper)] group-hover:text-white transition-colors">{globalSettings.contact?.phone}</span>
               </span>
             </a>
-            <div class="flex items-start gap-4">
-              <span class="icon-wrapper shrink-0"><MapPin class="w-5 h-5" strokeWidth={1.5} /></span>
-              <span>
-                <span class="mono-label text-white/60 block">Indirizzo</span>
-                <span class="h-display text-xl">{globalSettings.contact?.address}</span>
-              </span>
+          </div>
+
+          <!-- Sedi -->
+          <div class="mt-14 pt-8 border-t border-white/15">
+            <p class="mono-label text-white/60 mb-6">— Sedi</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {locations.map((loc: any) => (
+                <div class="location-card">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <span class="h-display text-2xl text-[var(--paper)]">{loc.city}</span>
+                    <span class="mono-label text-white/60">{loc.tag}</span>
+                  </div>
+                  <p class="text-white/75 mt-2">{loc.address}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

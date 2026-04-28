@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
 import { Instagram, Facebook } from 'lucide-astro';
+import logoFull from '../assets/images/brand/logo-black-tagline.png';
 
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
@@ -25,11 +27,9 @@ const email = globalSettings.contact?.email || 'info@viralagency.it';
       <!-- Brand -->
       <div class="col-span-2">
         <p class="mono-label text-white/60 mb-3">Brand</p>
-        <p class="h-display text-2xl md:text-3xl leading-tight">
-          REAL GOES VIRAL<span class="text-[var(--electric)]">.</span>
-        </p>
-        <p class="mono-label text-white/40 mt-3">
-          {globalSettings.companyName} — Social · Marketing · Web
+        <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto img-darken" />
+        <p class="mono-label text-white/40 mt-4">
+          {globalSettings.companyName} — Communication · Marketing · Social · Branding
         </p>
       </div>
 

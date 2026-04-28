@@ -1,13 +1,13 @@
 {
   "seo": {
     "title": "REAL GOES VIRAL — Agenzia di comunicazione & marketing",
-    "description": "Agenzia di comunicazione e marketing a Modena. Storytelling, contenuti, performance. Facciamo rumore dove conta."
+    "description": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia. Communication, marketing, social media management, graphic & branding design."
   },
   "hero": {
     "badge": "La tua agenzia di Marketing",
     "title": "Dicci ciò che vuoi e noi faremo meglio!",
     "subtitle": "Viviamo nell'era social e tu non l'hai ancora capito. Muoviti a polverizzare la tua concorrenza online prima che lo facciano loro.",
-    "ctaPrimary": { "text": "Scopri di più", "link": "#servizi" },
+    "ctaPrimary": { "text": "Prenota una Call", "link": "#contatti" },
     "ctaSecondary": { "text": "Contattaci", "link": "#contatti" }
   },
   "about": {
@@ -38,33 +38,64 @@
     "title": "Restiamo connessi"
   },
   "contact": {
-    "title": "Partiamo?",
+    "title": "Prenota una call",
     "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino."
   },
   "manifesto": {
     "eyebrow": "01 — Manifesto",
     "title": "Facciamo rumore dove conta.\nCreiamo storie che si diffondono.",
     "body": "Siamo un'agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.",
+    "tagline": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia.",
     "kpis": [
       { "num": 120, "suffix": "+", "label": "Progetti consegnati" },
       { "num": 48, "suffix": "M", "label": "Views generate" },
-      { "num": 9, "suffix": "", "label": "Anni di esperienza" },
+      { "num": 3, "suffix": "", "label": "Anni di esperienza" },
       { "num": 97, "suffix": "%", "label": "Clienti che tornano" }
     ]
   },
   "servicesList": [
-    { "num": "01", "title": "Storytelling", "desc": "Narrativa di brand, content strategy, tone of voice." },
-    { "num": "02", "title": "Social Media", "desc": "Gestione, community, advertising su Meta e TikTok." },
-    { "num": "03", "title": "Foto e Video", "desc": "Shooting, reel, campagne, produzione in-house." },
-    { "num": "04", "title": "Performance Marketing", "desc": "Google, Meta, YouTube, tracking e ottimizzazione." },
-    { "num": "05", "title": "Sito & Identità", "desc": "Siti, branding, sistema visivo, UI." },
-    { "num": "06", "title": "Consulenza", "desc": "Strategia, posizionamento, audit, formazione." }
+    {
+      "num": "01",
+      "title": "Communication",
+      "desc": "Strategia editoriale, posizionamento, tono di voce.",
+      "bullets": ["Brand strategy", "Copywriting & storytelling", "PR & media relations", "Content planning"]
+    },
+    {
+      "num": "02",
+      "title": "Marketing",
+      "desc": "Performance, funnel, dati. Acquisizione che si misura.",
+      "bullets": ["Meta & Google Ads", "Funnel & lead generation", "Email automation", "Tracking & analytics"]
+    },
+    {
+      "num": "03",
+      "title": "Social Media Management",
+      "desc": "Community, contenuti, advertising su Meta, TikTok e LinkedIn.",
+      "bullets": ["Piano editoriale", "Creazione reel & post", "Community management", "Influencer & creator collab"]
+    },
+    {
+      "num": "04",
+      "title": "Graphic & Branding Design",
+      "desc": "Identità visiva, sistema grafico, materiali on/offline.",
+      "bullets": ["Logo & brand identity", "Brand book & sistema visivo", "Materiali stampa & packaging", "UI / sito vetrina"]
+    }
   ],
   "team": [
     { "name": "Marco Rossi", "role": "Founder & Creative Director", "initials": "MR" },
     { "name": "Giulia Bianchi", "role": "Head of Content", "initials": "GB" },
     { "name": "Andrea Verdi", "role": "Art Director", "initials": "AV" },
     { "name": "Sara Neri", "role": "Performance Lead", "initials": "SN" }
+  ],
+  "clients": [
+    "Ducati Motor",
+    "Pasta Garofalo",
+    "Studio Bonaventura",
+    "Atelier 24",
+    "FoodCo",
+    "Nord Studio",
+    "Bottega Lina",
+    "Riviera Lab",
+    "Casa del Tè",
+    "Officine Mecca"
   ],
   "reviews": [
     {
@@ -101,6 +132,18 @@
       "title": "Una campagna virale non la pianifichi: la costruisci",
       "date": "28 Mar 2026",
       "href": "#"
+    }
+  ],
+  "locations": [
+    {
+      "city": "Bologna",
+      "tag": "HQ",
+      "address": "Via … , Bologna (BO)"
+    },
+    {
+      "city": "Modena",
+      "tag": "Studio Creativo",
+      "address": "Piazza Tintori 27, Bastiglia (MO) — 41033"
     }
   ]
 }
