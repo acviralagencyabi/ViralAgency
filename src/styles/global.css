@@ -249,9 +249,11 @@ button:hover .btn-arrow,
 .btn-pill:hover .btn-arrow { transform: translate(4px, -4px); }
 
 .section-dark .btn-outline,
-.section-deep .btn-outline { color: var(--paper); border-color: var(--paper); }
+.section-deep .btn-outline,
+.cta-section .btn-outline { color: var(--paper); border-color: var(--paper); background: transparent; }
 .section-dark .btn-outline:hover,
-.section-deep .btn-outline:hover { background: var(--paper); color: var(--ink); }
+.section-deep .btn-outline:hover,
+.cta-section .btn-outline:hover { background: var(--paper); color: var(--ink); }
 
 /* =========================================================================
    Cards
@@ -280,6 +282,33 @@ button:hover .btn-arrow,
 .feature-card:hover h3,
 .feature-card:hover p,
 .feature-card:hover .mono-label { color: var(--paper); }
+
+/* "Coming soon" article placeholder — same look but no hover lift, no color flip */
+.feature-card.is-soon {
+  background: var(--paper);
+  cursor: default;
+}
+.feature-card.is-soon:hover {
+  background: var(--paper);
+  color: var(--ink);
+  transform: none;
+}
+.feature-card.is-soon:hover h3,
+.feature-card.is-soon:hover p,
+.feature-card.is-soon:hover .mono-label { color: inherit; }
+.feature-card.is-soon:hover .text-\[var\(--electric\)\] { color: var(--electric); }
+.feature-card.is-soon:hover .text-\[var\(--muted\)\] { color: var(--muted); }
+
+.article-soon {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 0.25rem 0.55rem;
+  border: 1px dashed var(--hairline-strong);
+  border-radius: 999px;
+  color: var(--muted);
+}
 
 .tilt-card {
   transition: transform 0.4s var(--ease-out);

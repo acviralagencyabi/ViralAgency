@@ -248,9 +248,11 @@ function categoryFor(slug: string): string {
 
       <ul class="clients-grid stagger-children">
         {clients.map((name: string) => (
-          <li class="client-cell" data-cursor="cliente">
-            <span class="client-name">{name}</span>
-            <span class="client-arrow" aria-hidden="true">↗</span>
+          <li>
+            <a href="#contatti" class="client-cell" data-cursor="prossimo">
+              <span class="client-name">{name}</span>
+              <span class="client-arrow" aria-hidden="true">↗</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -515,22 +517,32 @@ function categoryFor(slug: string): string {
           <p class="eyebrow">06 — Articoli</p>
           <h2 class="section-title mt-4 max-w-3xl">Interviste &amp; approfondimenti.</h2>
         </div>
-        <a href="#" class="btn-outline" data-cursor="tutti">
-          Tutti gli articoli <span class="btn-arrow">↗</span>
+        <a href="#contatti" class="btn-outline" data-cursor="scrivici">
+          Suggeriscine uno <span class="btn-arrow">↗</span>
         </a>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
-        {articles.map((a: any) => (
-          <a href={a.href} class="feature-card group block" data-cursor="leggi">
-            <p class="mono-label text-[var(--electric)] mb-6">{a.tag}</p>
-            <h3 class="text-2xl md:text-3xl leading-tight mb-8 min-h-[6rem]">{a.title}</h3>
-            <div class="flex items-center justify-between border-t pt-4">
-              <span class="mono-label text-[var(--muted)]">{a.date}</span>
-              <span class="mono-label">Leggi ↗</span>
-            </div>
-          </a>
-        ))}
+        {articles.map((a: any) => {
+          const href = a.href && a.href !== '#' ? a.href : null;
+          const Tag = href ? 'a' : 'div';
+          const linkProps = href
+            ? { href, 'data-cursor': 'leggi' }
+            : { 'aria-disabled': 'true' };
+          return (
+            <Tag class={`feature-card group block ${href ? '' : 'is-soon'}`} {...linkProps}>
+              <div class="flex items-center justify-between mb-6">
+                <p class="mono-label text-[var(--electric)]">{a.tag}</p>
+                {!href && <span class="article-soon">Prossimamente</span>}
+              </div>
+              <h3 class="text-2xl md:text-3xl leading-tight mb-8">{a.title}</h3>
+              <div class="flex items-center justify-between border-t border-[var(--hairline)] pt-4">
+                <span class="mono-label text-[var(--muted)]">{a.date}</span>
+                <span class="mono-label">{href ? 'Leggi ↗' : 'In arrivo'}</span>
+              </div>
+            </Tag>
+          );
+        })}
       </div>
     </div>
   </section>

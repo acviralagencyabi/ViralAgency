@@ -40,7 +40,7 @@ const accessKey = settings.form?.web3formsKey || '';
     <textarea id="message" name="message" required rows="5" class="cf-input resize-none" placeholder="Raccontaci il tuo progetto"></textarea>
   </div>
 
-  <button type="submit" class="btn-pill w-full justify-center mt-2" data-cursor="invia">
+  <button type="submit" class="btn-outline cf-submit w-full justify-center mt-2" data-cursor="invia">
     Invia richiesta <span class="btn-arrow">↗</span>
   </button>
 
@@ -107,6 +107,9 @@ const accessKey = settings.form?.web3formsKey || '';
   .cf-msg-ok { color: #9fffd5; }
   .cf-msg-err { color: #ff9a8b; }
   form > button[type="submit"] { margin: 1.25rem; width: calc(100% - 2.5rem); }
+  /* Override the global .btn-outline border (inherits hairline rgba on light) so it's pure white on blue */
+  .cf-submit { border-color: rgba(245, 243, 238, 0.55); }
+  .cf-submit:hover { border-color: var(--paper); }
 </style>
 
 <script>
