@@ -2,7 +2,16 @@
 import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
 import { Instagram, Facebook } from 'lucide-astro';
-import logoFull from '../assets/images/brand/logo-black-tagline.png';
+import logoFullDefault from '../assets/images/brand/logo-black-tagline.png';
+
+const brandImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/brand/**/*.{png,jpg,jpeg,gif,webp,svg}',
+  { eager: true }
+);
+
+const logoFull =
+  (globalSettings.logoFooter && brandImages[globalSettings.logoFooter]?.default) ||
+  logoFullDefault;
 
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';

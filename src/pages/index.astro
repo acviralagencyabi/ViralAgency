@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { ArrowDown, Instagram, Facebook, Phone, Mail } from 'lucide-astro';
@@ -19,6 +20,12 @@ const portfolioImages = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true }
 );
 
+// Team photos (optional, optimized)
+const teamImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/team/**/*.{png,jpg,jpeg,gif,webp}',
+  { eager: true }
+);
+
 const portfolio = Object.entries(portfolioFiles)
   .map(([filePath, mod]) => {
     const slug = filePath.split('/').pop()?.replace('.json', '') || '';
@@ -35,88 +42,45 @@ const portfolio = Object.entries(portfolioFiles)
   })
   .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-// ---------- Default content for new sections (editabile via Keystatic in seguito) ----------
+// ---------- Homepage content (tutto editabile via Keystatic) ----------
 const H: any = homepage;
+const manifesto = H.manifesto;
+const servicesList = H.servicesList ?? [];
+const clients: string[] = H.clients ?? [];
+const locations = H.locations ?? [];
+const reviews = H.reviews ?? [];
 
-const manifesto = H.manifesto || {
-  eyebrow: '01 — Manifesto',
-  title: 'Facciamo rumore dove conta.\nCreiamo storie che si diffondono.',
-  body:
-    'Siamo un’agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.',
-  tagline: 'Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia.',
-  kpis: [
-    { num: 120, suffix: '+', label: 'Progetti consegnati' },
-    { num: 48, suffix: 'M', label: 'Views generate' },
-    { num: 3, suffix: '', label: 'Anni di esperienza' },
-    { num: 97, suffix: '%', label: 'Clienti che tornano' },
-  ],
-};
+// Team con foto opzionale
+const team = (H.team ?? []).map((m: any) => {
+  const photoModule = m.photo ? teamImages[m.photo] : null;
+  return {
+    ...m,
+    photo: photoModule?.default ?? null,
+  };
+});
 
-const servicesList = H.servicesList || [
-  { num: '01', title: 'Communication', desc: 'Strategia editoriale, posizionamento, tono di voce.', bullets: ['Brand strategy', 'Copywriting & storytelling', 'PR & media relations', 'Content planning'] },
-  { num: '02', title: 'Marketing', desc: 'Performance, funnel, dati. Acquisizione che si misura.', bullets: ['Meta & Google Ads', 'Funnel & lead generation', 'Email automation', 'Tracking & analytics'] },
-  { num: '03', title: 'Social Media Management', desc: 'Community, contenuti, advertising su Meta, TikTok e LinkedIn.', bullets: ['Piano editoriale', 'Creazione reel & post', 'Community management', 'Influencer & creator collab'] },
-  { num: '04', title: 'Graphic & Branding Design', desc: 'Identità visiva, sistema grafico, materiali on/offline.', bullets: ['Logo & brand identity', 'Brand book & sistema visivo', 'Materiali stampa & packaging', 'UI / sito vetrina'] },
-];
+// ---------- Articoli dalla collection Keystatic ----------
+const dateFormatter = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
 
-const clients = H.clients || [
-  'Ducati Motor', 'Pasta Garofalo', 'Studio Bonaventura', 'Atelier 24', 'FoodCo',
-  'Nord Studio', 'Bottega Lina', 'Riviera Lab', 'Casa del Tè', 'Officine Mecca',
-];
-
-const locations = H.locations || [
-  { city: 'Bologna', tag: 'HQ', address: 'Via … , Bologna (BO)' },
-  { city: 'Modena', tag: 'Studio Creativo', address: 'Piazza Tintori 27, Bastiglia (MO) — 41033' },
-];
-
-const team = H.team || [
-  { name: 'Marco Rossi', role: 'Founder & Creative Director', initials: 'MR' },
-  { name: 'Giulia Bianchi', role: 'Head of Content', initials: 'GB' },
-  { name: 'Andrea Verdi', role: 'Art Director', initials: 'AV' },
-  { name: 'Sara Neri', role: 'Performance Lead', initials: 'SN' },
-];
-
-const reviews = H.reviews || [
-  {
-    quote:
-      'Hanno preso il nostro brand e l’hanno fatto diventare conversazione. Engagement triplicato in sei mesi.',
-    author: 'Laura P.',
-    role: 'Marketing Manager, FoodCo',
-  },
-  {
-    quote:
-      'Velocità, qualità e una visione chiara. Non un’agenzia, un reparto marketing esterno.',
-    author: 'Davide S.',
-    role: 'CEO, Atelier 24',
-  },
-  {
-    quote:
-      'Ci hanno rimesso in pista dopo un rebranding andato male. Hanno capito in due chiamate.',
-    author: 'Federica M.',
-    role: 'Founder, Nord Studio',
-  },
-];
-
-const articles = H.articles || [
-  {
-    tag: 'Case Study',
-    title: 'Atelier 24: da 0 a 14k follower in tre mesi con un solo formato',
-    date: '21 Apr 2026',
-    href: 'articoli/atelier-24-14k-follower',
-  },
-  {
-    tag: 'Approfondimento',
-    title: 'TikTok Shop in Italia: cosa cambia per i brand del food nel 2026',
-    date: '08 Apr 2026',
-    href: 'articoli/tiktok-shop-italia-food',
-  },
-  {
-    tag: 'Intervista',
-    title: 'Dentro un lancio Motor Valley: 2,4M di views in 30 giorni',
-    date: '26 Mar 2026',
-    href: 'articoli/dentro-lancio-motor-valley',
-  },
-];
+const allArticles = await getCollection('articles');
+const articles = allArticles
+  .filter((a) => a.data.featured !== false)
+  .sort((a, b) => {
+    const ord = (a.data.order ?? 999) - (b.data.order ?? 999);
+    if (ord !== 0) return ord;
+    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+  })
+  .slice(0, 3)
+  .map((a) => ({
+    tag: a.data.tag,
+    title: a.data.title,
+    date: dateFormatter.format(a.data.date),
+    href: `articoli/${a.id}`,
+  }));
 
 // Resolve internal links so they respect Astro's base path (e.g. /VisualDigitalAgencyDemo/ on GH Pages)
 const BASE = import.meta.env.BASE_URL;
@@ -474,9 +438,20 @@ function categoryFor(slug: string): string {
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         {team.map((m: any) => (
           <div class="portfolio-card !aspect-[3/4] bg-[var(--ink-soft)]">
-            <div class="w-full h-full flex items-center justify-center">
-              <span class="h-display text-[clamp(3rem,10vw,6rem)] text-white/20 select-none">{m.initials}</span>
-            </div>
+            {m.photo ? (
+              <Image
+                src={m.photo}
+                alt={m.name}
+                width={500}
+                height={667}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="h-display text-[clamp(3rem,10vw,6rem)] text-white/20 select-none">{m.initials}</span>
+              </div>
+            )}
             <div class="meta" style="transform: translateY(0); opacity: 1;">
               <div>
                 <span class="tag">{m.role}</span>
@@ -551,7 +526,7 @@ function categoryFor(slug: string): string {
       <div class="flex flex-wrap items-center justify-between gap-6 border-y border-[var(--hairline)] py-8">
         <div>
           <p class="eyebrow">Seguici</p>
-          <p class="h-display text-2xl md:text-3xl mt-2">{homepage.social?.title || 'Restiamo connessi'}</p>
+          <p class="h-display text-2xl md:text-3xl mt-2">{H.social?.title || 'Restiamo connessi'}</p>
         </div>
         <div class="flex items-center gap-3">
           {globalSettings.social?.instagram && (
@@ -595,7 +570,7 @@ function categoryFor(slug: string): string {
             Prenota una call.
           </h2>
           <p class="quote-big mt-6 text-white/85 max-w-xl">
-            {homepage.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
+            {H.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
           </p>
 
           <div class="mt-12 space-y-6">

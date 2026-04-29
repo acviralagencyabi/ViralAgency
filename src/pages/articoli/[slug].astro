@@ -1,0 +1,93 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const data = article.data;
+
+const articleImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/articles/**/*.{png,jpg,jpeg,gif,webp,svg}',
+  { eager: true }
+);
+
+const cover =
+  data.coverImage && articleImages[data.coverImage]
+    ? articleImages[data.coverImage].default
+    : null;
+
+const dateLabel = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+}).format(data.date);
+
+const BASE = import.meta.env.BASE_URL;
+---
+
+<Layout title={data.title} description={data.excerpt}>
+  <article>
+    <header class="article-hero">
+      <div class="container-custom">
+        <a href={`${BASE}#articoli`} class="article-back">← Torna agli articoli</a>
+
+        <div class="article-meta mt-8">
+          <span class="article-tag">{data.tag}</span>
+          <span class="article-date">{dateLabel}</span>
+          {data.readTime && <span class="article-date">{data.readTime}</span>}
+        </div>
+
+        <h1 class="section-title max-w-4xl">{data.title}</h1>
+        <p class="quote-big mt-6 text-[var(--muted)] max-w-3xl">{data.excerpt}</p>
+
+        {cover && (
+          <div class="mt-12 overflow-hidden">
+            <Image
+              src={cover}
+              alt={data.title}
+              width={1600}
+              height={900}
+              class="w-full h-auto object-cover"
+            />
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="container-custom">
+      <div class="article-prose">
+        <Content />
+
+        {data.stats && data.stats.length > 0 && (
+          <div class="stat-row">
+            {data.stats.map((s) => (
+              <div class="stat">
+                <span class="num">{s.num}</span>
+                <span class="lbl">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <hr class="my-12 border-[var(--hairline)]" />
+        <p class="kicker">— Vuoi un piano simile per il tuo brand?</p>
+        <p>
+          <a href={`${BASE}#contatti`} class="btn-primary">
+            Prenota una call <span class="btn-arrow">↗</span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

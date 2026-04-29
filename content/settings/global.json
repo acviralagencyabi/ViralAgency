@@ -1,13 +1,8 @@
 {
   "companyName": "Viral Digital Agency",
-  "tagline": "Dimmi cosa vuoi e noi faremo meglio",
-  "logoNavbar": "/src/assets/images/uploads/global/logoNavbar.png",
-  "logoHero": "/src/assets/images/uploads/global/logoHero.png",
-  "colors": {
-    "primary": "#0B1F3A",
-    "secondary": "#0A0A0A",
-    "accent": "#1F4BFF"
-  },
+  "logoMark": null,
+  "logoWord": null,
+  "logoFooter": null,
   "contact": {
     "email": "info@viralagency.it",
     "phone": "+39 371 376 7488",
@@ -15,7 +10,8 @@
   },
   "social": {
     "facebook": "https://facebook.com/ViralAgencyAC",
-    "instagram": "https://instagram.com/viral.digitalagency"
+    "instagram": "https://instagram.com/viral.digitalagency",
+    "linkedin": null
   },
   "seo": {
     "titleSuffix": " | Viral Digital Agency Modena",

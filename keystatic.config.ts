@@ -17,137 +17,126 @@ export default config({
   },
 
   singletons: {
-    // Impostazioni Globali del sito
+    // ──────────────────────────────────────────────────────────────────────
+    // Impostazioni globali del sito
+    // ──────────────────────────────────────────────────────────────────────
     global: singleton({
       label: 'Impostazioni Globali',
       path: 'content/settings/global',
       format: { data: 'json' },
       schema: {
         companyName: fields.text({ label: 'Nome Azienda' }),
-        tagline: fields.text({ label: 'Tagline' }),
-        logoNavbar: fields.image({
-          label: 'Logo Navbar (piccolo)',
-          directory: 'src/assets/images/uploads',
-          publicPath: '/src/assets/images/uploads/',
+
+        // Brand assets — sostituiscono i loghi statici nel sito.
+        // Se lasciati vuoti, il sito usa i loghi di default in src/assets/images/brand/.
+        logoMark: fields.image({
+          label: 'Logo — Mark (icona piccola, navbar)',
+          description: 'Lasciato vuoto: usa il default `mark-color.png`.',
+          directory: 'src/assets/images/brand',
+          publicPath: '/src/assets/images/brand/',
         }),
-        logoHero: fields.image({
-          label: 'Logo Hero (completo)',
-          directory: 'src/assets/images/uploads',
-          publicPath: '/src/assets/images/uploads/',
+        logoWord: fields.image({
+          label: 'Logo — Wordmark (testo, navbar)',
+          description: 'Lasciato vuoto: usa il default `logo-black.png`.',
+          directory: 'src/assets/images/brand',
+          publicPath: '/src/assets/images/brand/',
         }),
-        colors: fields.object({
-          primary: fields.text({ label: 'Colore Primario (Deep)', defaultValue: '#0B1F3A' }),
-          secondary: fields.text({ label: 'Colore Secondario (Ink)', defaultValue: '#0A0A0A' }),
-          accent: fields.text({ label: 'Colore Accent (Electric)', defaultValue: '#1F4BFF' }),
-        }, { label: 'Colori' }),
-        contact: fields.object({
-          email: fields.text({ label: 'Email' }),
-          phone: fields.text({ label: 'Telefono' }),
-          address: fields.text({ label: 'Indirizzo' }),
-        }, { label: 'Contatti' }),
-        social: fields.object({
-          facebook: fields.url({ label: 'Facebook' }),
-          instagram: fields.url({ label: 'Instagram' }),
-          linkedin: fields.url({ label: 'LinkedIn' }),
-          twitter: fields.url({ label: 'Twitter/X' }),
-        }, { label: 'Social Media' }),
-        seo: fields.object({
-          titleSuffix: fields.text({ label: 'Suffisso Titolo SEO' }),
-          defaultDescription: fields.text({ label: 'Descrizione Default', multiline: true }),
-        }, { label: 'SEO' }),
-        form: fields.object({
-          web3formsKey: fields.text({ label: 'Web3Forms Access Key' }),
-        }, { label: 'Form Contatti' }),
-        legal: fields.object({
-          piva: fields.text({ label: 'Partita IVA' }),
-          codiceDestinatario: fields.text({ label: 'Codice Destinatario SDI' }),
-        }, { label: 'Dati Legali' }),
+        logoFooter: fields.image({
+          label: 'Logo — Footer (completo con tagline)',
+          description: 'Lasciato vuoto: usa il default `logo-black-tagline.png`.',
+          directory: 'src/assets/images/brand',
+          publicPath: '/src/assets/images/brand/',
+        }),
+
+        contact: fields.object(
+          {
+            email: fields.text({ label: 'Email' }),
+            phone: fields.text({ label: 'Telefono' }),
+            address: fields.text({ label: 'Indirizzo' }),
+          },
+          { label: 'Contatti' }
+        ),
+
+        social: fields.object(
+          {
+            facebook: fields.url({ label: 'Facebook' }),
+            instagram: fields.url({ label: 'Instagram' }),
+            linkedin: fields.url({ label: 'LinkedIn' }),
+          },
+          { label: 'Social Media' }
+        ),
+
+        seo: fields.object(
+          {
+            titleSuffix: fields.text({ label: 'Suffisso titolo SEO' }),
+            defaultDescription: fields.text({
+              label: 'Descrizione default',
+              multiline: true,
+            }),
+          },
+          { label: 'SEO' }
+        ),
+
+        form: fields.object(
+          {
+            web3formsKey: fields.text({ label: 'Web3Forms Access Key' }),
+          },
+          { label: 'Form contatti' }
+        ),
+
+        legal: fields.object(
+          {
+            piva: fields.text({ label: 'Partita IVA' }),
+            codiceDestinatario: fields.text({ label: 'Codice destinatario SDI' }),
+          },
+          { label: 'Dati legali' }
+        ),
       },
     }),
 
-    // Homepage - tutte le sezioni
+    // ──────────────────────────────────────────────────────────────────────
+    // Homepage — solo le sezioni effettivamente usate dal sito
+    // ──────────────────────────────────────────────────────────────────────
     homepage: singleton({
       label: 'Homepage',
       path: 'content/pages/homepage',
       format: { data: 'json' },
       schema: {
-        seo: fields.object({
-          title: fields.text({ label: 'Titolo SEO' }),
-          description: fields.text({ label: 'Descrizione SEO', multiline: true }),
-        }, { label: 'SEO' }),
+        seo: fields.object(
+          {
+            title: fields.text({ label: 'Titolo SEO' }),
+            description: fields.text({ label: 'Descrizione SEO', multiline: true }),
+          },
+          { label: 'SEO' }
+        ),
 
-        // --- Sezioni storiche (mantenute per non rompere dati esistenti) ---
-        hero: fields.object({
-          badge: fields.text({ label: 'Badge (non usato nel nuovo design, lasciato per compat.)' }),
-          title: fields.text({ label: 'Titolo (non usato)' }),
-          subtitle: fields.text({ label: 'Sottotitolo (non usato)', multiline: true }),
-          ctaPrimary: fields.object({
-            text: fields.text({ label: 'Testo' }),
-            link: fields.text({ label: 'Link' }),
-          }, { label: 'CTA Primario' }),
-          ctaSecondary: fields.object({
-            text: fields.text({ label: 'Testo' }),
-            link: fields.text({ label: 'Link' }),
-          }, { label: 'CTA Secondario' }),
-        }, { label: 'Hero (legacy)' }),
-
-        about: fields.object({
-          badge: fields.text({ label: 'Badge' }),
-          title: fields.text({ label: 'Titolo' }),
-          description: fields.text({ label: 'Descrizione', multiline: true }),
-          backgroundImage: fields.text({ label: 'URL Immagine Background' }),
-        }, { label: 'About (legacy)' }),
-
-        services: fields.object({
-          badge: fields.text({ label: 'Badge' }),
-          title: fields.text({ label: 'Titolo' }),
-          subtitle: fields.text({ label: 'Sottotitolo' }),
-          description: fields.text({ label: 'Descrizione', multiline: true }),
-        }, { label: 'Sezione Servizi (legacy)' }),
-
-        trailer: fields.object({
-          badge: fields.text({ label: 'Badge' }),
-          title: fields.text({ label: 'Titolo' }),
-          videoUrl: fields.text({ label: 'URL Video (YouTube/Vimeo)' }),
-          backgroundImage: fields.text({ label: 'URL Immagine Background' }),
-          playButtonText: fields.text({ label: 'Testo sotto play button' }),
-        }, { label: 'Trailer (legacy)' }),
-
-        portfolio: fields.object({
-          badge: fields.text({ label: 'Badge' }),
-          title: fields.text({ label: 'Titolo' }),
-          subtitle: fields.text({ label: 'Sottotitolo' }),
-        }, { label: 'Sezione Portfolio' }),
-
-        social: fields.object({
-          badge: fields.text({ label: 'Badge' }),
-          title: fields.text({ label: 'Titolo' }),
-        }, { label: 'Sezione Social' }),
-
-        contact: fields.object({
-          title: fields.text({ label: 'Titolo' }),
-          description: fields.text({ label: 'Descrizione', multiline: true }),
-        }, { label: 'Sezione Contatti' }),
-
-        // --- NUOVE SEZIONI (REAL GOES VIRAL) ---
-
-        manifesto: fields.object({
-          eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '01 — Manifesto' }),
-          title: fields.text({ label: 'Titolo (multilinea, usa \\n)', multiline: true }),
-          body: fields.text({ label: 'Corpo', multiline: true }),
-          tagline: fields.text({ label: 'Tagline (es. Motor Valley)', multiline: true }),
-          kpis: fields.array(
-            fields.object({
-              num: fields.number({ label: 'Numero', defaultValue: 0 }),
-              suffix: fields.text({ label: 'Suffisso', defaultValue: '' }),
-              label: fields.text({ label: 'Etichetta' }),
+        manifesto: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '01 — Manifesto' }),
+            title: fields.text({
+              label: 'Titolo (multilinea: usa Invio per andare a capo)',
+              multiline: true,
             }),
-            {
-              label: 'KPI',
-              itemLabel: (props) => `${props.fields.num.value}${props.fields.suffix.value} — ${props.fields.label.value}`,
-            }
-          ),
-        }, { label: 'Manifesto (Chi siamo)' }),
+            body: fields.text({ label: 'Corpo', multiline: true }),
+            tagline: fields.text({
+              label: 'Tagline (es. Motor Valley)',
+              multiline: true,
+            }),
+            kpis: fields.array(
+              fields.object({
+                num: fields.number({ label: 'Numero', defaultValue: 0 }),
+                suffix: fields.text({ label: 'Suffisso', defaultValue: '' }),
+                label: fields.text({ label: 'Etichetta' }),
+              }),
+              {
+                label: 'KPI',
+                itemLabel: (props) =>
+                  `${props.fields.num.value}${props.fields.suffix.value} — ${props.fields.label.value}`,
+              }
+            ),
+          },
+          { label: 'Manifesto (Chi siamo)' }
+        ),
 
         servicesList: fields.array(
           fields.object({
@@ -160,18 +149,16 @@ export default config({
             }),
           }),
           {
-            label: 'Servizi (lista editoriale)',
-            itemLabel: (props) => `${props.fields.num.value} — ${props.fields.title.value}`,
+            label: 'Servizi',
+            itemLabel: (props) =>
+              `${props.fields.num.value} — ${props.fields.title.value}`,
           }
         ),
 
-        clients: fields.array(
-          fields.text({ label: 'Nome cliente' }),
-          {
-            label: 'Clienti',
-            itemLabel: (props) => props.value || '(vuoto)',
-          }
-        ),
+        clients: fields.array(fields.text({ label: 'Nome cliente' }), {
+          label: 'Clienti',
+          itemLabel: (props) => props.value || '(vuoto)',
+        }),
 
         locations: fields.array(
           fields.object({
@@ -181,7 +168,8 @@ export default config({
           }),
           {
             label: 'Sedi',
-            itemLabel: (props) => `${props.fields.city.value} — ${props.fields.tag.value}`,
+            itemLabel: (props) =>
+              `${props.fields.city.value} — ${props.fields.tag.value}`,
           }
         ),
 
@@ -189,11 +177,21 @@ export default config({
           fields.object({
             name: fields.text({ label: 'Nome' }),
             role: fields.text({ label: 'Ruolo' }),
-            initials: fields.text({ label: 'Iniziali (es. MR)' }),
+            initials: fields.text({
+              label: 'Iniziali (fallback)',
+              description: 'Usate solo se non carichi una foto.',
+            }),
+            photo: fields.image({
+              label: 'Foto',
+              description: 'Ritratto consigliato (rapporto 3:4).',
+              directory: 'src/assets/images/team',
+              publicPath: '/src/assets/images/team/',
+            }),
           }),
           {
             label: 'Team',
-            itemLabel: (props) => `${props.fields.name.value} — ${props.fields.role.value}`,
+            itemLabel: (props) =>
+              `${props.fields.name.value} — ${props.fields.role.value}`,
           }
         ),
 
@@ -205,21 +203,28 @@ export default config({
           }),
           {
             label: 'Recensioni',
-            itemLabel: (props) => `${props.fields.author.value}`,
+            itemLabel: (props) => props.fields.author.value,
           }
         ),
 
-        articles: fields.array(
-          fields.object({
-            tag: fields.text({ label: 'Tag (Intervista, Approfondimento…)' }),
-            title: fields.text({ label: 'Titolo' }),
-            date: fields.text({ label: 'Data (visualizzata)' }),
-            href: fields.text({ label: 'Link', defaultValue: '#' }),
-          }),
+        social: fields.object(
           {
-            label: 'Articoli in evidenza',
-            itemLabel: (props) => props.fields.title.value,
-          }
+            title: fields.text({
+              label: 'Titolo sezione social',
+              defaultValue: 'Restiamo connessi',
+            }),
+          },
+          { label: 'Sezione Social' }
+        ),
+
+        contact: fields.object(
+          {
+            description: fields.text({
+              label: 'Testo introduttivo (sopra il form contatti)',
+              multiline: true,
+            }),
+          },
+          { label: 'Sezione Contatti' }
         ),
       },
     }),
@@ -241,6 +246,63 @@ export default config({
         description: fields.text({ label: 'Descrizione', multiline: true }),
         order: fields.number({ label: 'Ordine', defaultValue: 0 }),
         featured: fields.checkbox({ label: 'In Evidenza' }),
+      },
+    }),
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Articoli — collection completa con corpo Markdoc editabile
+    // Ogni articolo è un file content/articles/<slug>.mdoc con frontmatter
+    // ──────────────────────────────────────────────────────────────────────
+    articles: collection({
+      label: 'Articoli',
+      slugField: 'title',
+      path: 'content/articles/*',
+      format: { contentField: 'body' },
+      schema: {
+        title: fields.slug({ name: { label: 'Titolo' } }),
+        tag: fields.text({
+          label: 'Tag (Case Study, Intervista, Approfondimento, …)',
+          defaultValue: 'Case Study',
+        }),
+        date: fields.date({ label: 'Data di pubblicazione' }),
+        excerpt: fields.text({ label: 'Estratto / preview', multiline: true }),
+        readTime: fields.text({
+          label: 'Tempo di lettura',
+          defaultValue: '5 min di lettura',
+        }),
+        coverImage: fields.image({
+          label: 'Copertina (opzionale)',
+          directory: 'src/assets/images/articles',
+          publicPath: '/src/assets/images/articles/',
+        }),
+        featured: fields.checkbox({
+          label: 'Mostra in homepage',
+          defaultValue: true,
+        }),
+        order: fields.number({
+          label: 'Ordine in homepage (asc)',
+          defaultValue: 0,
+        }),
+        stats: fields.array(
+          fields.object({
+            num: fields.text({ label: 'Numero / KPI (es. 14.300)' }),
+            label: fields.text({ label: 'Etichetta' }),
+          }),
+          {
+            label: 'Box numeri (opzionale, mostrati a fine articolo)',
+            itemLabel: (props) =>
+              `${props.fields.num.value} — ${props.fields.label.value}`,
+          }
+        ),
+        body: fields.markdoc({
+          label: 'Contenuto',
+          options: {
+            image: {
+              directory: 'src/assets/images/articles',
+              publicPath: '/src/assets/images/articles/',
+            },
+          },
+        }),
       },
     }),
   },

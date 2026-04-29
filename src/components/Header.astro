@@ -1,23 +1,45 @@
 ---
 import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
-import logoMark from '../assets/images/brand/mark-color.png';
-import logoWord from '../assets/images/brand/logo-black.png';
+import logoMarkDefault from '../assets/images/brand/mark-color.png';
+import logoWordDefault from '../assets/images/brand/logo-black.png';
+
+const brandImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/brand/**/*.{png,jpg,jpeg,gif,webp,svg}',
+  { eager: true }
+);
+
+const logoMark =
+  (globalSettings.logoMark && brandImages[globalSettings.logoMark]?.default) ||
+  logoMarkDefault;
+const logoWord =
+  (globalSettings.logoWord && brandImages[globalSettings.logoWord]?.default) ||
+  logoWordDefault;
 
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 
-// Ogni voce nel dropdown punta a un'ancora UNICA della homepage.
-// Articoli non ha sotto-pagine, quindi è un link diretto (no dropdown).
+// Sulle sotto-pagine (es. /articoli/<slug>) le ancore "#manifesto" puntano
+// a sezioni che non esistono in quella pagina: prefissiamo con la home.
+const BASE = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const homePath = BASE.replace(/\/$/, '');
+const isHome = currentPath === homePath;
+
+// Logo: in home usa l'ancora #home (smooth scroll Lenis); fuori, vai a /
+const homeHref = isHome ? '#home' : BASE;
+// Le voci di menu si comportano allo stesso modo
+const anchor = (a: string) => (isHome ? a : `${BASE}${a}`);
+
 const portfolioMenu = [
-  { label: 'Lavori', href: '#portfolio' },
-  { label: 'Clienti', href: '#clienti' },
-  { label: 'Recensioni', href: '#recensioni' },
+  { label: 'Lavori', href: anchor('#portfolio') },
+  { label: 'Clienti', href: anchor('#clienti') },
+  { label: 'Recensioni', href: anchor('#recensioni') },
 ];
 
 const aboutMenu = [
-  { label: 'Manifesto', href: '#manifesto' },
-  { label: 'Servizi', href: '#servizi' },
-  { label: 'Il team', href: '#team' },
+  { label: 'Manifesto', href: anchor('#manifesto') },
+  { label: 'Servizi', href: anchor('#servizi') },
+  { label: 'Il team', href: anchor('#team') },
 ];
 ---
 
@@ -25,16 +47,16 @@ const aboutMenu = [
   <nav class="container-custom">
     <div class="flex items-center justify-between">
       <!-- Logo -->
-      <a href="#home" class="inline-flex items-center gap-2 nav-logo" aria-label={globalSettings.companyName}>
+      <a href={homeHref} class="inline-flex items-center gap-2 nav-logo" aria-label={globalSettings.companyName}>
         <Image src={logoMark} alt="" width={32} height={32} class="h-7 w-auto" />
-        <Image src={logoWord} alt="VIRAL" width={120} height={28} class="h-5 w-auto" />
+        <Image src={logoWord} alt={globalSettings.companyName} width={120} height={28} class="h-5 w-auto" />
         <span class="nav-dot" aria-hidden="true"></span>
       </a>
 
       <!-- Desktop nav -->
       <div class="hidden lg:flex items-center gap-1">
         <div class="nav-item">
-          <a href="#portfolio" class="nav-link">Portfolio</a>
+          <a href={anchor('#portfolio')} class="nav-link">Portfolio</a>
           <div class="megamenu">
             <p class="mono-label mb-3">I nostri lavori per ogni cliente</p>
             <div class="megamenu-grid">
@@ -49,7 +71,7 @@ const aboutMenu = [
         </div>
 
         <div class="nav-item">
-          <a href="#manifesto" class="nav-link">Chi siamo</a>
+          <a href={anchor('#manifesto')} class="nav-link">Chi siamo</a>
           <div class="megamenu">
             <p class="mono-label mb-3">Storytelling, team & servizi</p>
             <div class="megamenu-grid">
@@ -63,7 +85,7 @@ const aboutMenu = [
           </div>
         </div>
 
-        <a href="#articoli" class="nav-link">Articoli</a>
+        <a href={anchor('#articoli')} class="nav-link">Articoli</a>
       </div>
 
       <!-- Right: Contatti mailto -->
@@ -100,10 +122,10 @@ const aboutMenu = [
     <div class="flex-1">
       <p class="mono-label opacity-60 mb-8">Menu</p>
       <nav class="flex flex-col gap-5">
-        <a href="#portfolio" class="mm-link">Portfolio <span>↗</span></a>
-        <a href="#manifesto" class="mm-link">Chi siamo <span>↗</span></a>
-        <a href="#servizi" class="mm-link">Servizi <span>↗</span></a>
-        <a href="#articoli" class="mm-link">Articoli <span>↗</span></a>
+        <a href={anchor('#portfolio')} class="mm-link">Portfolio <span>↗</span></a>
+        <a href={anchor('#manifesto')} class="mm-link">Chi siamo <span>↗</span></a>
+        <a href={anchor('#servizi')} class="mm-link">Servizi <span>↗</span></a>
+        <a href={anchor('#articoli')} class="mm-link">Articoli <span>↗</span></a>
         <a href={`mailto:${email}`} class="mm-link">Contatti <span>↗</span></a>
       </nav>
     </div>
