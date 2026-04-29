@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const title = 'Atelier 24: da 0 a 14k follower in tre mesi con un solo formato';
+const tag = 'Case Study';
+const date = '21 Apr 2026';
+const excerpt =
+  'Una boutique di Modena, un canale TikTok da rifare e un format ripetibile. La storia di come abbiamo trasformato un negozio di provincia in una destination per la community fashion italiana.';
+
+const BASE = import.meta.env.BASE_URL;
+---
+
+<Layout title={title} description={excerpt}>
+
+  <article>
+    <header class="article-hero">
+      <div class="container-custom">
+        <a href={`${BASE}#articoli`} class="article-back">← Torna agli articoli</a>
+
+        <div class="article-meta mt-8">
+          <span class="article-tag">{tag}</span>
+          <span class="article-date">{date}</span>
+          <span class="article-date">5 min di lettura</span>
+        </div>
+
+        <h1 class="section-title max-w-4xl">{title}</h1>
+        <p class="quote-big mt-6 text-[var(--muted)] max-w-3xl">{excerpt}</p>
+      </div>
+    </header>
+
+    <div class="container-custom">
+      <div class="article-prose">
+        <p class="kicker">— Il brief</p>
+        <p class="lead">
+          Atelier 24 è una boutique di abbigliamento donna nel centro di Modena. Tre vetrine,
+          un'identità chiara, un pubblico locale che cresceva di passaparola. Online, però,
+          niente: profilo Instagram dimenticato dal 2023, zero TikTok, zero strategia.
+        </p>
+        <p>
+          La proprietaria ci ha chiamati a gennaio 2026. La domanda era semplice: «Possiamo
+          arrivare alle clienti che ci scoprono solo quando passano davanti al negozio?». Tre mesi
+          dopo, il canale TikTok ha 14.300 follower, una community attiva e — soprattutto —
+          riempie il negozio nei weekend con clienti arrivate apposta da Bologna, Reggio Emilia,
+          Parma.
+        </p>
+
+        <h2>Cosa abbiamo cambiato</h2>
+        <p>
+          Niente piano editoriale a 30 voci. Niente reel "trendy" appiccicati al brand. Abbiamo
+          lavorato su <strong>un solo formato</strong>, ripetibile due volte a settimana, con un
+          ruolo preciso: trasformare ogni capo nuovo in una mini-storia di 30 secondi.
+        </p>
+
+        <h3>Il format: "Capo del giorno"</h3>
+        <p>
+          Apertura: Giulia (la titolare) tira fuori un capo dall'armadio del retrobottega.
+          Macchina fissa, luce naturale, audio diretto. Lei racconta da dove arriva il pezzo —
+          fornitore, materiale, perché lo ha scelto. Indossa, si specchia, dà tre modi diversi
+          per abbinarlo. Chiude con un dettaglio: prezzo, taglie disponibili, e un invito
+          asciutto: «Se ti piace, scrivimi qui sotto».
+        </p>
+        <p>
+          Niente tagli serrati, niente musica trendy, niente caption lunghissime. Sotto al video:
+          tre righe, due hashtag locali, il link della scheda prodotto in bio.
+        </p>
+
+        <h3>Perché ha funzionato</h3>
+        <p>
+          Tre cose in particolare. Primo, è autentico — Giulia non è un influencer, parla come
+          parla quando entri in negozio. Secondo, è utile — chi guarda capisce in 30 secondi se
+          il capo fa per sé. Terzo, è prevedibile — chi segue il canale sa che martedì e venerdì
+          alle 18 esce un capo nuovo, e si è creata l'abitudine di guardare.
+        </p>
+
+        <blockquote>
+          «Avevamo paura di essere troppo "piccole" per TikTok. Invece era proprio quello il
+          punto: la gente cerca il negozio sotto casa, non l'ennesimo brand globale.»
+          <br />— Giulia M., Atelier 24
+        </blockquote>
+
+        <h2>I numeri (90 giorni)</h2>
+        <div class="stat-row">
+          <div class="stat"><span class="num">14.300</span><span class="lbl">Follower</span></div>
+          <div class="stat"><span class="num">2,1M</span><span class="lbl">Views totali</span></div>
+          <div class="stat"><span class="num">+38%</span><span class="lbl">Vendite in negozio</span></div>
+          <div class="stat"><span class="num">26</span><span class="lbl">Video pubblicati</span></div>
+        </div>
+
+        <h2>Cosa portarsi a casa</h2>
+        <ul>
+          <li>Un format solo, ben fatto, batte dieci esperimenti casuali.</li>
+          <li>Per i brand locali la <em>vicinanza</em> è un vantaggio, non un limite — usatela come parte del racconto.</li>
+          <li>L'autenticità non è uno stile: è chi parla. Trovate la persona giusta dentro l'azienda e mettetela davanti alla camera.</li>
+          <li>La cadenza fissa crea abitudine. Due video a settimana, sempre alla stessa ora, valgono più di sette caricati a caso.</li>
+        </ul>
+
+        <h2>Prossimi passi</h2>
+        <p>
+          A maggio apriamo lo shop online integrato, con check-out diretto da TikTok Shop (di
+          cui parliamo <a href={`${BASE}articoli/tiktok-shop-italia-food`} class="underline">qui</a>).
+          L'obiettivo per fine 2026 è 50.000 follower e un secondo punto vendita a Bologna.
+        </p>
+
+        <hr class="my-12 border-[var(--hairline)]" />
+        <p class="kicker">— Vuoi un piano simile per il tuo brand?</p>
+        <p>
+          <a href={`${BASE}#contatti`} class="btn-primary">Prenota una call <span class="btn-arrow">↗</span></a>
+        </p>
+      </div>
+    </div>
+  </article>
+
+</Layout>

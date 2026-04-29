@@ -1,0 +1,125 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const title = 'Dentro un lancio Motor Valley: 2,4M di views in 30 giorni';
+const tag = 'Intervista';
+const date = '26 Mar 2026';
+const excerpt =
+  'Trenta giorni, un brand del distretto motoristico, una sola crew video. Marco (Founder & Creative Director) racconta come abbiamo costruito la campagna che ha portato 2,4 milioni di views, 40 contatti commerciali e 7 deal chiusi.';
+
+const BASE = import.meta.env.BASE_URL;
+---
+
+<Layout title={title} description={excerpt}>
+
+  <article>
+    <header class="article-hero">
+      <div class="container-custom">
+        <a href={`${BASE}#articoli`} class="article-back">← Torna agli articoli</a>
+
+        <div class="article-meta mt-8">
+          <span class="article-tag">{tag}</span>
+          <span class="article-date">{date}</span>
+          <span class="article-date">6 min di lettura</span>
+        </div>
+
+        <h1 class="section-title max-w-4xl">{title}</h1>
+        <p class="quote-big mt-6 text-[var(--muted)] max-w-3xl">{excerpt}</p>
+      </div>
+    </header>
+
+    <div class="container-custom">
+      <div class="article-prose">
+        <p class="kicker">— Q&A con Marco Rossi, Founder & Creative Director</p>
+        <p class="lead">
+          Marzo 2026. Un brand del distretto Motor Valley — non possiamo nominarlo, ma diciamo
+          che è uno di quei nomi che riconosci dal logo a 50 metri — ci chiama per il lancio
+          di un nuovo prodotto. Trenta giorni di tempo, un budget medio, e un solo obiettivo:
+          generare conversazione qualificata, non vanity metric. Ne abbiamo parlato con Marco,
+          che ha guidato la campagna.
+        </p>
+
+        <h2>Da dove siete partiti?</h2>
+        <p>
+          <strong>Marco:</strong> Dal brief abbiamo capito subito che il problema non era la
+          notorietà — il brand è già famoso — ma l'<em>autorevolezza nicchia</em>. Volevamo
+          che ne parlassero le persone giuste: appassionati, ingegneri, journalist di
+          settore. Le views generaliste contavano poco. Per questo abbiamo abbandonato
+          l'idea della singola "campagna virale" e abbiamo costruito un piano a tre layer.
+        </p>
+
+        <h2>I tre layer in concreto?</h2>
+        <p>
+          <strong>Layer 1 — Contenuto verticale ad altissima qualità.</strong> Una mini-doc
+          di 4 minuti, girata in due giorni con una crew di 5 persone tra Modena e
+          Maranello. Pubblicata in esclusiva su YouTube come anchor.
+        </p>
+        <p>
+          <strong>Layer 2 — Frammentazione editoriale.</strong> Dalla mini-doc abbiamo
+          estratto 18 micro-clip per Reels, TikTok e LinkedIn. Ogni piattaforma con il suo
+          taglio: emotion su Instagram, performance su TikTok, sostanza su LinkedIn.
+        </p>
+        <p>
+          <strong>Layer 3 — Seeding mirato.</strong> Niente influencer marketing classico.
+          Abbiamo individuato 22 voci verticali — non per follower, per autorevolezza nella
+          community motoristica — e gli abbiamo dato accesso anticipato al contenuto, una
+          settimana prima del go-live pubblico.
+        </p>
+
+        <h2>Cosa è successo nei primi sette giorni?</h2>
+        <p>
+          La mini-doc su YouTube ha fatto 380k views organiche — nessuna spinta paid nei
+          primi 5 giorni. Le micro-clip su TikTok hanno scalato grazie a due video che hanno
+          intercettato un trend audio del momento (puro caso, ma siamo stati pronti a
+          spingerli). LinkedIn è stato il canale più sorprendente: 1.200 commenti
+          qualificati, di cui una buona parte da CTO e direttori R&D di altri brand del
+          settore.
+        </p>
+
+        <blockquote>
+          Quando il commercio interno ci ha scritto «ci stanno arrivando email da gente che
+          non avevamo mai sentito», abbiamo capito che il piano stava facendo quello che
+          doveva. La views totale è una conseguenza, non l'obiettivo.
+        </blockquote>
+
+        <h2>I numeri finali a 30 giorni</h2>
+        <div class="stat-row">
+          <div class="stat"><span class="num">2,4M</span><span class="lbl">Views totali</span></div>
+          <div class="stat"><span class="num">68k</span><span class="lbl">Engagement</span></div>
+          <div class="stat"><span class="num">40</span><span class="lbl">Lead qualificati</span></div>
+          <div class="stat"><span class="num">7</span><span class="lbl">Deal chiusi</span></div>
+        </div>
+
+        <h2>Cosa rifaresti diversamente?</h2>
+        <p>
+          <strong>Marco:</strong> Avrei spinto di più i contenuti LinkedIn nelle prime 48 ore.
+          Ce ne siamo accorti tardi che era il canale dove la conversazione si stava
+          concentrando, e abbiamo recuperato a metà mese. Se ci fossimo arrivati subito,
+          probabilmente i lead qualificati sarebbero stati 60+.
+        </p>
+
+        <h2>Tre lezioni dal lancio</h2>
+        <ul>
+          <li>Per i brand B2B-adjacent, le metriche di vanity contano poco. Misura sempre la qualità della conversazione, non solo il volume.</li>
+          <li>Una mini-doc da quattro minuti vale più di dieci reel scollegati: usa il long-form come fonte e frammentalo.</li>
+          <li>Il seeding "ai pari" funziona meglio degli influencer "ai più". Soprattutto se il pubblico è competente.</li>
+        </ul>
+
+        <h2>E adesso?</h2>
+        <p>
+          A maggio parte la fase due con un format ricorrente mensile sul canale del brand.
+          L'idea è trasformare il singolo lancio in un piano editoriale a 12 mesi che non
+          dipenda più da campagne occasionali. Quando uno lancio funziona, il vero
+          investimento è capire come renderlo ripetibile.
+        </p>
+
+        <hr class="my-12 border-[var(--hairline)]" />
+        <p class="kicker">— Hai un lancio in arrivo? Parliamone.</p>
+        <p>
+          <a href={`${BASE}#contatti`} class="btn-primary">Prenota una call <span class="btn-arrow">↗</span></a>
+        </p>
+      </div>
+    </div>
+  </article>
+
+</Layout>

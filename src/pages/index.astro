@@ -102,21 +102,30 @@ const articles = H.articles || [
     tag: 'Case Study',
     title: 'Atelier 24: da 0 a 14k follower in tre mesi con un solo formato',
     date: '21 Apr 2026',
-    href: '#articoli',
+    href: 'articoli/atelier-24-14k-follower',
   },
   {
     tag: 'Approfondimento',
     title: 'TikTok Shop in Italia: cosa cambia per i brand del food nel 2026',
     date: '08 Apr 2026',
-    href: '#articoli',
+    href: 'articoli/tiktok-shop-italia-food',
   },
   {
     tag: 'Intervista',
     title: 'Dentro un lancio Motor Valley: 2,4M di views in 30 giorni',
     date: '26 Mar 2026',
-    href: '#articoli',
+    href: 'articoli/dentro-lancio-motor-valley',
   },
 ];
+
+// Resolve internal links so they respect Astro's base path (e.g. /VisualDigitalAgencyDemo/ on GH Pages)
+const BASE = import.meta.env.BASE_URL;
+const link = (path: string) => {
+  if (!path) return BASE;
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('mailto:') || path.startsWith('tel:')) return path;
+  if (path.startsWith('#')) return path; // in-page anchors stay scope-local
+  return BASE + path.replace(/^\//, '');
+};
 
 // Category tag helper for portfolio cards
 function categoryFor(slug: string): string {
@@ -524,7 +533,7 @@ function categoryFor(slug: string): string {
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
         {articles.map((a: any) => (
-          <a href={a.href || '#articoli'} class="feature-card group block" data-cursor="leggi">
+          <a href={link(a.href || 'articoli')} class="feature-card group block" data-cursor="leggi">
             <p class="mono-label text-[var(--electric)] mb-6">{a.tag}</p>
             <h3 class="text-2xl md:text-3xl leading-tight mb-8">{a.title}</h3>
             <div class="flex items-center justify-between border-t border-[var(--hairline)] pt-4">
