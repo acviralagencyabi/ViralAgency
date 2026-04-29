@@ -6,25 +6,18 @@ import logoWord from '../assets/images/brand/logo-black.png';
 
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 
+// Ogni voce nel dropdown punta a un'ancora UNICA della homepage.
+// Articoli non ha sotto-pagine, quindi è un link diretto (no dropdown).
 const portfolioMenu = [
-  { label: 'Case Study', href: '#portfolio' },
+  { label: 'Lavori', href: '#portfolio' },
   { label: 'Clienti', href: '#clienti' },
-  { label: 'Lavori Selezionati', href: '#portfolio' },
-  { label: 'In Evidenza', href: '#portfolio' },
-];
-
-const aboutMenu = [
-  { label: 'Storia', href: '#manifesto' },
-  { label: 'Servizi', href: '#servizi' },
-  { label: 'Il Team', href: '#team' },
   { label: 'Recensioni', href: '#recensioni' },
 ];
 
-const articlesMenu = [
-  { label: 'Interviste', href: '#articoli' },
-  { label: 'Approfondimenti', href: '#articoli' },
-  { label: 'News', href: '#articoli' },
-  { label: 'Tutti gli Articoli', href: '#articoli' },
+const aboutMenu = [
+  { label: 'Manifesto', href: '#manifesto' },
+  { label: 'Servizi', href: '#servizi' },
+  { label: 'Il team', href: '#team' },
 ];
 ---
 
@@ -70,20 +63,7 @@ const articlesMenu = [
           </div>
         </div>
 
-        <div class="nav-item">
-          <a href="#articoli" class="nav-link">Articoli</a>
-          <div class="megamenu">
-            <p class="mono-label mb-3">Interviste & approfondimenti</p>
-            <div class="megamenu-grid">
-              {articlesMenu.map((item) => (
-                <a href={item.href} class="megamenu-link">
-                  <span>{item.label}</span>
-                  <span class="arr">↗</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
+        <a href="#articoli" class="nav-link">Articoli</a>
       </div>
 
       <!-- Right: Contatti mailto -->

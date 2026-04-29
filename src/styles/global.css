@@ -360,6 +360,22 @@ button:hover .btn-arrow,
 /* Mega-menu — solid black panel */
 .nav-item { position: relative; }
 
+/* Invisible bridge that fills the gap between the trigger and the panel,
+   so the cursor doesn't lose hover while traveling down to the dropdown. */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 0.7rem;
+  pointer-events: none;
+}
+.nav-item:hover::after,
+.nav-item:focus-within::after {
+  pointer-events: auto;
+}
+
 .megamenu {
   position: absolute;
   top: calc(100% + 0.6rem);
@@ -372,7 +388,9 @@ button:hover .btn-arrow,
   padding: 1.5rem;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s var(--ease-out);
+  /* Open immediately, but fade out with a small delay so a quick mouse
+     traverse through the gap doesn't kill the panel. */
+  transition: opacity 0.25s ease 0.12s, transform 0.25s var(--ease-out) 0.12s;
   isolation: isolate;
   box-shadow: 0 20px 40px -20px rgba(10, 10, 10, 0.45);
 }
@@ -381,6 +399,7 @@ button:hover .btn-arrow,
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
+  transition: opacity 0.2s ease 0s, transform 0.25s var(--ease-out) 0s;
 }
 
 /* Force-close after clicking a link inside the dropdown */
