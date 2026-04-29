@@ -162,15 +162,19 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--ink);
   color: var(--paper);
 }
-.section-dark h1, .section-dark h2, .section-dark h3, .section-dark h4 { color: var(--paper); }
-.section-dark .eyebrow { color: rgba(245, 243, 238, 0.7); }
-
 .section-deep {
   background: var(--deep);
   color: var(--paper);
 }
-.section-deep h1, .section-deep h2, .section-deep h3, .section-deep h4 { color: var(--paper); }
-.section-deep .eyebrow { color: rgba(245, 243, 238, 0.7); }
+.section-dark h1, .section-dark h2, .section-dark h3, .section-dark h4,
+.section-deep h1, .section-deep h2, .section-deep h3, .section-deep h4,
+.cta-section h1, .cta-section h2, .cta-section h3, .cta-section h4,
+.section-dark .section-title,
+.section-deep .section-title,
+.cta-section .section-title { color: var(--paper); }
+.section-dark .eyebrow,
+.section-deep .eyebrow,
+.cta-section .eyebrow { color: rgba(245, 243, 238, 0.7); }
 
 .section-divider { border-top: 1px solid var(--hairline); }
 
