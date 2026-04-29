@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
+import homepage from '../../content/pages/homepage.json';
 import { Instagram, Facebook } from 'lucide-astro';
 import logoFullDefault from '../assets/images/brand/logo-black-tagline.png';
 
@@ -15,6 +16,7 @@ const logoFull =
 
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
+const locations = (homepage as any).locations ?? [];
 ---
 
 <footer class="section-dark mt-0">
@@ -50,10 +52,23 @@ const email = globalSettings.contact?.email || 'info@viralagency.it';
           {globalSettings.contact?.phone && (
             <li><a href={`tel:${globalSettings.contact.phone.replace(/\s/g, '')}`} class="hover:text-[var(--electric)] transition-colors">{globalSettings.contact.phone}</a></li>
           )}
-          {globalSettings.contact?.address && (
-            <li class="text-white/60">{globalSettings.contact.address}</li>
-          )}
         </ul>
+
+        {locations.length > 0 && (
+          <>
+            <p class="mono-label text-white/60 mt-6 mb-3">Sedi</p>
+            <ul class="space-y-3 text-sm text-white/80">
+              {locations.map((loc: any) => (
+                <li>
+                  <span class="block text-[var(--paper)]">
+                    {loc.city}{loc.tag && <span class="text-white/40"> — {loc.tag}</span>}
+                  </span>
+                  {loc.address && <span class="block text-white/60">{loc.address}</span>}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
 
       <!-- Legale + social -->

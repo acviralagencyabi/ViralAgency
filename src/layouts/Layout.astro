@@ -166,21 +166,10 @@ const schemaOrg = {
         const cursorLabel = cursor?.querySelector<HTMLSpanElement>('.label');
 
         if (cursor) {
-          let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-          let tx = cx, ty = cy;
-
+          // No inertia: cursor follows the mouse 1:1.
           document.addEventListener('mousemove', (e) => {
-            tx = e.clientX;
-            ty = e.clientY;
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
           });
-
-          const raf = () => {
-            cx += (tx - cx) * 0.18;
-            cy += (ty - cy) * 0.18;
-            cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
-            requestAnimationFrame(raf);
-          };
-          raf();
 
           document.addEventListener('mouseleave', () => (cursor.style.opacity = '0'));
           document.addEventListener('mouseenter', () => (cursor.style.opacity = '1'));
