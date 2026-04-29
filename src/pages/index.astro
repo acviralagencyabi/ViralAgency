@@ -59,6 +59,11 @@ const team = (H.team ?? []).map((m: any) => {
   };
 });
 
+const mapsUrl = (loc: { city?: string; address?: string }) => {
+  const q = [loc.address, loc.city].filter(Boolean).join(', ');
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+};
+
 // ---------- Articoli dalla collection Keystatic ----------
 const dateFormatter = new Intl.DateTimeFormat('it-IT', {
   day: '2-digit',
@@ -595,13 +600,29 @@ function categoryFor(slug: string): string {
             <p class="mono-label text-white/60 mb-6">— Sedi</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {locations.map((loc: any) => (
-                <div class="location-card">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <span class="h-display text-2xl text-[var(--paper)]">{loc.city}</span>
-                    <span class="mono-label text-white/60">{loc.tag}</span>
+                loc.address ? (
+                  <a
+                    href={mapsUrl(loc)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="location-card group block"
+                    data-cursor="apri mappa"
+                    aria-label={`Apri ${loc.city ?? loc.address} su Google Maps`}
+                  >
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="h-display text-2xl text-[var(--paper)] group-hover:text-white transition-colors">{loc.city}</span>
+                      <span class="mono-label text-white/60">{loc.tag}</span>
+                    </div>
+                    <p class="text-white/75 mt-2 group-hover:text-white transition-colors">{loc.address}</p>
+                  </a>
+                ) : (
+                  <div class="location-card">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <span class="h-display text-2xl text-[var(--paper)]">{loc.city}</span>
+                      <span class="mono-label text-white/60">{loc.tag}</span>
+                    </div>
                   </div>
-                  <p class="text-white/75 mt-2">{loc.address}</p>
-                </div>
+                )
               ))}
             </div>
           </div>

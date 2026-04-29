@@ -17,6 +17,11 @@ const logoFull =
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const locations = (homepage as any).locations ?? [];
+
+const mapsUrl = (loc: { city?: string; address?: string }) => {
+  const q = [loc.address, loc.city].filter(Boolean).join(', ');
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+};
 ---
 
 <footer class="section-dark mt-0">
@@ -60,10 +65,25 @@ const locations = (homepage as any).locations ?? [];
             <ul class="space-y-3 text-sm text-white/80">
               {locations.map((loc: any) => (
                 <li>
-                  <span class="block text-[var(--paper)]">
-                    {loc.city}{loc.tag && <span class="text-white/40"> — {loc.tag}</span>}
-                  </span>
-                  {loc.address && <span class="block text-white/60">{loc.address}</span>}
+                  {loc.address ? (
+                    <a
+                      href={mapsUrl(loc)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="group block hover:text-[var(--electric)] transition-colors"
+                      data-cursor="apri mappa"
+                      aria-label={`Apri ${loc.city ?? loc.address} su Google Maps`}
+                    >
+                      <span class="block text-[var(--paper)] group-hover:text-[var(--electric)] transition-colors">
+                        {loc.city}{loc.tag && <span class="text-white/40"> — {loc.tag}</span>}
+                      </span>
+                      <span class="block text-white/60 group-hover:text-[var(--electric)] transition-colors">{loc.address}</span>
+                    </a>
+                  ) : (
+                    <span class="block text-[var(--paper)]">
+                      {loc.city}{loc.tag && <span class="text-white/40"> — {loc.tag}</span>}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
