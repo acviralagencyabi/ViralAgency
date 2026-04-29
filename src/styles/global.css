@@ -920,27 +920,6 @@ html.lenis, html.lenis body { height: auto; }
   display: block;
 }
 
-/* Rotating badge */
-.rotating-badge {
-  width: 120px;
-  height: 120px;
-  border-radius: 999px;
-  background: var(--electric);
-  color: var(--paper);
-  display: grid;
-  place-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  animation: spin 16s linear infinite;
-  text-align: center;
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 /* Quote */
 .quote-big {
   font-family: var(--font-display);
@@ -1270,7 +1249,6 @@ html.lenis, html.lenis body { height: auto; }
     scroll-behavior: auto !important;
   }
   .marquee-track { animation: none; }
-  .rotating-badge { animation: none; }
 }
 
 :focus-visible {
