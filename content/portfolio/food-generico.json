@@ -1,0 +1,11 @@
+{
+  "title": "food-generico",
+  "brand": "Food Generico",
+  "videoSrc": "/videos/portfolio/food-generico.mp4",
+  "poster": "/src/assets/images/portfolio/food-generico/poster.jpg",
+  "description": "Food Generico",
+  "category": "campagna",
+  "gridSize": "regular",
+  "order": 21,
+  "featured": true
+}

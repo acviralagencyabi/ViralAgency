@@ -1,0 +1,11 @@
+{
+  "title": "toto-e-peppino",
+  "brand": "Totò e Peppino",
+  "videoSrc": "/videos/portfolio/toto-e-peppino.mp4",
+  "poster": "/src/assets/images/portfolio/toto-e-peppino/poster.jpg",
+  "description": "Totò e Peppino",
+  "category": "contenuto",
+  "gridSize": "regular",
+  "order": 17,
+  "featured": true
+}

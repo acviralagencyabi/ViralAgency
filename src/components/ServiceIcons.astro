@@ -1,0 +1,221 @@
+---
+interface Props {
+  name?: string;
+  class?: string;
+}
+const { name = 'none', class: className = '' } = Astro.props;
+---
+
+{name === 'megaphone' && (
+  <svg class={`svc-icon svc-megaphone ${className}`} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="meg-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="currentColor" stop-opacity="1" />
+        <stop offset="100%" stop-color="currentColor" stop-opacity="0.55" />
+      </linearGradient>
+    </defs>
+    <g class="megaphone-body">
+      <path d="M14 26 L42 14 L46 14 L46 50 L42 50 L14 38 Z" fill="url(#meg-grad)" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <path d="M14 26 L14 38 L20 38 L20 26 Z" fill="currentColor" opacity="0.85" />
+      <path d="M20 38 L24 52 L18 52 L14 38 Z" fill="currentColor" opacity="0.7" />
+    </g>
+    <g class="megaphone-waves" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none">
+      <path d="M52 22 Q56 32 52 42" class="wv wv1" />
+      <path d="M56 18 Q62 32 56 46" class="wv wv2" />
+    </g>
+  </svg>
+)}
+
+{name === 'target' && (
+  <svg class={`svc-icon svc-target ${className}`} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <g class="target-rings" stroke="currentColor" stroke-width="1.8" fill="none">
+      <circle cx="32" cy="32" r="22" class="ring ring-3" />
+      <circle cx="32" cy="32" r="14" class="ring ring-2" />
+      <circle cx="32" cy="32" r="6" class="ring ring-1" fill="currentColor" fill-opacity="0.12" />
+    </g>
+    <g class="target-bars" fill="currentColor">
+      <rect class="bar bar-1" x="46" y="36" width="4" height="8" rx="1" />
+      <rect class="bar bar-2" x="52" y="30" width="4" height="14" rx="1" />
+      <rect class="bar bar-3" x="58" y="22" width="4" height="22" rx="1" />
+    </g>
+    <g class="target-cross" stroke="currentColor" stroke-width="1.4">
+      <line x1="32" y1="6" x2="32" y2="14" />
+      <line x1="32" y1="50" x2="32" y2="58" />
+      <line x1="6" y1="32" x2="14" y2="32" />
+      <line x1="50" y1="32" x2="58" y2="32" />
+    </g>
+    <circle cx="32" cy="32" r="2" fill="currentColor" class="target-dot" />
+  </svg>
+)}
+
+{name === 'heart' && (
+  <svg class={`svc-icon svc-heart ${className}`} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <path
+      class="heart-shape"
+      d="M32 52 C20 44 8 36 8 24 C8 16 14 12 20 12 C24 12 28 14 32 18 C36 14 40 12 44 12 C50 12 56 16 56 24 C56 36 44 44 32 52 Z"
+      fill="currentColor"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linejoin="round"
+    />
+    <g class="heart-burst" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <line x1="14" y1="10" x2="11" y2="7" class="spark s1" />
+      <line x1="50" y1="10" x2="53" y2="7" class="spark s2" />
+      <line x1="6" y1="20" x2="2" y2="20" class="spark s3" />
+      <line x1="58" y1="20" x2="62" y2="20" class="spark s4" />
+    </g>
+    <g class="heart-notification">
+      <circle cx="50" cy="14" r="6" fill="var(--electric)" stroke="var(--paper)" stroke-width="1.6" class="notif-dot" />
+      <text x="50" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="var(--paper)" font-family="var(--font-mono)">1</text>
+    </g>
+  </svg>
+)}
+
+{name === 'compass' && (
+  <svg class={`svc-icon svc-compass ${className}`} viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="1.6" fill="none" class="compass-ring" />
+    <g class="compass-arm" style="transform-origin: 32px 32px;">
+      <line x1="32" y1="32" x2="48" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="48" cy="16" r="3" fill="currentColor" />
+    </g>
+    <g class="compass-pencil" style="transform-origin: 32px 32px;">
+      <line x1="32" y1="32" x2="32" y2="56" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <polygon points="29,56 35,56 32,62" fill="currentColor" />
+    </g>
+    <circle cx="32" cy="32" r="3" fill="currentColor" class="compass-pivot" />
+    <path
+      class="compass-trace"
+      d="M14 50 Q22 30 32 30 Q42 30 50 50"
+      stroke="currentColor"
+      stroke-width="1.4"
+      fill="none"
+      stroke-linecap="round"
+      stroke-dasharray="100"
+      stroke-dashoffset="100"
+      opacity="0.6"
+    />
+  </svg>
+)}
+
+<style is:global>
+  /* ──────────── SERVICE ICONS — base ──────────── */
+  .svc-icon {
+    width: clamp(2.4rem, 4vw, 3.2rem);
+    height: clamp(2.4rem, 4vw, 3.2rem);
+    color: currentColor;
+    display: block;
+    transition: transform 0.4s var(--ease-out), color 0.3s ease;
+  }
+
+  /* ──────────── MEGAPHONE ──────────── */
+  .svc-megaphone .megaphone-body { transform-origin: 30px 32px; transition: transform 0.3s var(--ease-out); }
+  .svc-megaphone .wv { stroke-dasharray: 30; stroke-dashoffset: 30; opacity: 0; transition: opacity 0.3s ease; }
+  .service-card:hover .svc-megaphone .megaphone-body,
+  .svc-megaphone:hover .megaphone-body {
+    animation: megaphone-shake 0.5s ease-in-out infinite;
+  }
+  .service-card:hover .svc-megaphone .wv,
+  .svc-megaphone:hover .wv {
+    opacity: 1;
+    animation: wave-pulse 1.4s ease-in-out infinite;
+  }
+  .service-card:hover .svc-megaphone .wv2,
+  .svc-megaphone:hover .wv2 { animation-delay: 0.25s; }
+  @keyframes megaphone-shake {
+    0%, 100% { transform: rotate(0deg) translateX(0); }
+    20% { transform: rotate(-3deg) translateX(-1px); }
+    50% { transform: rotate(3deg) translateX(1px); }
+    80% { transform: rotate(-2deg) translateX(-1px); }
+  }
+  @keyframes wave-pulse {
+    0% { stroke-dashoffset: 30; opacity: 0; }
+    40% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -30; opacity: 0; }
+  }
+
+  /* ──────────── TARGET (Marketing) ──────────── */
+  .svc-target .ring { transform-origin: 32px 32px; transition: transform 0.4s var(--ease-out); }
+  .svc-target .bar { transform-origin: bottom; transform: scaleY(0.2); transition: transform 0.5s var(--ease-out); }
+  .svc-target .target-cross line { stroke-dasharray: 14; stroke-dashoffset: 0; }
+  .service-card:hover .svc-target .ring-1,
+  .svc-target:hover .ring-1 { animation: target-pulse 1.2s ease-in-out infinite; }
+  .service-card:hover .svc-target .ring-2,
+  .svc-target:hover .ring-2 { animation: target-pulse 1.2s ease-in-out infinite 0.15s; }
+  .service-card:hover .svc-target .ring-3,
+  .svc-target:hover .ring-3 { animation: target-pulse 1.2s ease-in-out infinite 0.3s; }
+  .service-card:hover .svc-target .bar,
+  .svc-target:hover .bar { transform: scaleY(1); }
+  .service-card:hover .svc-target .bar-1,
+  .svc-target:hover .bar-1 { transition-delay: 0s; }
+  .service-card:hover .svc-target .bar-2,
+  .svc-target:hover .bar-2 { transition-delay: 0.1s; }
+  .service-card:hover .svc-target .bar-3,
+  .svc-target:hover .bar-3 { transition-delay: 0.2s; }
+  .service-card:hover .svc-target .target-dot,
+  .svc-target:hover .target-dot { animation: target-blink 0.6s ease-in-out infinite alternate; }
+  @keyframes target-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.7; }
+  }
+  @keyframes target-blink {
+    0% { opacity: 1; }
+    100% { opacity: 0.3; }
+  }
+
+  /* ──────────── HEART (Social) ──────────── */
+  .svc-heart .heart-shape { transform-origin: 32px 32px; }
+  .svc-heart .spark { stroke-dasharray: 5; stroke-dashoffset: 5; opacity: 0; }
+  .svc-heart .heart-notification { transform-origin: 50px 14px; opacity: 0.7; }
+  .service-card:hover .svc-heart .heart-shape,
+  .svc-heart:hover .heart-shape { animation: heart-beat 0.9s ease-in-out infinite; }
+  .service-card:hover .svc-heart .spark,
+  .svc-heart:hover .spark { animation: spark-out 0.9s ease-out infinite; }
+  .service-card:hover .svc-heart .s2,
+  .svc-heart:hover .s2 { animation-delay: 0.1s; }
+  .service-card:hover .svc-heart .s3,
+  .svc-heart:hover .s3 { animation-delay: 0.2s; }
+  .service-card:hover .svc-heart .s4,
+  .svc-heart:hover .s4 { animation-delay: 0.3s; }
+  .service-card:hover .svc-heart .heart-notification,
+  .svc-heart:hover .heart-notification {
+    animation: notif-pop 1.6s ease-in-out infinite;
+  }
+  @keyframes heart-beat {
+    0%, 100% { transform: scale(1); }
+    20% { transform: scale(1.15); }
+    40% { transform: scale(0.95); }
+    60% { transform: scale(1.08); }
+    80% { transform: scale(1); }
+  }
+  @keyframes spark-out {
+    0% { stroke-dashoffset: 5; opacity: 0; }
+    50% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -5; opacity: 0; }
+  }
+  @keyframes notif-pop {
+    0%, 80% { transform: scale(1); opacity: 1; }
+    90% { transform: scale(0.7); opacity: 0.4; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ──────────── COMPASS (Branding) ──────────── */
+  .svc-compass .compass-arm { transition: transform 0.5s var(--ease-out); }
+  .svc-compass .compass-trace { transition: stroke-dashoffset 1.6s var(--ease-out), opacity 0.4s ease; }
+  .service-card:hover .svc-compass .compass-arm,
+  .svc-compass:hover .compass-arm { animation: compass-spin 4s linear infinite; }
+  .service-card:hover .svc-compass .compass-trace,
+  .svc-compass:hover .compass-trace {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  @keyframes compass-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Reduced motion: kill animations */
+  @media (prefers-reduced-motion: reduce) {
+    .svc-icon *,
+    .svc-icon { animation: none !important; transition: none !important; }
+  }
+</style>

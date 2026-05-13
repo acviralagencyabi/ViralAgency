@@ -1,13 +1,15 @@
 {
   "seo": {
     "title": "REAL GOES VIRAL — Agenzia di comunicazione & marketing",
-    "description": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia. Communication, marketing, social media management, graphic & branding design."
+    "description": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia. Comunicazione, marketing, gestione social media, grafica & branding."
   },
   "manifesto": {
     "eyebrow": "01 — Manifesto",
-    "title": "Facciamo rumore dove conta.\nCreiamo storie che si diffondono.",
-    "body": "Siamo un'agenzia di comunicazione e marketing. Trasformiamo brand in conversazioni, contenuti in cultura, click in clienti. Non vendiamo visibilità: la costruiamo.",
-    "tagline": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia.",
+    "title": "Il nostro nome\nè la nostra promessa.",
+    "body": "Non crediamo nei trucchi per diventare famosi in una notte. Crediamo nella forza della realtà. Il nostro lavoro è prendere ciò che la tua azienda ha di vero — i tuoi prodotti, le tue persone, i tuoi valori — e comunicarlo con la massima cura. Quando un messaggio è Real, la risonanza (Viral) arriva da sé, perché le persone riconoscono la verità.",
+    "tagline": "Mettiamo al centro ciò che sei. Perché l'autenticità è l'unico contenuto che non passa inosservato.",
+    "ctaLabel": "Parliamo del tuo progetto",
+    "ctaHref": "#contatti",
     "kpis": [
       { "num": 120, "suffix": "+", "label": "Progetti consegnati" },
       { "num": 48, "suffix": "M", "label": "Views generate" },
@@ -18,46 +20,50 @@
   "servicesList": [
     {
       "num": "01",
-      "title": "Communication",
+      "title": "Comunicazione",
+      "icon": "megaphone",
       "desc": "Strategia editoriale, posizionamento, tono di voce.",
       "bullets": [
-        "Brand strategy",
-        "Copywriting & storytelling",
-        "PR & media relations",
-        "Content planning"
+        "Strategia di marca",
+        "Copywriting e storytelling",
+        "PR e relazioni con i media",
+        "Pianificazione contenuti"
       ]
     },
     {
       "num": "02",
-      "title": "Marketing",
+      "title": "Marketing & Pubblicità",
+      "icon": "target",
       "desc": "Performance, funnel, dati. Acquisizione che si misura.",
       "bullets": [
-        "Meta & Google Ads",
-        "Funnel & lead generation",
-        "Email automation",
-        "Tracking & analytics"
+        "Inserzioni Meta e Google",
+        "Funnel e lead generation",
+        "Automazioni email",
+        "Tracciamento e analitiche"
       ]
     },
     {
       "num": "03",
-      "title": "Social Media Management",
+      "title": "Gestione Social Media",
+      "icon": "heart",
       "desc": "Community, contenuti, advertising su Meta, TikTok e LinkedIn.",
       "bullets": [
         "Piano editoriale",
-        "Creazione reel & post",
-        "Community management",
-        "Influencer & creator collab"
+        "Creazione reel e post",
+        "Gestione community",
+        "Collaborazioni con creator"
       ]
     },
     {
       "num": "04",
-      "title": "Graphic & Branding Design",
+      "title": "Grafica & Branding",
+      "icon": "compass",
       "desc": "Identità visiva, sistema grafico, materiali on/offline.",
       "bullets": [
-        "Logo & brand identity",
-        "Brand book & sistema visivo",
-        "Materiali stampa & packaging",
-        "UI / sito vetrina"
+        "Logo e identità di marca",
+        "Brand book e sistema visivo",
+        "Materiali stampa e packaging",
+        "Interfacce e siti vetrina"
       ]
     }
   ],
@@ -87,27 +93,27 @@
   ],
   "team": [
     {
-      "name": "Marco Rossi",
-      "role": "Founder & Creative Director",
-      "initials": "MR",
+      "name": "Abderrafie Abbad",
+      "role": "Founder",
+      "initials": "AA",
       "photo": null
     },
     {
-      "name": "Giulia Bianchi",
-      "role": "Head of Content",
-      "initials": "GB",
+      "name": "Elisa Guicciardi",
+      "role": "Graphic Designer",
+      "initials": "EG",
       "photo": null
     },
     {
-      "name": "Andrea Verdi",
-      "role": "Art Director",
-      "initials": "AV",
+      "name": "Erica Bulgarelli",
+      "role": "Social Media Manager",
+      "initials": "EB",
       "photo": null
     },
     {
-      "name": "Sara Neri",
-      "role": "Performance Lead",
-      "initials": "SN",
+      "name": "Cristian Benatti",
+      "role": "Content Creator",
+      "initials": "CB",
       "photo": null
     }
   ],
@@ -115,23 +121,29 @@
     {
       "quote": "Hanno preso il nostro brand e l'hanno fatto diventare conversazione. Engagement triplicato in sei mesi.",
       "author": "Laura P.",
-      "role": "Marketing Manager, FoodCo"
+      "role": "Marketing Manager, FoodCo",
+      "googleUrl": ""
     },
     {
       "quote": "Velocità, qualità e una visione chiara. Non un'agenzia, un reparto marketing esterno.",
       "author": "Davide S.",
-      "role": "CEO, Atelier 24"
+      "role": "CEO, Atelier 24",
+      "googleUrl": ""
     },
     {
       "quote": "Ci hanno rimesso in pista dopo un rebranding andato male. Hanno capito in due chiamate.",
       "author": "Federica M.",
-      "role": "Founder, Nord Studio"
+      "role": "Founder, Nord Studio",
+      "googleUrl": ""
     }
   ],
   "social": {
     "title": "Restiamo connessi"
   },
   "contact": {
-    "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino."
+    "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino.",
+    "showWhatsapp": true,
+    "whatsappLabel": "Scrivici su WhatsApp",
+    "phoneLabel": "Chiamaci ora"
   }
 }

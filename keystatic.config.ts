@@ -9,6 +9,33 @@ const storage = isLocal
       repo: 'Ro0t-set/VisualDigitalAgencyDemo' as const,
     };
 
+// ──────────────────────────────────────────────────────────────────────────────
+// Helper: opzioni icone per i servizi (cards in homepage)
+// ──────────────────────────────────────────────────────────────────────────────
+const serviceIconOptions = [
+  { label: 'Nessuna icona', value: 'none' },
+  { label: 'Megafono (Comunicazione)', value: 'megaphone' },
+  { label: 'Target (Marketing)', value: 'target' },
+  { label: 'Cuore / Notifica (Social)', value: 'heart' },
+  { label: 'Compasso (Branding)', value: 'compass' },
+] as const;
+
+// Categorie portfolio in italiano
+const portfolioCategoryOptions = [
+  { label: 'Social Media', value: 'social' },
+  { label: 'Video', value: 'video' },
+  { label: 'Campagna', value: 'campagna' },
+  { label: 'Branding', value: 'branding' },
+  { label: 'Contenuto', value: 'contenuto' },
+  { label: 'Shooting', value: 'shooting' },
+] as const;
+
+// Dimensione card nella griglia tipo Pinterest (CSS columns, no buchi)
+const portfolioGridSizeOptions = [
+  { label: 'Regolare (3:4)', value: 'regular' },
+  { label: 'Verticale alta (9:16, formato story)', value: 'tall' },
+] as const;
+
 export default config({
   storage,
 
@@ -28,7 +55,6 @@ export default config({
         companyName: fields.text({ label: 'Nome Azienda' }),
 
         // Brand assets — sostituiscono i loghi statici nel sito.
-        // Se lasciati vuoti, il sito usa i loghi di default in src/assets/images/brand/.
         logoMark: fields.image({
           label: 'Logo — Mark (icona piccola, navbar)',
           description: 'Lasciato vuoto: usa il default `mark-color.png`.',
@@ -57,13 +83,44 @@ export default config({
           { label: 'Contatti' }
         ),
 
+        whatsapp: fields.object(
+          {
+            number: fields.text({
+              label: 'Numero WhatsApp (con prefisso, senza + es. 393331234567)',
+              description: 'Lascia vuoto per nascondere il bottone WhatsApp.',
+            }),
+            defaultMessage: fields.text({
+              label: 'Messaggio precompilato',
+              multiline: true,
+              defaultValue:
+                'Ciao! Sono interessato/a a una consulenza per il mio brand. Possiamo parlarne?',
+            }),
+          },
+          { label: 'WhatsApp' }
+        ),
+
         social: fields.object(
           {
             facebook: fields.url({ label: 'Facebook' }),
             instagram: fields.url({ label: 'Instagram' }),
             linkedin: fields.url({ label: 'LinkedIn' }),
+            googleReviewsUrl: fields.url({
+              label: 'URL profilo Google (recensioni)',
+              description: 'Link al profilo Google Business per le recensioni.',
+            }),
           },
           { label: 'Social Media' }
+        ),
+
+        analytics: fields.object(
+          {
+            gaTrackingId: fields.text({
+              label: 'Google Analytics — Measurement ID (G-XXXXXXXXXX)',
+              description:
+                'Lascia vuoto per disabilitare GA. Lo script viene caricato solo dopo consenso ai cookie.',
+            }),
+          },
+          { label: 'Analytics' }
         ),
 
         seo: fields.object(
@@ -95,7 +152,7 @@ export default config({
     }),
 
     // ──────────────────────────────────────────────────────────────────────
-    // Homepage — solo le sezioni effettivamente usate dal sito
+    // Homepage — sezioni effettivamente usate dal sito
     // ──────────────────────────────────────────────────────────────────────
     homepage: singleton({
       label: 'Homepage',
@@ -117,10 +174,21 @@ export default config({
               label: 'Titolo (multilinea: usa Invio per andare a capo)',
               multiline: true,
             }),
-            body: fields.text({ label: 'Corpo', multiline: true }),
-            tagline: fields.text({
-              label: 'Tagline (es. Motor Valley)',
+            body: fields.text({
+              label: 'Corpo del manifesto',
               multiline: true,
+            }),
+            tagline: fields.text({
+              label: 'Tagline (frase di chiusura)',
+              multiline: true,
+            }),
+            ctaLabel: fields.text({
+              label: 'Testo CTA arcobaleno',
+              defaultValue: 'Parliamo del tuo progetto',
+            }),
+            ctaHref: fields.text({
+              label: 'Destinazione CTA (es. #contatti)',
+              defaultValue: '#contatti',
             }),
             kpis: fields.array(
               fields.object({
@@ -141,7 +209,12 @@ export default config({
         servicesList: fields.array(
           fields.object({
             num: fields.text({ label: 'Numero (es. 01)', defaultValue: '01' }),
-            title: fields.text({ label: 'Titolo' }),
+            title: fields.text({ label: 'Titolo (in italiano)' }),
+            icon: fields.select({
+              label: 'Icona animata',
+              options: serviceIconOptions,
+              defaultValue: 'none',
+            }),
             desc: fields.text({ label: 'Descrizione breve', multiline: true }),
             bullets: fields.array(fields.text({ label: 'Sotto-servizio' }), {
               label: 'Sotto-servizi',
@@ -200,6 +273,11 @@ export default config({
             quote: fields.text({ label: 'Citazione', multiline: true }),
             author: fields.text({ label: 'Autore' }),
             role: fields.text({ label: 'Ruolo / Azienda' }),
+            googleUrl: fields.url({
+              label: 'Link recensione Google (opzionale)',
+              description:
+                'Link diretto alla recensione su Google. Se vuoto, usa l\'URL profilo Google in Impostazioni Globali.',
+            }),
           }),
           {
             label: 'Recensioni',
@@ -223,9 +301,90 @@ export default config({
               label: 'Testo introduttivo (sopra il form contatti)',
               multiline: true,
             }),
+            showWhatsapp: fields.checkbox({
+              label: 'Mostra bottone WhatsApp',
+              defaultValue: true,
+            }),
+            whatsappLabel: fields.text({
+              label: 'Testo bottone WhatsApp',
+              defaultValue: 'Scrivici su WhatsApp',
+            }),
+            phoneLabel: fields.text({
+              label: 'Testo bottone Telefono',
+              defaultValue: 'Chiamaci ora',
+            }),
           },
           { label: 'Sezione Contatti' }
         ),
+      },
+    }),
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Banner cookie (testi semplici)
+    // ──────────────────────────────────────────────────────────────────────
+    cookieBanner: singleton({
+      label: 'Cookie — Banner',
+      path: 'content/pages/cookie-banner',
+      format: { data: 'json' },
+      schema: {
+        bannerTitle: fields.text({
+          label: 'Banner — Titolo',
+          defaultValue: 'Rispettiamo la tua privacy',
+        }),
+        bannerBody: fields.text({
+          label: 'Banner — Testo',
+          multiline: true,
+          defaultValue:
+            'Usiamo cookie tecnici essenziali e, con il tuo consenso, cookie di analisi (Google Analytics) per capire come migliorare il sito. Puoi accettare tutto, rifiutare i non essenziali o personalizzare la scelta.',
+        }),
+        acceptLabel: fields.text({ label: 'Bottone — Accetta tutto', defaultValue: 'Accetta tutto' }),
+        rejectLabel: fields.text({ label: 'Bottone — Solo essenziali', defaultValue: 'Solo essenziali' }),
+        customizeLabel: fields.text({ label: 'Bottone — Personalizza', defaultValue: 'Personalizza' }),
+        prefsTitle: fields.text({ label: 'Preferenze — Titolo', defaultValue: 'Preferenze cookie' }),
+        prefsIntro: fields.text({
+          label: 'Preferenze — Introduzione',
+          multiline: true,
+          defaultValue:
+            'Scegli quali categorie di cookie permettere. I cookie tecnici sono necessari al funzionamento del sito e non possono essere disattivati.',
+        }),
+        managePrefsLabel: fields.text({
+          label: 'Footer — Etichetta "Gestisci cookie"',
+          defaultValue: 'Gestisci cookie',
+        }),
+      },
+    }),
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Cookie Policy — pagina completa
+    // ──────────────────────────────────────────────────────────────────────
+    cookiePolicy: singleton({
+      label: 'Cookie — Policy',
+      path: 'content/pages/cookie-policy',
+      format: { data: 'json' },
+      schema: {
+        title: fields.text({ label: 'Titolo', defaultValue: 'Cookie Policy' }),
+        lastUpdated: fields.date({ label: 'Ultimo aggiornamento' }),
+        body: fields.text({
+          label: 'Contenuto (Markdown leggero — usa riga vuota per separare i paragrafi, ## per titoli)',
+          multiline: true,
+        }),
+      },
+    }),
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Privacy Policy — pagina completa
+    // ──────────────────────────────────────────────────────────────────────
+    privacyPolicy: singleton({
+      label: 'Privacy Policy',
+      path: 'content/pages/privacy-policy',
+      format: { data: 'json' },
+      schema: {
+        title: fields.text({ label: 'Titolo', defaultValue: 'Privacy Policy' }),
+        lastUpdated: fields.date({ label: 'Ultimo aggiornamento' }),
+        body: fields.text({
+          label: 'Contenuto (Markdown leggero — usa riga vuota per separare i paragrafi, ## per titoli)',
+          multiline: true,
+        }),
       },
     }),
   },
@@ -237,21 +396,46 @@ export default config({
       path: 'content/portfolio/*',
       format: { data: 'json' },
       schema: {
-        title: fields.slug({ name: { label: 'Titolo' } }),
-        image: fields.image({
-          label: 'Immagine',
+        title: fields.slug({
+          name: { label: 'Titolo / slug' },
+        }),
+        brand: fields.text({
+          label: 'Etichetta Brand visualizzata (es. Brand 1)',
+          description:
+            'Testo mostrato come titolo sulla card. Usa "Brand 1", "Brand 2"… come placeholder oppure il nome reale del cliente.',
+        }),
+        videoSrc: fields.text({
+          label: 'Percorso video (es. /videos/portfolio/biskero.mp4)',
+          description:
+            'Path relativo al video MP4 in public/. Carica il file in public/videos/portfolio/ e indica qui il percorso.',
+        }),
+        poster: fields.image({
+          label: 'Poster (immagine di fallback)',
+          description:
+            'Mostrata prima che il video parta o se il browser non lo supporta. Lascia vuoto per usare il primo frame del video.',
           directory: 'src/assets/images/portfolio',
           publicPath: '/src/assets/images/portfolio/',
         }),
         description: fields.text({ label: 'Descrizione', multiline: true }),
+        category: fields.select({
+          label: 'Categoria',
+          options: portfolioCategoryOptions,
+          defaultValue: 'social',
+        }),
+        gridSize: fields.select({
+          label: 'Dimensione nella griglia',
+          description:
+            'Definisce come la card occupa la griglia tipo Pinterest. Mischia formati per dare ritmo.',
+          options: portfolioGridSizeOptions,
+          defaultValue: 'regular',
+        }),
         order: fields.number({ label: 'Ordine', defaultValue: 0 }),
-        featured: fields.checkbox({ label: 'In Evidenza' }),
+        featured: fields.checkbox({ label: 'In Evidenza', defaultValue: true }),
       },
     }),
 
     // ──────────────────────────────────────────────────────────────────────
     // Articoli — collection completa con corpo Markdoc editabile
-    // Ogni articolo è un file content/articles/<slug>.mdoc con frontmatter
     // ──────────────────────────────────────────────────────────────────────
     articles: collection({
       label: 'Articoli',

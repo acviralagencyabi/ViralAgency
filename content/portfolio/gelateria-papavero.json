@@ -1,0 +1,11 @@
+{
+  "title": "gelateria-papavero",
+  "brand": "Gelateria Papavero",
+  "videoSrc": "/videos/portfolio/gelateria-papavero.mp4",
+  "poster": "/src/assets/images/portfolio/gelateria-papavero/poster.jpg",
+  "description": "Gelateria Papavero",
+  "category": "video",
+  "gridSize": "regular",
+  "order": 8,
+  "featured": true
+}

@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import policy from '../../content/pages/privacy-policy.json';
+import { renderLightMarkdown } from '../lib/light-markdown';
+
+const html = renderLightMarkdown(policy.body || '');
+
+const dateFormatter = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+});
+const lastUpdated = policy.lastUpdated
+  ? dateFormatter.format(new Date(policy.lastUpdated))
+  : '';
+---
+
+<Layout title={policy.title} description="Informativa sul trattamento dei dati personali.">
+  <section class="section pt-40">
+    <div class="container-custom max-w-3xl">
+      <p class="eyebrow">Policy</p>
+      <h1 class="section-title mt-3">{policy.title}</h1>
+      {lastUpdated && (
+        <p class="mono-label text-[var(--muted)] mt-4">Ultimo aggiornamento: {lastUpdated}</p>
+      )}
+
+      <article class="policy-prose mt-12" set:html={html}></article>
+    </div>
+  </section>
+</Layout>

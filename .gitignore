@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # Windows
 Thumbs.db
+
+# Raw video sources — already copied to public/videos/portfolio/ for the site
+media/

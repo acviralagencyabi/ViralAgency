@@ -1,0 +1,11 @@
+{
+  "title": "vino-e",
+  "brand": "Vino e",
+  "videoSrc": "/videos/portfolio/vino-e.mp4",
+  "poster": "/src/assets/images/portfolio/vino-e/poster.jpg",
+  "description": "Vino e",
+  "category": "social",
+  "gridSize": "regular",
+  "order": 25,
+  "featured": true
+}

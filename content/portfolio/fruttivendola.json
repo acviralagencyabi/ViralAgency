@@ -1,0 +1,11 @@
+{
+  "title": "fruttivendola",
+  "brand": "Fruttivendola",
+  "videoSrc": "/videos/portfolio/fruttivendola.mp4",
+  "poster": "/src/assets/images/portfolio/fruttivendola/poster.jpg",
+  "description": "Fruttivendola",
+  "category": "social",
+  "gridSize": "tall",
+  "order": 7,
+  "featured": true
+}

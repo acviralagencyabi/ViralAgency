@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
 import homepage from '../../content/pages/homepage.json';
+import cookieBanner from '../../content/pages/cookie-banner.json';
 import { Instagram, Facebook } from 'lucide-astro';
 import logoFullDefault from '../assets/images/brand/logo-black-tagline.png';
 
@@ -17,6 +18,11 @@ const logoFull =
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const locations = (homepage as any).locations ?? [];
+
+const BASE = import.meta.env.BASE_URL;
+const privacyHref = BASE + 'privacy-policy/';
+const cookieHref = BASE + 'cookie-policy/';
+const managePrefsLabel = (cookieBanner as any).managePrefsLabel || 'Gestisci cookie';
 
 const mapsUrl = (loc: { city?: string; address?: string }) => {
   const q = [loc.address, loc.city].filter(Boolean).join(', ');
@@ -117,7 +123,22 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
 
     <div class="mt-16 pt-8 border-t border-white/10 flex flex-wrap gap-4 items-center justify-between mono-label text-white/50">
       <span>© {currentYear} {globalSettings.companyName} — Tutti i diritti riservati</span>
-      <span>Site design — REAL GOES VIRAL · {currentYear}</span>
+      <div class="flex flex-wrap gap-4 items-center">
+        <a href={privacyHref} class="hover:text-[var(--electric)] transition-colors">Privacy</a>
+        <a href={cookieHref} class="hover:text-[var(--electric)] transition-colors">Cookie</a>
+        <button type="button" id="footer-cookie-prefs" class="hover:text-[var(--electric)] transition-colors mono-label text-white/50 bg-transparent border-0 cursor-pointer p-0">
+          {managePrefsLabel}
+        </button>
+        <span class="hidden md:inline">Site design — REAL GOES VIRAL · {currentYear}</span>
+      </div>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  document.getElementById('footer-cookie-prefs')?.addEventListener('click', () => {
+    if (typeof window.openCookiePreferences === 'function') {
+      window.openCookiePreferences();
+    }
+  });
+</script>

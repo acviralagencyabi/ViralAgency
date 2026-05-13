@@ -654,7 +654,7 @@ html.lenis, html.lenis body { height: auto; }
   border-radius: 999px;
   background: #ffffff;
   pointer-events: none;
-  z-index: 100;
+  z-index: 9999;
   transform: translate(-50%, -50%);
   transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out);
   will-change: transform;
@@ -1235,6 +1235,528 @@ html.lenis, html.lenis body { height: auto; }
 .location-card:hover {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.32);
+}
+
+/* =========================================================================
+   Portfolio — Pinterest masonry via CSS columns (no gaps, ever)
+   Vertical-video friendly: regular 3:4, tall 9:16. Items keep source order
+   distributed column-by-column.
+   ========================================================================= */
+.portfolio-grid {
+  column-count: 2;
+  column-gap: clamp(0.6rem, 1.2vw, 1rem);
+}
+@media (min-width: 768px)  { .portfolio-grid { column-count: 3; } }
+@media (min-width: 1100px) { .portfolio-grid { column-count: 4; } }
+
+.pf-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-soft);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--paper);
+  display: block;
+  width: 100%;
+  margin-bottom: clamp(0.6rem, 1.2vw, 1rem);
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  aspect-ratio: 3 / 4;
+  transition: transform 0.45s var(--ease-out);
+}
+.pf-card.pf-tall { aspect-ratio: 9 / 16; }
+/* Backwards-compat: any legacy size collapses to regular */
+.pf-card.pf-wide,
+.pf-card.pf-featured { aspect-ratio: 3 / 4; }
+
+/* Media stack: poster + video + play marker */
+.pf-media {
+  position: absolute;
+  inset: 0;
+  background: var(--ink-soft);
+  overflow: hidden;
+}
+.pf-poster,
+.pf-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.pf-video {
+  opacity: 0;
+  z-index: 1;
+}
+.pf-poster {
+  opacity: 1;
+  z-index: 0;
+}
+.pf-card:hover .pf-video,
+.pf-card:focus-visible .pf-video {
+  opacity: 1;
+  transform: scale(1.03);
+}
+.pf-card:hover .pf-poster,
+.pf-card:focus-visible .pf-poster {
+  opacity: 0;
+}
+/* On touch devices: keep poster visible until viewport autoplay swaps in the video */
+@media (hover: none) {
+  .pf-card.is-playing .pf-video { opacity: 1; }
+  .pf-card.is-playing .pf-poster { opacity: 0; }
+}
+
+.pf-play {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 10, 0.55);
+  color: var(--paper);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(245, 243, 238, 0.18);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-out);
+  z-index: 3;
+  pointer-events: none;
+}
+.pf-card:hover .pf-play,
+.pf-card:focus-visible .pf-play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Portfolio meta overlay (uses .meta from existing .portfolio-card rules
+   but we need to layer over the video) */
+.pf-card .meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.88), rgba(10, 10, 10, 0));
+  color: var(--paper);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  transform: translateY(0);
+  opacity: 1;
+}
+.pf-card .meta .tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(245, 243, 238, 0.7);
+}
+.pf-card .meta .title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+/* Lightbox video specific */
+.lightbox-video {
+  max-width: min(92vw, 1100px);
+  max-height: 82vh;
+  width: auto;
+  background: #000;
+  display: block;
+}
+
+/* =========================================================================
+   Service icons — sit nicely inside the .service-card head
+   ========================================================================= */
+.sv-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.6rem, 4vw, 3.4rem);
+  height: clamp(2.6rem, 4vw, 3.4rem);
+  flex-shrink: 0;
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  padding: 0.4rem;
+  background: rgba(10, 10, 10, 0.02);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.service-card:hover .sv-icon-wrap {
+  border-color: var(--ink);
+  background: rgba(10, 10, 10, 0.05);
+}
+.sv-head .sv-title {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =========================================================================
+   Rainbow rotating button (Manifesto CTA + Form submit)
+   ========================================================================= */
+.btn-rainbow {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: 999px;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 0;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 0;
+  transition: transform 0.4s var(--ease-out);
+}
+.btn-rainbow:hover { transform: translateY(-2px); }
+
+.btn-rainbow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220%;
+  aspect-ratio: 1 / 1;
+  background: conic-gradient(
+    from 0deg,
+    #ff3b1f,
+    #ff8a00,
+    #ffd400,
+    #00ff85,
+    #00bfff,
+    #8a2be2,
+    #ff007a,
+    #ff3b1f
+  );
+  transform: translate(-50%, -50%);
+  animation: btn-rainbow-spin 5s linear infinite;
+  z-index: -2;
+  filter: blur(0.5px);
+}
+.btn-rainbow::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  background: var(--ink);
+  z-index: -1;
+}
+.btn-rainbow:hover::before {
+  animation-duration: 2.2s;
+  filter: blur(0px);
+}
+
+.btn-rainbow-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.05rem 2rem;
+  color: var(--paper);
+}
+.btn-rainbow-arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out);
+}
+.btn-rainbow:hover .btn-rainbow-arrow {
+  transform: translate(3px, -3px);
+}
+
+@keyframes btn-rainbow-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* On dark backgrounds (cta-section) keep the inner the dark colour but
+   choose deep blue instead of pure black so the gradient still feels alive. */
+.cta-section .btn-rainbow,
+.section-dark .btn-rainbow {
+  background: var(--deep);
+}
+.cta-section .btn-rainbow::after,
+.section-dark .btn-rainbow::after {
+  background: var(--deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-rainbow::before { animation: none; }
+}
+
+/* =========================================================================
+   Contact quick buttons (WhatsApp + Phone) — white on blue (CTA section)
+   ========================================================================= */
+.contact-quick {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .contact-quick { grid-template-columns: 1fr 1fr; }
+}
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--paper);
+  text-decoration: none;
+  font-family: var(--font-display);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.3s var(--ease-out);
+  backdrop-filter: blur(8px);
+}
+.contact-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+.contact-btn .cb-label {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: var(--paper);
+}
+.contact-btn .cb-sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245, 243, 238, 0.55);
+  margin-top: 0.2rem;
+}
+.contact-btn .cb-arrow {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  opacity: 0.6;
+  transition: transform 0.3s var(--ease-out), opacity 0.3s ease;
+}
+.contact-btn:hover .cb-arrow {
+  transform: translate(3px, -3px);
+  opacity: 1;
+}
+.contact-btn-wa {
+  border-color: rgba(37, 211, 102, 0.45);
+}
+.contact-btn-wa:hover {
+  border-color: rgba(37, 211, 102, 0.95);
+  background: rgba(37, 211, 102, 0.12);
+}
+.contact-btn-wa svg { color: #25D366; }
+
+/* Review card cursor when linked to Google */
+a.review-card { color: inherit; text-decoration: none; transition: background 0.25s ease; }
+a.review-card:hover { background: rgba(10, 10, 10, 0.03); }
+
+/* =========================================================================
+   Cookie consent banner & preferences modal
+   ========================================================================= */
+.cookie-banner {
+  position: fixed;
+  left: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 100;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid rgba(245, 243, 238, 0.18);
+  padding: 1.25rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--font-display);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  transform: translateY(120%);
+  opacity: 0;
+  transition: transform 0.5s var(--ease-out), opacity 0.4s ease;
+}
+.cookie-banner.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+@media (min-width: 768px) {
+  .cookie-banner { grid-template-columns: 1fr auto; align-items: center; }
+}
+.cookie-banner-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--paper);
+}
+.cookie-banner-body {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(245, 243, 238, 0.78);
+}
+.cookie-banner-body a {
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--electric);
+}
+.cookie-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.cookie-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.1rem;
+  border: 1px solid rgba(245, 243, 238, 0.4);
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.cookie-btn:hover {
+  background: rgba(245, 243, 238, 0.1);
+  border-color: var(--paper);
+}
+.cookie-btn-primary {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+.cookie-btn-primary:hover {
+  background: var(--electric);
+  color: var(--paper);
+  border-color: var(--electric);
+}
+.cookie-btn-ghost {
+  border-color: rgba(245, 243, 238, 0.2);
+  color: rgba(245, 243, 238, 0.7);
+}
+
+/* Modal "personalizza" */
+.cookie-prefs {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.cookie-prefs.is-open { display: flex; }
+.cookie-prefs-card {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--hairline);
+  padding: 2rem;
+  max-width: 540px;
+  width: 100%;
+  font-family: var(--font-display);
+}
+.cookie-prefs-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+.cookie-prefs-intro {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin-bottom: 1.4rem;
+}
+.cookie-pref-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--hairline);
+}
+.cookie-pref-row:first-of-type { border-top: 0; }
+.cookie-pref-info strong {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+.cookie-pref-info span {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  display: block;
+  margin-top: 0.3rem;
+}
+.cookie-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--hairline);
+  cursor: pointer;
+  transition: background 0.25s ease;
+  border: 0;
+  padding: 0;
+}
+.cookie-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: var(--paper);
+  border-radius: 999px;
+  transition: transform 0.25s var(--ease-out);
+}
+.cookie-toggle[aria-pressed="true"] { background: var(--electric); }
+.cookie-toggle[aria-pressed="true"]::after { transform: translateX(20px); }
+.cookie-toggle[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+.cookie-prefs-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+  flex-wrap: wrap;
+}
+.cookie-prefs-actions .cookie-btn {
+  color: var(--ink);
+  border-color: var(--hairline-strong);
+}
+.cookie-prefs-actions .cookie-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.cookie-prefs-actions .cookie-btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.cookie-prefs-actions .cookie-btn-primary:hover {
+  background: var(--electric);
+  border-color: var(--electric);
+  color: var(--paper);
 }
 
 /* =========================================================================

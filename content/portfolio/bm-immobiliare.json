@@ -1,0 +1,11 @@
+{
+  "title": "bm-immobiliare",
+  "brand": "Bm Immobiliare",
+  "videoSrc": "/videos/portfolio/bm-immobiliare.mp4",
+  "poster": "/src/assets/images/portfolio/bm-immobiliare/poster.jpg",
+  "description": "Bm Immobiliare",
+  "category": "video",
+  "gridSize": "tall",
+  "order": 20,
+  "featured": true
+}

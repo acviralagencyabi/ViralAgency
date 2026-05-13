@@ -1,0 +1,11 @@
+{
+  "title": "feam-arredamenti",
+  "brand": "Feam Arredamenti",
+  "videoSrc": "/videos/portfolio/feam-arredamenti.mp4",
+  "poster": "/src/assets/images/portfolio/feam-arredamenti/poster.jpg",
+  "description": "Feam Arredamenti",
+  "category": "shooting",
+  "gridSize": "regular",
+  "order": 6,
+  "featured": true
+}

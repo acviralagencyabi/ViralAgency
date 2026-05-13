@@ -1,0 +1,11 @@
+{
+  "title": "ambiente",
+  "brand": "Ambiente",
+  "videoSrc": "/videos/portfolio/ambiente.mp4",
+  "poster": "/src/assets/images/portfolio/ambiente/poster.jpg",
+  "description": "Ambiente",
+  "category": "social",
+  "gridSize": "regular",
+  "order": 19,
+  "featured": true
+}

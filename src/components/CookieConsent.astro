@@ -1,0 +1,204 @@
+---
+import cookieBanner from '../../content/pages/cookie-banner.json';
+import globalSettings from '../../content/settings/global.json';
+
+const policy: any = cookieBanner;
+
+const gaId = (globalSettings as any).analytics?.gaTrackingId || '';
+
+const BASE = import.meta.env.BASE_URL;
+const cookiePolicyHref = BASE + 'cookie-policy/';
+const privacyPolicyHref = BASE + 'privacy-policy/';
+---
+
+<!-- Cookie consent banner -->
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Avviso cookie">
+  <div>
+    <p class="cookie-banner-title">{policy.bannerTitle}</p>
+    <p class="cookie-banner-body">
+      {policy.bannerBody}
+      {' '}
+      <a href={cookiePolicyHref}>Cookie Policy</a>
+      {' · '}
+      <a href={privacyPolicyHref}>Privacy Policy</a>
+    </p>
+  </div>
+  <div class="cookie-actions">
+    <button type="button" class="cookie-btn cookie-btn-ghost" data-cookie-action="customize">
+      {policy.customizeLabel}
+    </button>
+    <button type="button" class="cookie-btn" data-cookie-action="reject">
+      {policy.rejectLabel}
+    </button>
+    <button type="button" class="cookie-btn cookie-btn-primary" data-cookie-action="accept">
+      {policy.acceptLabel}
+    </button>
+  </div>
+</div>
+
+<!-- Preferences modal -->
+<div id="cookie-prefs" class="cookie-prefs" role="dialog" aria-modal="true" aria-labelledby="cookie-prefs-title">
+  <div class="cookie-prefs-card">
+    <h2 id="cookie-prefs-title" class="cookie-prefs-title">{policy.prefsTitle}</h2>
+    <p class="cookie-prefs-intro">{policy.prefsIntro}</p>
+
+    <div class="cookie-pref-row">
+      <div class="cookie-pref-info">
+        <strong>Cookie tecnici</strong>
+        <p style="font-size: 0.85rem; color: var(--muted); line-height: 1.45; margin: 0;">
+          Necessari al funzionamento del sito (es. memorizzare la tua scelta sui cookie).
+        </p>
+        <span>Sempre attivi</span>
+      </div>
+      <button type="button" class="cookie-toggle" aria-pressed="true" aria-disabled="true" aria-label="Cookie tecnici sempre attivi"></button>
+    </div>
+
+    <div class="cookie-pref-row">
+      <div class="cookie-pref-info">
+        <strong>Cookie di analisi (Google Analytics)</strong>
+        <p style="font-size: 0.85rem; color: var(--muted); line-height: 1.45; margin: 0;">
+          Misurano in forma aggregata come viene utilizzato il sito. Caricati solo dopo il tuo consenso.
+        </p>
+        <span>Opzionali</span>
+      </div>
+      <button type="button" class="cookie-toggle" data-cookie-toggle="analytics" aria-pressed="false" aria-label="Attiva cookie di analisi"></button>
+    </div>
+
+    <div class="cookie-prefs-actions">
+      <button type="button" class="cookie-btn" data-cookie-action="prefs-cancel">Annulla</button>
+      <button type="button" class="cookie-btn cookie-btn-primary" data-cookie-action="prefs-save">Salva preferenze</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ gaId, BASE }}>
+  (function () {
+    const STORAGE_KEY = 'cookie-consent.v1';
+    const banner = document.getElementById('cookie-banner');
+    const modal = document.getElementById('cookie-prefs');
+    const analyticsToggle = document.querySelector('[data-cookie-toggle="analytics"]');
+
+    function readConsent() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function writeConsent(consent) {
+      const payload = Object.assign({ ts: Date.now(), essential: true, analytics: false }, consent);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch (_) {}
+      return payload;
+    }
+
+    function showBanner() {
+      if (!banner) return;
+      // Defer so the slide-in animation actually plays
+      requestAnimationFrame(() => banner.classList.add('is-visible'));
+      banner.style.display = '';
+    }
+    function hideBanner() {
+      if (!banner) return;
+      banner.classList.remove('is-visible');
+      // Wait for transition before removing from layout
+      setTimeout(() => { banner.style.display = 'none'; }, 500);
+    }
+
+    function openModal() {
+      if (!modal) return;
+      modal.classList.add('is-open');
+      // Sync toggle with stored value
+      const stored = readConsent();
+      if (analyticsToggle) {
+        const on = Boolean(stored?.analytics);
+        analyticsToggle.setAttribute('aria-pressed', String(on));
+      }
+    }
+    function closeModal() {
+      modal?.classList.remove('is-open');
+    }
+
+    function loadGA(id) {
+      if (!id) return;
+      if (window.__gaLoaded) return;
+      window.__gaLoaded = true;
+
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+      document.head.appendChild(s);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ window.dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', id, { anonymize_ip: true });
+    }
+
+    function applyConsent(consent) {
+      if (consent?.analytics && gaId) {
+        loadGA(gaId);
+      }
+      // Optional: dispatch a global event so other scripts can react
+      document.dispatchEvent(new CustomEvent('cookie-consent:update', { detail: consent }));
+    }
+
+    // Wire up banner buttons
+    banner?.addEventListener('click', (e) => {
+      const action = e.target?.closest?.('[data-cookie-action]')?.dataset?.cookieAction;
+      if (!action) return;
+
+      if (action === 'accept') {
+        const c = writeConsent({ analytics: true });
+        applyConsent(c);
+        hideBanner();
+      } else if (action === 'reject') {
+        const c = writeConsent({ analytics: false });
+        applyConsent(c);
+        hideBanner();
+      } else if (action === 'customize') {
+        openModal();
+      }
+    });
+
+    // Toggle in modal
+    analyticsToggle?.addEventListener('click', () => {
+      const pressed = analyticsToggle.getAttribute('aria-pressed') === 'true';
+      analyticsToggle.setAttribute('aria-pressed', String(!pressed));
+    });
+
+    // Modal actions
+    modal?.addEventListener('click', (e) => {
+      const action = e.target?.closest?.('[data-cookie-action]')?.dataset?.cookieAction;
+      if (action === 'prefs-cancel') {
+        closeModal();
+      } else if (action === 'prefs-save') {
+        const analyticsOn = analyticsToggle?.getAttribute('aria-pressed') === 'true';
+        const c = writeConsent({ analytics: analyticsOn });
+        applyConsent(c);
+        closeModal();
+        hideBanner();
+      } else if (e.target === modal) {
+        // Click on overlay closes
+        closeModal();
+      }
+    });
+
+    // Expose a global for the footer "Gestisci cookie" link
+    window.openCookiePreferences = function () {
+      openModal();
+    };
+
+    // Initial state
+    const existing = readConsent();
+    if (!existing) {
+      showBanner();
+    } else {
+      banner.style.display = 'none';
+      applyConsent(existing);
+    }
+  })();
+</script>

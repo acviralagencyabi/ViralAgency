@@ -1,0 +1,11 @@
+{
+  "title": "centro-estetico-la-villa",
+  "brand": "Centro Estetico la Villa",
+  "videoSrc": "/videos/portfolio/centro-estetico-la-villa.mp4",
+  "poster": "/src/assets/images/portfolio/centro-estetico-la-villa/poster.jpg",
+  "description": "Centro Estetico la Villa",
+  "category": "video",
+  "gridSize": "regular",
+  "order": 2,
+  "featured": true
+}

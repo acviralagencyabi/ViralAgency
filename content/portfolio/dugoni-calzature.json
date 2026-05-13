@@ -1,0 +1,11 @@
+{
+  "title": "dugoni-calzature",
+  "brand": "Dugoni Calzature",
+  "videoSrc": "/videos/portfolio/dugoni-calzature.mp4",
+  "poster": "/src/assets/images/portfolio/dugoni-calzature/poster.jpg",
+  "description": "Dugoni Calzature",
+  "category": "campagna",
+  "gridSize": "regular",
+  "order": 3,
+  "featured": true
+}

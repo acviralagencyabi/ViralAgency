@@ -1,0 +1,11 @@
+{
+  "title": "kakao",
+  "brand": "Kakao",
+  "videoSrc": "/videos/portfolio/kakao.mp4",
+  "poster": "/src/assets/images/portfolio/kakao/poster.jpg",
+  "description": "Kakao",
+  "category": "shooting",
+  "gridSize": "tall",
+  "order": 12,
+  "featured": true
+}

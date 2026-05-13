@@ -1,0 +1,11 @@
+{
+  "title": "emporio-delle-firme",
+  "brand": "Emporio delle Firme",
+  "videoSrc": "/videos/portfolio/emporio-delle-firme.mp4",
+  "poster": "/src/assets/images/portfolio/emporio-delle-firme/poster.jpg",
+  "description": "Emporio delle Firme",
+  "category": "branding",
+  "gridSize": "tall",
+  "order": 4,
+  "featured": true
+}

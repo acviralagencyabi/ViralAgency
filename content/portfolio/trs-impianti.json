@@ -1,0 +1,11 @@
+{
+  "title": "trs-impianti",
+  "brand": "TRS Impianti",
+  "videoSrc": "/videos/portfolio/trs-impianti.mp4",
+  "poster": "/src/assets/images/portfolio/trs-impianti/poster.jpg",
+  "description": "TRS Impianti",
+  "category": "branding",
+  "gridSize": "regular",
+  "order": 16,
+  "featured": true
+}

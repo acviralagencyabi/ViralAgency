@@ -1,0 +1,11 @@
+{
+  "title": "oltre-gluten-free",
+  "brand": "Oltre Gluten Free",
+  "videoSrc": "/videos/portfolio/oltre-gluten-free.mp4",
+  "poster": "/src/assets/images/portfolio/oltre-gluten-free/poster.jpg",
+  "description": "Oltre Gluten Free",
+  "category": "contenuto",
+  "gridSize": "tall",
+  "order": 23,
+  "featured": true
+}

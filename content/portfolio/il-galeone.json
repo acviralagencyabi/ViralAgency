@@ -1,0 +1,11 @@
+{
+  "title": "il-galeone",
+  "brand": "Il Galeone",
+  "videoSrc": "/videos/portfolio/il-galeone.mp4",
+  "poster": "/src/assets/images/portfolio/il-galeone/poster.jpg",
+  "description": "Il Galeone",
+  "category": "contenuto",
+  "gridSize": "regular",
+  "order": 11,
+  "featured": true
+}

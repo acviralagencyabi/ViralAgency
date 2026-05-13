@@ -1,0 +1,11 @@
+{
+  "title": "pianeta-auto",
+  "brand": "Pianeta Auto",
+  "videoSrc": "/videos/portfolio/pianeta-auto.mp4",
+  "poster": "/src/assets/images/portfolio/pianeta-auto/poster.jpg",
+  "description": "Pianeta Auto",
+  "category": "campagna",
+  "gridSize": "tall",
+  "order": 15,
+  "featured": true
+}

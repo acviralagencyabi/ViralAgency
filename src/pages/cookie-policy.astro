@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import policy from '../../content/pages/cookie-policy.json';
+import { renderLightMarkdown } from '../lib/light-markdown';
+
+const html = renderLightMarkdown(policy.body || '');
+
+const dateFormatter = new Intl.DateTimeFormat('it-IT', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+});
+const lastUpdated = policy.lastUpdated
+  ? dateFormatter.format(new Date(policy.lastUpdated))
+  : '';
+---
+
+<Layout title={policy.title} description="Informativa sui cookie utilizzati dal sito.">
+  <section class="section pt-40">
+    <div class="container-custom max-w-3xl">
+      <p class="eyebrow">Policy</p>
+      <h1 class="section-title mt-3">{policy.title}</h1>
+      {lastUpdated && (
+        <p class="mono-label text-[var(--muted)] mt-4">Ultimo aggiornamento: {lastUpdated}</p>
+      )}
+
+      <article class="policy-prose mt-12" set:html={html}></article>
+
+      <div class="mt-12 pt-8 border-t border-[var(--hairline)] flex flex-wrap gap-3 items-center">
+        <button type="button" class="btn-outline" id="open-cookie-prefs">
+          Modifica preferenze cookie <span class="btn-arrow">↗</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.getElementById('open-cookie-prefs')?.addEventListener('click', () => {
+      if (typeof window.openCookiePreferences === 'function') {
+        window.openCookiePreferences();
+      }
+    });
+  </script>
+</Layout>
+
+<style is:global>
+  .policy-prose h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    font-weight: 600;
+    margin-top: 2.6rem;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+  .policy-prose h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    font-weight: 600;
+    margin-top: 1.6rem;
+    margin-bottom: 0.6rem;
+    color: var(--ink);
+  }
+  .policy-prose p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+  }
+  .policy-prose ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+    list-style: disc;
+  }
+  .policy-prose li {
+    margin-bottom: 0.4rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+</style>

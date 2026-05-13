@@ -8,10 +8,18 @@
     "phone": "+39 371 376 7488",
     "address": "Piazza Tintori 27, Bastiglia (MO) – 41033"
   },
+  "whatsapp": {
+    "number": "393713767488",
+    "defaultMessage": "Ciao! Sono interessato/a a una consulenza per il mio brand. Possiamo parlarne?"
+  },
   "social": {
     "facebook": "https://facebook.com/ViralAgencyAC",
     "instagram": "https://instagram.com/viral.digitalagency",
-    "linkedin": null
+    "linkedin": null,
+    "googleReviewsUrl": ""
+  },
+  "analytics": {
+    "gaTrackingId": ""
   },
   "seo": {
     "titleSuffix": " | Viral Digital Agency Modena",

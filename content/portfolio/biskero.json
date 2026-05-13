@@ -1,0 +1,11 @@
+{
+  "title": "biskero",
+  "brand": "Biskero",
+  "videoSrc": "/videos/portfolio/biskero.mp4",
+  "poster": "/src/assets/images/portfolio/biskero/poster.jpg",
+  "description": "Biskero",
+  "category": "social",
+  "gridSize": "tall",
+  "order": 1,
+  "featured": true
+}

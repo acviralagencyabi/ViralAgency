@@ -1,0 +1,11 @@
+{
+  "title": "fabrika-steackhause",
+  "brand": "Fabrika Steackhause",
+  "videoSrc": "/videos/portfolio/fabrika-steackhause.mp4",
+  "poster": "/src/assets/images/portfolio/fabrika-steackhause/poster.jpg",
+  "description": "Fabrika Steackhause",
+  "category": "contenuto",
+  "gridSize": "regular",
+  "order": 5,
+  "featured": true
+}

@@ -1,0 +1,11 @@
+{
+  "title": "tredici-lounge-bar",
+  "brand": "Tredici Lounge Bar",
+  "videoSrc": "/videos/portfolio/tredici-lounge-bar.mp4",
+  "poster": "/src/assets/images/portfolio/tredici-lounge-bar/poster.jpg",
+  "description": "Tredici Lounge Bar",
+  "category": "shooting",
+  "gridSize": "regular",
+  "order": 24,
+  "featured": true
+}

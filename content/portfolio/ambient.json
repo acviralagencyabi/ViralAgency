@@ -1,0 +1,11 @@
+{
+  "title": "ambient",
+  "brand": "Ambient",
+  "videoSrc": "/videos/portfolio/ambient.mp4",
+  "poster": "/src/assets/images/portfolio/ambient/poster.jpg",
+  "description": "Ambient",
+  "category": "shooting",
+  "gridSize": "tall",
+  "order": 18,
+  "featured": true
+}

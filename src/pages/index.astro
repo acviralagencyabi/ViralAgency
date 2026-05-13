@@ -3,44 +3,62 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { ArrowDown, Instagram, Facebook, Phone, Mail } from 'lucide-astro';
+import ServiceIcons from '../components/ServiceIcons.astro';
+import { ArrowDown, Instagram, Facebook, Phone, Mail, MessageCircle, Star } from 'lucide-astro';
 
 import homepage from '../../content/pages/homepage.json';
 import globalSettings from '../../content/settings/global.json';
 
-// Portfolio JSON
+// Portfolio JSON (uno per video, generati da media/video)
 const portfolioFiles = import.meta.glob<{ default: any }>(
   '/content/portfolio/*.json',
   { eager: true }
 );
 
-// Portfolio images (optimized)
+// Optional poster images (se l'editor ne carica uno)
 const portfolioImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/portfolio/**/*.{png,jpg,jpeg,gif,webp}',
   { eager: true }
 );
 
-// Team photos (optional, optimized)
+// Team photos (optional)
 const teamImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/team/**/*.{png,jpg,jpeg,gif,webp}',
   { eager: true }
 );
 
+const categoryLabels: Record<string, string> = {
+  social: 'Social Media',
+  video: 'Video',
+  campagna: 'Campagna',
+  branding: 'Branding',
+  contenuto: 'Contenuto',
+  shooting: 'Shooting',
+};
+
 const portfolio = Object.entries(portfolioFiles)
   .map(([filePath, mod]) => {
     const slug = filePath.split('/').pop()?.replace('.json', '') || '';
-    const titleData = mod.default.title;
+    const d = mod.default;
+    const titleData = d.title;
     const displayTitle = typeof titleData === 'object' ? titleData.name : titleData;
-    const imagePath = mod.default.image;
-    const imageModule = imagePath ? portfolioImages[imagePath] : null;
+    const poster = d.poster ? portfolioImages[d.poster]?.default ?? null : null;
     return {
-      ...mod.default,
       slug,
+      brand: d.brand || `Brand ${slug}`,
+      videoSrc: d.videoSrc || '',
+      poster,
+      description: d.description || '',
+      category: d.category || 'social',
+      categoryLabel: categoryLabels[d.category] || 'Social Media',
+      gridSize: d.gridSize || 'regular',
+      order: d.order ?? 0,
+      featured: d.featured !== false,
       displayTitle,
-      image: imageModule?.default || null,
     };
   })
-  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  .filter((p) => p.featured && p.videoSrc)
+  .sort((a, b) => a.order - b.order);
 
 // ---------- Homepage content (tutto editabile via Keystatic) ----------
 const H: any = homepage;
@@ -63,6 +81,18 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
   const q = [loc.address, loc.city].filter(Boolean).join(', ');
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 };
+
+// WhatsApp
+const whatsappRaw = (globalSettings as any).whatsapp?.number || '';
+const whatsappNumber = whatsappRaw.replace(/[^0-9]/g, '');
+const whatsappMessage = (globalSettings as any).whatsapp?.defaultMessage || '';
+const whatsappUrl = whatsappNumber
+  ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
+  : '';
+const showWhatsapp = H.contact?.showWhatsapp !== false && Boolean(whatsappUrl);
+
+// Google Reviews URL (fallback)
+const googleReviewsUrl = (globalSettings as any).social?.googleReviewsUrl || '';
 
 // ---------- Articoli dalla collection Keystatic ----------
 const dateFormatter = new Intl.DateTimeFormat('it-IT', {
@@ -87,22 +117,13 @@ const articles = allArticles
     href: `articoli/${a.id}`,
   }));
 
-// Resolve internal links so they respect Astro's base path (e.g. /VisualDigitalAgencyDemo/ on GH Pages)
 const BASE = import.meta.env.BASE_URL;
 const link = (path: string) => {
   if (!path) return BASE;
   if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('mailto:') || path.startsWith('tel:')) return path;
-  if (path.startsWith('#')) return path; // in-page anchors stay scope-local
+  if (path.startsWith('#')) return path;
   return BASE + path.replace(/^\//, '');
 };
-
-// Category tag helper for portfolio cards
-function categoryFor(slug: string): string {
-  if (slug.includes('vfdc')) return 'Branding';
-  const n = parseInt(slug.replace(/\D/g, ''), 10) || 0;
-  const cats = ['Social', 'Video', 'Campaign', 'Branding', 'Content', 'Shoot'];
-  return cats[n % cats.length];
-}
 ---
 
 <Layout title={homepage.seo.title} description={homepage.seo.description}>
@@ -112,7 +133,6 @@ function categoryFor(slug: string): string {
        ======================================================================= -->
   <section id="home" class="min-h-screen flex flex-col justify-between pt-28 pb-10 md:pt-36">
     <div class="container-custom flex-1 flex flex-col">
-      <!-- Top meta row -->
       <div class="flex flex-wrap items-start justify-between gap-4 mb-auto">
         <p class="mono-label text-[var(--muted)]">
           01 / HOMEPAGE
@@ -122,7 +142,6 @@ function categoryFor(slug: string): string {
         </p>
       </div>
 
-      <!-- Main statement: gigantic title, nothing else -->
       <div class="my-auto py-10 md:py-16">
         <h1 class="h-display text-[clamp(3rem,13vw,11rem)] leading-[0.9]">
           <span class="line-reveal block"><span>REAL</span></span>
@@ -133,7 +152,6 @@ function categoryFor(slug: string): string {
         </h1>
       </div>
 
-      <!-- Bottom row: tagline + single CTA + scroll hint -->
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end mt-auto">
         <p class="md:col-span-5 quote-big text-[var(--ink)]">
           Agenzia di comunicazione &amp; marketing.
@@ -170,7 +188,7 @@ function categoryFor(slug: string): string {
   </div>
 
   <!-- =======================================================================
-       MANIFESTO / ABOUT
+       MANIFESTO / ABOUT (con CTA arcobaleno)
        ======================================================================= -->
   <section id="manifesto" class="section">
     <div class="container-custom grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
@@ -188,9 +206,25 @@ function categoryFor(slug: string): string {
 
         {manifesto.tagline && (
           <p class="mt-8 inline-flex items-start gap-3 max-w-2xl">
-            <span class="mono-label text-[var(--electric)] mt-2 shrink-0">— MOTOR VALLEY</span>
+            <span class="mono-label text-[var(--electric)] mt-2 shrink-0">— REAL · VIRAL</span>
             <span class="quote-big text-[var(--ink)]">{manifesto.tagline}</span>
           </p>
+        )}
+
+        {manifesto.ctaLabel && (
+          <div class="mt-10">
+            <a
+              href={manifesto.ctaHref || '#contatti'}
+              class="btn-rainbow"
+              data-cursor="prenota"
+              aria-label={manifesto.ctaLabel}
+            >
+              <span class="btn-rainbow-inner">
+                {manifesto.ctaLabel}
+                <span class="btn-rainbow-arrow" aria-hidden="true">↗</span>
+              </span>
+            </a>
+          </div>
         )}
 
         <!-- KPIs -->
@@ -235,7 +269,7 @@ function categoryFor(slug: string): string {
   </section>
 
   <!-- =======================================================================
-       PORTFOLIO
+       PORTFOLIO — griglia asimmetrica con video hover
        ======================================================================= -->
   <section id="portfolio" class="section section-dark">
     <div class="container-custom">
@@ -243,7 +277,7 @@ function categoryFor(slug: string): string {
         <div class="reveal-left">
           <p class="eyebrow">02 — Portfolio</p>
           <h2 class="section-title mt-4 max-w-3xl">
-            I lavori migliori,<br />cliente per cliente.
+            I lavori migliori, cliente per cliente.
           </h2>
         </div>
         <a href="#contatti" class="btn-outline" data-cursor="scrivici">
@@ -251,33 +285,44 @@ function categoryFor(slug: string): string {
         </a>
       </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 stagger-children" id="portfolio-grid">
+      <div class="portfolio-grid stagger-children" id="portfolio-grid">
         {portfolio.map((item, index) => (
           <button
             type="button"
-            class="portfolio-card text-left !aspect-[4/5]"
+            class={`portfolio-card pf-card pf-${item.gridSize}`}
             data-index={index}
+            data-video={item.videoSrc}
             data-cursor="apri"
-            aria-label={`Apri ${item.description || item.displayTitle}`}
+            aria-label={`Apri ${item.brand}`}
           >
-            {item.image ? (
-              <Image
-                src={item.image}
-                alt={item.description || item.displayTitle}
-                class="w-full h-full object-cover"
-                loading="lazy"
-                width={600}
-                height={750}
-              />
-            ) : (
-              <div class="w-full h-full bg-[var(--ink-soft)] flex items-center justify-center">
-                <span class="mono-label text-white/40">no image</span>
-              </div>
-            )}
+            <div class="pf-media">
+              {item.poster && (
+                <Image
+                  src={item.poster}
+                  alt={item.brand}
+                  class="pf-poster"
+                  loading="lazy"
+                  width={800}
+                  height={1000}
+                />
+              )}
+              <video
+                class="pf-video"
+                src={item.videoSrc}
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-hidden="true"
+              ></video>
+              <span class="pf-play" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><polygon points="7,5 19,12 7,19"/></svg>
+              </span>
+            </div>
             <div class="meta">
               <div>
-                <span class="tag">{categoryFor(item.slug)}</span>
-                <span class="title block mt-1">{item.description || item.displayTitle}</span>
+                <span class="tag">{item.categoryLabel}</span>
+                <span class="title block mt-1">{item.brand}</span>
               </div>
               <span class="tag">↗</span>
             </div>
@@ -287,8 +332,8 @@ function categoryFor(slug: string): string {
     </div>
   </section>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <!-- Video Lightbox -->
+  <div id="video-lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="lightbox-overlay"></div>
     <button type="button" class="lightbox-close" aria-label="Chiudi">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -296,18 +341,18 @@ function categoryFor(slug: string): string {
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
     </button>
-    <button type="button" class="lightbox-nav lightbox-prev" aria-label="Immagine precedente">
+    <button type="button" class="lightbox-nav lightbox-prev" aria-label="Video precedente">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
     </button>
-    <button type="button" class="lightbox-nav lightbox-next" aria-label="Immagine successiva">
+    <button type="button" class="lightbox-nav lightbox-next" aria-label="Video successivo">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </button>
     <div class="lightbox-content">
-      <img id="lightbox-image" src="" alt="" class="lightbox-image" />
+      <video id="lightbox-video" class="lightbox-video" controls playsinline></video>
       <p id="lightbox-caption" class="lightbox-caption"></p>
     </div>
     <div class="lightbox-counter">
@@ -315,76 +360,117 @@ function categoryFor(slug: string): string {
     </div>
   </div>
 
-  <script is:inline define:vars={{ portfolioData: portfolio.map((p) => ({ image: p.image?.src || '', title: p.description || p.displayTitle })) }}>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightbox-image');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const lightboxCurrent = document.getElementById('lightbox-current');
-    const lightboxTotal = document.getElementById('lightbox-total');
-    const portfolioItems = document.querySelectorAll('#portfolio-grid .portfolio-card');
+  <script is:inline define:vars={{ portfolioData: portfolio.map((p) => ({ video: p.videoSrc, title: p.brand })) }}>
+    // -------- Hover-to-play on the asymmetric grid --------
+    const portfolioCards = document.querySelectorAll('#portfolio-grid .pf-card');
+    const isCoarse = window.matchMedia('(hover: none)').matches;
 
+    portfolioCards.forEach((card) => {
+      const video = card.querySelector('video');
+      if (!video) return;
+
+      const play = () => {
+        try {
+          video.currentTime = 0;
+          const p = video.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        } catch (_) {}
+      };
+      const stop = () => {
+        try { video.pause(); video.currentTime = 0; } catch (_) {}
+      };
+
+      if (!isCoarse) {
+        card.addEventListener('mouseenter', play);
+        card.addEventListener('mouseleave', stop);
+        card.addEventListener('focus', play);
+        card.addEventListener('blur', stop);
+      }
+    });
+
+    // -------- Mobile: autoplay cards entering viewport (one cycle) --------
+    if (isCoarse) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const card = entry.target;
+          const v = card.querySelector('video');
+          if (!v) return;
+          if (entry.isIntersecting) {
+            card.classList.add('is-playing');
+            try { v.play().catch(() => {}); } catch (_) {}
+          } else {
+            card.classList.remove('is-playing');
+            try { v.pause(); } catch (_) {}
+          }
+        });
+      }, { threshold: 0.55 });
+      portfolioCards.forEach((c) => io.observe(c));
+    }
+
+    // -------- Lightbox (video) --------
+    const lb = document.getElementById('video-lightbox');
+    const lbVideo = document.getElementById('lightbox-video');
+    const lbCaption = document.getElementById('lightbox-caption');
+    const lbCurr = document.getElementById('lightbox-current');
+    const lbTotal = document.getElementById('lightbox-total');
     let currentIndex = 0;
-    const images = portfolioData;
+    const items = portfolioData;
 
-    function openLightbox(index) {
-      currentIndex = index;
-      updateLightbox();
-      lightbox.classList.add('active');
-      lightbox.setAttribute('aria-hidden', 'false');
+    function openLb(i) {
+      currentIndex = i;
+      updateLb();
+      lb.classList.add('active');
+      lb.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      lightbox.setAttribute('aria-hidden', 'true');
+    function closeLb() {
+      lb.classList.remove('active');
+      lb.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      try { lbVideo.pause(); } catch (_) {}
     }
-    function updateLightbox() {
-      const item = images[currentIndex];
-      lightboxImage.src = item.image;
-      lightboxImage.alt = item.title;
-      lightboxCaption.textContent = item.title;
-      lightboxCurrent.textContent = currentIndex + 1;
-      lightboxTotal.textContent = images.length;
+    function updateLb() {
+      const it = items[currentIndex];
+      lbVideo.src = it.video;
+      lbCaption.textContent = it.title;
+      lbCurr.textContent = currentIndex + 1;
+      lbTotal.textContent = items.length;
+      try {
+        const p = lbVideo.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      } catch (_) {}
     }
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      updateLightbox();
-    }
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updateLightbox();
-    }
+    const next = () => { currentIndex = (currentIndex + 1) % items.length; updateLb(); };
+    const prev = () => { currentIndex = (currentIndex - 1 + items.length) % items.length; updateLb(); };
 
-    portfolioItems.forEach((item) => {
-      item.addEventListener('click', () => {
-        const index = parseInt(item.dataset.index, 10);
-        openLightbox(index);
+    portfolioCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        const i = parseInt(card.dataset.index, 10);
+        openLb(i);
       });
     });
-    document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-    document.querySelector('.lightbox-overlay').addEventListener('click', closeLightbox);
-    document.querySelector('.lightbox-next').addEventListener('click', nextImage);
-    document.querySelector('.lightbox-prev').addEventListener('click', prevImage);
-
+    document.querySelector('.lightbox-close').addEventListener('click', closeLb);
+    document.querySelector('.lightbox-overlay').addEventListener('click', closeLb);
+    document.querySelector('.lightbox-next').addEventListener('click', next);
+    document.querySelector('.lightbox-prev').addEventListener('click', prev);
     document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') nextImage();
-      if (e.key === 'ArrowLeft') prevImage();
+      if (!lb.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLb();
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
     });
 
-    let touchStartX = 0;
-    let touchEndX = 0;
-    lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    lightbox.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) { if (diff > 0) nextImage(); else prevImage(); }
+    let tsx = 0, tex = 0;
+    lb.addEventListener('touchstart', (e) => { tsx = e.changedTouches[0].screenX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => {
+      tex = e.changedTouches[0].screenX;
+      const d = tsx - tex;
+      if (Math.abs(d) > 50) { if (d > 0) next(); else prev(); }
     }, { passive: true });
   </script>
 
   <!-- =======================================================================
-       SERVIZI
+       SERVIZI — con icone animate
        ======================================================================= -->
   <section id="servizi" class="section">
     <div class="container-custom">
@@ -408,7 +494,14 @@ function categoryFor(slug: string): string {
               <span class="mono-label text-[var(--muted)]">{s.num}</span>
               <span class="sv-arrow mono" aria-hidden="true">↗</span>
             </div>
-            <h3 class="sv-title mt-4">{s.title}</h3>
+            <div class="sv-head mt-4 flex items-start gap-4">
+              {s.icon && s.icon !== 'none' && (
+                <span class="sv-icon-wrap text-[var(--ink)]">
+                  <ServiceIcons name={s.icon} />
+                </span>
+              )}
+              <h3 class="sv-title">{s.title}</h3>
+            </div>
             <p class="text-[var(--muted)] mt-3 max-w-md">{s.desc}</p>
             {s.bullets && s.bullets.length > 0 && (
               <ul class="sv-bullets mt-6">
@@ -470,25 +563,76 @@ function categoryFor(slug: string): string {
   </section>
 
   <!-- =======================================================================
-       RECENSIONI
+       RECENSIONI — con link Google
        ======================================================================= -->
   <section id="recensioni" class="section">
     <div class="container-custom">
-      <div class="mb-12 reveal-left">
-        <p class="eyebrow">05 — Recensioni</p>
-        <h2 class="section-title mt-4 max-w-3xl">Lo dicono i nostri clienti.</h2>
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <div class="reveal-left">
+          <p class="eyebrow">05 — Recensioni</p>
+          <h2 class="section-title mt-4 max-w-3xl">Lo dicono i nostri clienti.</h2>
+        </div>
+        {googleReviewsUrl && (
+          <a
+            href={googleReviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-outline"
+            data-cursor="vedi tutte"
+          >
+            Tutte su Google <span class="btn-arrow">↗</span>
+          </a>
+        )}
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-b border-[var(--hairline)] stagger-children">
-        {reviews.map((r: any) => (
-          <div class="feature-card border-0 md:border-r md:border-[var(--hairline)] last:md:border-r-0 h-full flex flex-col justify-between gap-8 min-h-[280px]">
-            <p class="quote-big">"{r.quote}"</p>
-            <div>
-              <p class="mono-label text-[var(--ink)]">{r.author}</p>
-              <p class="mono-label text-[var(--muted)] mt-1">{r.role}</p>
+        {reviews.map((r: any) => {
+          const href = r.googleUrl || googleReviewsUrl;
+          return href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="leggi su google"
+              class="feature-card review-card border-0 md:border-r md:border-[var(--hairline)] last:md:border-r-0 h-full flex flex-col justify-between gap-8 min-h-[280px]"
+            >
+              <div>
+                <div class="flex gap-1 mb-4 text-[var(--electric)]">
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                </div>
+                <p class="quote-big">"{r.quote}"</p>
+              </div>
+              <div class="flex items-end justify-between gap-4">
+                <div>
+                  <p class="mono-label text-[var(--ink)]">{r.author}</p>
+                  <p class="mono-label text-[var(--muted)] mt-1">{r.role}</p>
+                </div>
+                <span class="mono-label text-[var(--muted)]">Google ↗</span>
+              </div>
+            </a>
+          ) : (
+            <div class="feature-card review-card border-0 md:border-r md:border-[var(--hairline)] last:md:border-r-0 h-full flex flex-col justify-between gap-8 min-h-[280px]">
+              <div>
+                <div class="flex gap-1 mb-4 text-[var(--electric)]">
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                  <Star class="w-4 h-4" fill="currentColor" strokeWidth={0} />
+                </div>
+                <p class="quote-big">"{r.quote}"</p>
+              </div>
+              <div>
+                <p class="mono-label text-[var(--ink)]">{r.author}</p>
+                <p class="mono-label text-[var(--muted)] mt-1">{r.role}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>
@@ -564,7 +708,7 @@ function categoryFor(slug: string): string {
   </section>
 
   <!-- =======================================================================
-       CONTATTI — bianco su blu
+       CONTATTI — Prenota una call, WhatsApp, telefono, email + form
        ======================================================================= -->
   <section id="contatti" class="section cta-section noise-overlay">
     <div class="container-custom relative z-10">
@@ -578,19 +722,46 @@ function categoryFor(slug: string): string {
             {H.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
           </p>
 
-          <div class="mt-12 space-y-6">
+          <!-- Quick contact buttons: WhatsApp + Phone -->
+          <div class="contact-quick mt-10">
+            {showWhatsapp && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="contact-btn contact-btn-wa"
+                data-cursor="whatsapp"
+              >
+                <MessageCircle class="w-5 h-5" strokeWidth={1.6} />
+                <span>
+                  <span class="cb-label">{H.contact?.whatsappLabel || 'Scrivici su WhatsApp'}</span>
+                  <span class="cb-sub">Risposta in poche ore</span>
+                </span>
+                <span class="cb-arrow" aria-hidden="true">↗</span>
+              </a>
+            )}
+            {globalSettings.contact?.phone && (
+              <a
+                href={`tel:${(globalSettings.contact?.phone || '').replace(/\s/g, '')}`}
+                class="contact-btn contact-btn-phone"
+                data-cursor="chiamaci"
+              >
+                <Phone class="w-5 h-5" strokeWidth={1.6} />
+                <span>
+                  <span class="cb-label">{H.contact?.phoneLabel || 'Chiamaci ora'}</span>
+                  <span class="cb-sub">{globalSettings.contact.phone}</span>
+                </span>
+                <span class="cb-arrow" aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+
+          <div class="mt-10 pt-8 border-t border-white/15 space-y-6">
             <a href={`mailto:${globalSettings.contact?.email}`} class="flex items-center gap-4 group" data-cursor="scrivici">
               <span class="contact-icon shrink-0"><Mail class="w-5 h-5" strokeWidth={1.5} /></span>
               <span>
                 <span class="mono-label text-white/60 block">Email</span>
                 <span class="h-display text-xl text-[var(--paper)] group-hover:text-white transition-colors">{globalSettings.contact?.email}</span>
-              </span>
-            </a>
-            <a href={`tel:${(globalSettings.contact?.phone || '').replace(/\s/g, '')}`} class="flex items-center gap-4 group" data-cursor="chiamaci">
-              <span class="contact-icon shrink-0"><Phone class="w-5 h-5" strokeWidth={1.5} /></span>
-              <span>
-                <span class="mono-label text-white/60 block">Telefono</span>
-                <span class="h-display text-xl text-[var(--paper)] group-hover:text-white transition-colors">{globalSettings.contact?.phone}</span>
               </span>
             </a>
           </div>
