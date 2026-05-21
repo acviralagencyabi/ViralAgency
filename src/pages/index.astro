@@ -362,7 +362,7 @@ const link = (path: string) => {
       window.matchMedia('(hover: none)').matches ||
       window.matchMedia('(pointer: coarse)').matches ||
       (window.navigator?.maxTouchPoints || 0) > 0 ||
-      window.innerWidth < 768;
+      /Android|iPhone|iPad|iPod|Mobile/i.test(window.navigator?.userAgent || '');
 
     if (isCoarse) {
       portfolioCards.forEach((card) => {

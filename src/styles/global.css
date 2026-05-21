@@ -1360,7 +1360,7 @@ html.lenis, html.lenis body { height: auto; }
   opacity: 0;
 }
 /* On touch devices: keep poster visible; video playback happens in the lightbox after tap. */
-@media (hover: none), (pointer: coarse), (max-width: 767px) {
+@media (hover: none), (pointer: coarse) {
   .pf-card:hover .pf-video,
   .pf-card:focus-visible .pf-video {
     opacity: 0;
