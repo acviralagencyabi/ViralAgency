@@ -570,6 +570,25 @@ button:hover .btn-arrow,
 }
 
 /* =========================================================================
+   Split-flap char — used by .intro-scramble (span-per-char approach)
+   The .flipping class is toggled by JS each time a char cycles.
+   ========================================================================= */
+.flap-char {
+  display: inline-block;
+  transform-origin: center 60%;
+  will-change: transform, opacity;
+}
+.flap-char.flipping {
+  animation: flap-flip 0.09s ease-in-out forwards;
+}
+@keyframes flap-flip {
+  0%   { opacity: 1;    transform: scaleY(1);    }
+  42%  { opacity: 0;    transform: scaleY(0.08); }
+  58%  { opacity: 0;    transform: scaleY(0.08); }
+  100% { opacity: 0.95; transform: scaleY(1);    }
+}
+
+/* =========================================================================
    Lenis — smooth scroll bootstrap CSS
    ========================================================================= */
 

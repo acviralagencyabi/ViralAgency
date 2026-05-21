@@ -124,41 +124,53 @@ const schemaOrg = {
     <CookieConsent />
 
     <script>
-      // ---------- Intro matrix scramble (page-load wordmark) ----------
+      // ---------- Split-flap reveal — intro wordmark (page-load) ----------
+      // Each character flips through a short ordered sequence before landing,
+      // left-to-right, mimicking a Solari/departures-board flip panel.
       {
         const el = document.querySelector<HTMLElement>('.intro-scramble');
         if (el) {
           const target = el.dataset.text || el.textContent || '';
-          const chars = '!<>-_\\/[]{}—=+*^?#$%&0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-          const len = target.length;
-          const queue: { to: string; end: number }[] = [];
-          for (let i = 0; i < len; i++) {
-            // Fast: ~120ms → ~480ms per letter at 60fps
-            const end = 7 + Math.floor(Math.random() * 22);
-            queue.push({ to: target[i], end });
+          const FLAP    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          const FLIP_MS  = 90;  // duration of one flip animation (ms)
+          const STEPS    = 5;   // cycling steps per char before settling
+          const STAGGER  = 40;  // ms between each char starting
+
+          // Build one <span class="flap-char"> per non-space char
+          el.innerHTML = '';
+          const chars: Array<{ span: HTMLSpanElement; to: string }> = [];
+          for (const ch of target) {
+            if (ch === ' ') {
+              el.appendChild(document.createTextNode(' '));
+            } else {
+              const span = document.createElement('span');
+              span.className = 'flap-char';
+              // Initial display: a random char from the board
+              span.textContent = FLAP[Math.floor(Math.random() * FLAP.length)];
+              el.appendChild(span);
+              chars.push({ span, to: ch });
+            }
           }
 
-          // Pre-fill with a full scramble so the text is already "alive" at paint-in
-          el.textContent = target
-            .split('')
-            .map((c) => (c === ' ' ? ' ' : chars[Math.floor(Math.random() * chars.length)]))
-            .join('');
+          // One flip cycle: squish → change char → unsquish
+          const flipTo = (span: HTMLSpanElement, ch: string) =>
+            new Promise<void>((res) => {
+              span.classList.remove('flipping');
+              void span.offsetWidth; // force reflow to restart animation
+              span.classList.add('flipping');
+              setTimeout(() => { span.textContent = ch; }, FLIP_MS * 0.46);
+              setTimeout(() => { span.classList.remove('flipping'); res(); }, FLIP_MS);
+            });
 
-          let frame = 0;
-          const tick = () => {
-            let out = '';
-            let done = 0;
-            for (const q of queue) {
-              if (q.to === ' ') { out += ' '; done++; continue; }
-              if (frame >= q.end) { out += q.to; done++; }
-              else { out += chars[Math.floor(Math.random() * chars.length)]; }
-            }
-            el.textContent = out;
-            if (done === queue.length) return;
-            frame++;
-            requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
+          // Stagger each char, flip STEPS times through FLAP then land on target
+          chars.forEach(({ span, to }, i) => {
+            setTimeout(async () => {
+              for (let s = 0; s < STEPS - 1; s++) {
+                await flipTo(span, FLAP[Math.floor(Math.random() * FLAP.length)]);
+              }
+              await flipTo(span, to);
+            }, i * STAGGER);
+          });
         }
       }
 
@@ -314,54 +326,77 @@ const schemaOrg = {
         });
       });
 
-      // ---------- Matrix scramble on section titles ----------
+      // ---------- Split-flap reveal on section titles (scroll-triggered) ----------
+      // Characters cycle through the board alphabet in order, left-to-right,
+      // giving a clean mechanical "departures board" feel instead of chaos.
       {
-        const CHARS = '!<>-_\\/[]{}—=+*^?#$%&0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        // Board character set — ordered, clean (no matrix noise)
+        const BOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const STAGGER = 3;  // rAF frames between each char starting  (~50ms @ 60fps)
+        const STEPS   = 5;  // board steps per char before it settles
 
-        // Scramble every text node inside a root, in sync.
-        // Punctuation and whitespace pass through untouched.
-        const scrambleRoot = (root: Element, speed: number, onDone?: () => void) => {
-          const items: Array<{
-            node: Text;
-            queue: Array<{ to: string; end: number }>;
-          }> = [];
+        const splitFlapRoot = (root: Element, onDone?: () => void) => {
+          type CharEntry = {
+            to: string; skip: boolean;
+            start: number; end: number; flapPos: number;
+          };
+          const items: Array<{ node: Text; queue: CharEntry[] }> = [];
 
           const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
           let n: Node | null;
+          let charCount = 0;
+
           while ((n = walker.nextNode())) {
             const text = (n as Text).textContent || '';
             if (!text.trim()) continue;
-            items.push({
-              node: n as Text,
-              queue: [...text].map((ch) => ({
-                to: ch,
-                end: Math.round((7 + Math.floor(Math.random() * 18)) * speed),
-              })),
+
+            const queue: CharEntry[] = [...text].map((ch) => {
+              // Whitespace and punctuation pass through without animation
+              if (/[\s\n\r.,!?—–\-:;'"()]/.test(ch)) {
+                return { to: ch, skip: true, start: 0, end: 0, flapPos: 0 };
+              }
+              const start = charCount * STAGGER;
+              const end   = start + STEPS;
+              // Start the cycle a few positions before the target in BOARD
+              const targetIdx = BOARD.indexOf(ch.toUpperCase());
+              const flapPos   = targetIdx >= 0
+                ? (targetIdx - STEPS + BOARD.length * 4) % BOARD.length
+                : Math.floor(Math.random() * BOARD.length);
+              charCount++;
+              return { to: ch, skip: false, start, end, flapPos };
             });
-          }
-          if (!items.length) {
-            onDone?.();
-            return;
+
+            items.push({ node: n as Text, queue });
           }
 
-          const maxEnd = items.reduce(
-            (acc, it) => Math.max(acc, ...it.queue.map((q) => q.end)),
+          if (!items.length) { onDone?.(); return; }
+
+          const maxFrame = items.reduce(
+            (acc, { queue }) => Math.max(acc, ...queue.map((q) => q.end)),
             0
           );
 
+          // Set initial scrambled state (all active chars show their board start)
+          items.forEach(({ node, queue }) => {
+            node.textContent = queue.map((q) =>
+              q.skip ? q.to : BOARD[q.flapPos]
+            ).join('');
+          });
+
           let frame = 0;
           const tick = () => {
-            for (const it of items) {
+            for (const { node, queue } of items) {
               let out = '';
-              for (const q of it.queue) {
-                // Preserve layout: whitespace, line breaks, punctuation
-                if (/[\s\n\r.,!?—–\-]/.test(q.to)) { out += q.to; continue; }
-                if (frame >= q.end) out += q.to;
-                else out += CHARS[Math.floor(Math.random() * CHARS.length)];
+              for (const q of queue) {
+                if (q.skip)           { out += q.to; continue; }
+                if (frame >= q.end)   { out += q.to; continue; }
+                if (frame < q.start)  { out += BOARD[q.flapPos]; continue; }
+                // Active: advance one board position per frame
+                out += BOARD[(q.flapPos + (frame - q.start)) % BOARD.length];
               }
-              it.node.textContent = out;
+              node.textContent = out;
             }
-            if (frame >= maxEnd) { onDone?.(); return; }
+            if (frame >= maxFrame) { onDone?.(); return; }
             frame++;
             requestAnimationFrame(tick);
           };
@@ -369,15 +404,13 @@ const schemaOrg = {
         };
 
         const targets = document.querySelectorAll<HTMLElement>('.section-title');
-
-        // Fire once, the first time the title enters the viewport. No hover re-trigger.
+        // Fire once, the first time each title enters the viewport.
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
-              const el = entry.target as HTMLElement;
-              scrambleRoot(el, 0.5);
-              io.unobserve(el);
+              splitFlapRoot(entry.target as HTMLElement);
+              io.unobserve(entry.target);
             });
           },
           { threshold: 0.35 }
