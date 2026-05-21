@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const BASE = import.meta.env.BASE_URL;
+const services = [
+  { title: 'Social Media Strategy', desc: 'Piano editoriale annuale, definizione del tono di voce e degli obiettivi per ogni canale social della tua azienda.' },
+  { title: 'Contenuti Originali', desc: 'Foto, video, reel, caroselli e stories creati dal nostro team per far risaltare il tuo brand in Emilia-Romagna e oltre.' },
+  { title: 'Meta Ads & TikTok Ads', desc: 'Campagne pubblicitarie sui social con targeting preciso per il pubblico di Modena, Bologna, Reggio Emilia e dintorni.' },
+  { title: 'Gestione Community', desc: 'Rispondiamo a commenti e messaggi, gestiamo le crisi, costruiamo relazioni reali con i tuoi follower.' },
+  { title: 'Influencer & Creator', desc: "Collaborazioni con creator dell'Emilia-Romagna selezionati per coerenza con il tuo brand e audience reale." },
+  { title: 'Reporting Mensile', desc: 'Ogni mese un report completo con i dati che contano: crescita, engagement, click, conversioni, ROI delle campagne.' },
+];
+const cities = ['Modena', 'Bologna', 'Reggio Emilia', 'Parma', 'Ferrara', 'Ravenna', 'Forlì', 'Rimini', 'Piacenza'];
+const schema = JSON.stringify({
+  "@context":"https://schema.org","@graph":[
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Modena","Bologna","Reggio Emilia","Parma","Emilia-Romagna"],"priceRange":"€€"},
+    {"@type":"Service","name":"Gestione Social Media Emilia-Romagna","serviceType":"Social Media Management","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Emilia-Romagna","description":"Gestione professionale dei social media per aziende di tutta l'Emilia-Romagna: Modena, Bologna, Reggio Emilia, Parma e oltre."}
+  ]
+});
+---
+<Layout title="Gestione Social Media Emilia-Romagna | Viral Digital Agency" description="Gestione professionale dei social media in tutta l'Emilia-Romagna. Viral Digital Agency segue aziende di Modena, Bologna, Reggio Emilia, Parma e dintorni.">
+  <div class="pt-28 md:pt-40">
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Social Media · Emilia-Romagna</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Gestione Social Media<br />in <em class="not-italic text-[var(--electric)]">Emilia-Romagna</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          Con sedi a Modena e Bologna, seguiamo aziende in tutta la regione. Che tu sia a Reggio Emilia, Parma, Ferrara o Rimini: il nostro team porta i tuoi social al livello che meriti.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo del tuo progetto</a>
+          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Servizi Social</p>
+        <h2 class="section-title mt-3 max-w-3xl">Gestione social media a 360° per aziende emiliane e romagnole.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Copertura regionale</p>
+        <h2 class="section-title mt-3 max-w-3xl">Siamo ovunque ci siano aziende emiliane e romagnole da far crescere.</h2>
+        <div class="flex flex-wrap gap-3 mt-8">
+          {cities.map((city) => (
+            <span class="reveal px-4 py-2 border border-[var(--hairline)] text-sm font-medium text-[var(--ink)] rounded-sm">{city}</span>
+          ))}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">L'Emilia-Romagna è una delle regioni più produttive d'Italia, con un tessuto imprenditoriale fatto di PMI eccellenti in ogni settore. Molte di queste aziende hanno una presenza social minima o assente, perdendo ogni giorno opportunità di visibilità, contatti commerciali e fidelizzazione dei clienti già acquisiti.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Non serve essere fisicamente vicini per fare un buon lavoro: con videocall, strumenti collaborativi e la nostra rete creativa, seguiamo clienti in tutto il territorio regionale con la stessa qualità e attenzione dei clienti locali. Ma quando serve, siamo lì.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Le nostre sedi</p>
+        <h2 class="section-title mt-3">Modena e Bologna: al centro dell'Emilia-Romagna.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency</strong>
+              <span class="block text-white/80">Piazza Tintori 27</span>
+              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
+              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
+              <span class="block text-white/80">40121 Bologna BO</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Da dove sei</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">Ovunque tu sia in Emilia-Romagna, possiamo lavorare insieme.</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Scrivici. Ti rispondiamo entro 24 ore con una proposta concreta per la tua azienda.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Contattaci ora</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>

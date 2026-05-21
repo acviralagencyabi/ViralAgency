@@ -117,7 +117,25 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
               <Facebook class="w-4 h-4" strokeWidth={1.5} />
             </a>
           )}
+          {(globalSettings.social as any)?.googleMapsUrl && (
+            <a href={(globalSettings.social as any).googleMapsUrl} target="_blank" rel="noopener noreferrer" aria-label="Google Business Profile" class="w-10 h-10 rounded-full border border-white/30 grid place-items-center hover:bg-[var(--electric)] hover:border-[var(--electric)] transition-colors">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </a>
+          )}
         </div>
+        {(globalSettings.social as any)?.googleReviewsUrl && (
+          <a
+            href={(globalSettings.social as any).googleReviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 mt-4 text-xs text-white/50 hover:text-[var(--electric)] transition-colors mono-label"
+          >
+            <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            Lascia una recensione su Google
+          </a>
+        )}
       </div>
     </div>
 

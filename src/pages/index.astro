@@ -280,11 +280,11 @@ const link = (path: string) => {
               )}
               <video
                 class="pf-video"
-                src={item.videoSrc}
+                data-src={item.videoSrc}
                 muted
                 loop
                 playsinline
-                preload="metadata"
+                preload="none"
                 aria-hidden="true"
               ></video>
               <span class="pf-play" aria-hidden="true">
@@ -359,12 +359,22 @@ const link = (path: string) => {
     const portfolioCards = allCards;
     const isCoarse = window.matchMedia('(hover: none)').matches;
 
+    // Lazy-load a video's src only when about to play (prevents pre-loading
+    // every video on page load, which crashes mobile GPU/memory).
+    function loadVideoSrc(v) {
+      if (!v.src && v.dataset.src) {
+        v.src = v.dataset.src;
+        v.load();
+      }
+    }
+
     portfolioCards.forEach((card) => {
       const video = card.querySelector('video');
       if (!video) return;
 
       const play = () => {
         try {
+          loadVideoSrc(video);
           video.currentTime = 0;
           const p = video.play();
           if (p && typeof p.catch === 'function') p.catch(() => {});
@@ -382,22 +392,42 @@ const link = (path: string) => {
       }
     });
 
-    // -------- Mobile: autoplay cards entering viewport (one cycle) --------
+    // -------- Mobile: one-at-a-time autoplay for cards in viewport --------
+    // Serialises playback so only ONE video plays at a time (prevents GPU
+    // overload / black-screen glitch on Safari and Firefox mobile).
     if (isCoarse) {
+      let activeCard = null;
+
+      const stopCard = (card) => {
+        if (!card) return;
+        const v = card.querySelector('video');
+        card.classList.remove('is-playing');
+        try { if (v) { v.pause(); } } catch (_) {}
+      };
+
+      const startCard = (card) => {
+        if (activeCard && activeCard !== card) stopCard(activeCard);
+        activeCard = card;
+        const v = card.querySelector('video');
+        if (!v) return;
+        loadVideoSrc(v);
+        card.classList.add('is-playing');
+        // Small defer lets the browser finish layout before decode
+        setTimeout(() => {
+          try { v.play().catch(() => { card.classList.remove('is-playing'); }); } catch (_) {}
+        }, 60);
+      };
+
       const io = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          const card = entry.target;
-          const v = card.querySelector('video');
-          if (!v) return;
           if (entry.isIntersecting) {
-            card.classList.add('is-playing');
-            try { v.play().catch(() => {}); } catch (_) {}
+            startCard(entry.target);
           } else {
-            card.classList.remove('is-playing');
-            try { v.pause(); } catch (_) {}
+            stopCard(entry.target);
+            if (activeCard === entry.target) activeCard = null;
           }
         });
-      }, { threshold: 0.55 });
+      }, { threshold: 0.5 });
       portfolioCards.forEach((c) => io.observe(c));
     }
 

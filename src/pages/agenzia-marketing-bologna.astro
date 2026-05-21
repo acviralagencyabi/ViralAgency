@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const BASE = import.meta.env.BASE_URL;
+const services = [
+  { title: 'Social Media Marketing', desc: 'Gestione completa di Instagram, Facebook, TikTok e LinkedIn per aziende bolognesi con contenuti creati ad hoc.' },
+  { title: 'Google & Meta Ads', desc: "Campagne pubblicitarie a pagamento ottimizzate per il mercato di Bologna, dall'e-commerce al locale." },
+  { title: 'Brand Identity', desc: 'Logo, palette, tipografia e sistema visivo coerente per far riconoscere il tuo brand in tutta Bologna.' },
+  { title: 'Video Production', desc: 'Video per social, reel, spot e video istituzionali prodotti dal nostro team con riprese a Bologna.' },
+  { title: 'Siti & Landing Page', desc: 'Presenza digitale curata: siti vetrina, landing page ad alta conversione, ottimizzazione per Bologna e dintorni.' },
+  { title: 'Consulenza Strategica', desc: "Analisi del tuo mercato a Bologna, dei competitor e dei margini di crescita. Poi costruiamo un piano d'azione." },
+];
+const schema = JSON.stringify({
+  "@context":"https://schema.org","@graph":[
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Bologna","Emilia-Romagna"],"priceRange":"€€"},
+    {"@type":"Service","name":"Marketing Digitale Bologna","serviceType":"Digital Marketing","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Bologna","description":"Agenzia di marketing digitale con sede a Bologna. Social media, advertising, branding e video per aziende bolognesi."}
+  ]
+});
+---
+<Layout title="Agenzia di Marketing Bologna | Viral Digital Agency" description="Agenzia di marketing digitale a Bologna. Performance marketing, social media, branding e video per aziende bolognesi in crescita. Sede a V.le Pietramellara, Bologna.">
+  <div class="pt-28 md:pt-40">
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Marketing Digitale · Bologna</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Agenzia di Marketing<br />a <em class="not-italic text-[var(--electric)]">Bologna</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          Il nostro HQ è a Bologna. Da qui gestiamo brand in tutta l'Emilia-Romagna e in Italia, con un team che unisce creatività bolognese e rigore data-driven. Ogni progetto è una storia vera da raccontare.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo del tuo progetto</a>
+          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Cosa offriamo</p>
+        <h2 class="section-title mt-3 max-w-3xl">Servizi di marketing completi per aziende di Bologna.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Perché sceglierci a Bologna</p>
+        <h2 class="section-title mt-3 max-w-3xl">Bologna è una piazza esigente. Noi la conosciamo bene.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">Bologna è un mercato dinamico: università, startup, PMI storiche, retail e ristorazione di eccellenza. La concorrenza è alta e il pubblico bolognese è attento e selettivo. Le campagne generiche non funzionano qui. Serve conoscenza del territorio e dei suoi consumatori.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Con il nostro headquarter nel cuore di Bologna, siamo presenti ogni volta che serve un incontro, una ripresa o una sessione di strategia. Lavoriamo con aziende bolognesi di ogni settore e dimensione, portando risultati misurabili nel tempo.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Vieni a trovarci</p>
+        <h2 class="section-title mt-3">Siamo a Bologna, in Viale Pietramellara.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
+              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
+              <span class="block text-white/80">40121 Bologna BO</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency</strong>
+              <span class="block text-white/80">Piazza Tintori 27</span>
+              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Siamo qui</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">Lavoriamo insieme a Bologna per portare il tuo brand ovunque.</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Scrivici o chiamaci per una prima chiacchierata. Nessun impegno, tante idee.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Contattaci a Bologna</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>

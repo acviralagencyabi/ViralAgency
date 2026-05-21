@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const BASE = import.meta.env.BASE_URL;
+const services = [
+  { title: 'Piano Editoriale', desc: 'Strategia mensile su misura: contenuti, frequenza, tone of voice. Ogni post ha uno scopo preciso, non solo visibilità.' },
+  { title: 'Creazione Contenuti', desc: 'Reel, caroselli, stories e video girati e montati dal nostro team creativo di Modena. Nessun template generico.' },
+  { title: 'Advertising Meta & TikTok', desc: 'Campagne a performance ottimizzate settimana per settimana. Budget controllato, risultati misurabili.' },
+  { title: 'Community Management', desc: 'Risposte ai commenti, DM, menzioni. La tua community modenese cresce quando è curata ogni giorno.' },
+  { title: 'Analytics & Report', desc: 'Report mensile chiaro: reach, engagement, conversioni, CPC. Non numeri fini a sé stessi, ma insight utili.' },
+  { title: 'Collaborazioni Creator', desc: 'Identifichiamo creator e micro-influencer locali allineati al tuo brand nel territorio modenese e in Emilia-Romagna.' },
+];
+const schema = JSON.stringify({
+  "@context":"https://schema.org","@graph":[
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Modena","Bastiglia","Emilia-Romagna"],"priceRange":"€€","sameAs":["https://facebook.com/ViralAgencyAC","https://instagram.com/viral.digitalagency","https://maps.google.com/?kgmid=/g/11m75qc3vq"]},
+    {"@type":"Service","name":"Gestione Social Media Modena","serviceType":"Social Media Management","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Modena","description":"Gestione professionale dei profili social, creazione contenuti, advertising Meta e TikTok per aziende di Modena e della Motor Valley."}
+  ]
+});
+---
+<Layout title="Agenzia Social Media Modena | Viral Digital Agency" description="Viral Digital Agency è l'agenzia social media di Modena che porta il tuo brand a crescere online. Contenuti reali, advertising Meta & TikTok, community management. Studio a Bastiglia (MO).">
+  <div class="pt-28 md:pt-40">
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Social Media · Modena</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Agenzia Social Media<br />a <em class="not-italic text-[var(--electric)]">Modena</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          Dal nostro studio di Bastiglia, gestiamo i profili social di aziende e brand in tutta la provincia di Modena. Contenuti reali, strategie misurabili, un team dedicato che conosce il mercato locale.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo del tuo progetto</a>
+          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Cosa facciamo</p>
+        <h2 class="section-title mt-3 max-w-3xl">Gestione social media completa per aziende modenesi.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Perché sceglierci</p>
+        <h2 class="section-title mt-3 max-w-3xl">Conosciamo il mercato modenese. E lavoriamo per fartelo amare.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">Modena non è una città qualsiasi: è un distretto industriale con aziende che producono eccellenza — dall'automotive all'agroalimentare, dalla ceramica alla moda. Le aziende modenesi hanno storie potenti da raccontare, ma spesso non sanno come tradurle in contenuti social efficaci. Noi lo facciamo ogni giorno.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Non offriamo pacchetti standard. Ogni cliente di Modena e provincia ha una strategia costruita sulle sue specificità: il settore, il pubblico target, la stagionalità e gli obiettivi reali di business. Misuriamo tutto e ti mostriamo cosa funziona, settimana dopo settimana.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Dove siamo</p>
+        <h2 class="section-title mt-3">Vieni a trovarci a Modena o a Bologna.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency</strong>
+              <span class="block text-white/80">Piazza Tintori 27</span>
+              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
+              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
+              <span class="block text-white/80">40121 Bologna BO</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Inizia oggi</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">Porta i social della tua azienda modenese al livello successivo.</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Raccontaci il tuo brand. Ti risponderemo entro 24 ore con una strategia, non con un listino prezzi.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Contattaci ora</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>

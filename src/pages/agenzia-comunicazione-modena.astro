@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const BASE = import.meta.env.BASE_URL;
+const services = [
+  { title: 'Strategia Editoriale', desc: 'Costruiamo il tuo piano di comunicazione annuale: temi, formati, canali e calendario. Niente improvvisazione.' },
+  { title: 'Copywriting & Storytelling', desc: 'Testi che vendono senza sembrare pubblicità. Dal sito alla brochure, dalle email ai post social.' },
+  { title: 'Identità di Voce', desc: 'Definiamo il tone of voice del tuo brand modenese in modo che sia riconoscibile ovunque e in ogni formato.' },
+  { title: 'Comunicazione Istituzionale', desc: "Comunicati stampa, presentazioni aziendali, relazioni con stakeholder e media locali dell'Emilia-Romagna." },
+  { title: 'Contenuti Corporate', desc: 'Video aziendali, interviste, case history e reportage per mostrare chi sei davvero ai tuoi clienti.' },
+  { title: 'Gestione della Reputazione', desc: 'Monitoraggio, risposta alle recensioni e gestione della presenza online del tuo brand a Modena e online.' },
+];
+const schema = JSON.stringify({
+  "@context":"https://schema.org","@graph":[
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Modena","Bastiglia","Emilia-Romagna"],"priceRange":"€€"},
+    {"@type":"Service","name":"Comunicazione Aziendale Modena","serviceType":"Corporate Communication","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Modena","description":"Strategia editoriale, copywriting, storytelling e comunicazione istituzionale per aziende di Modena e dell'Emilia-Romagna."}
+  ]
+});
+---
+<Layout title="Agenzia di Comunicazione Modena | Viral Digital Agency" description="Comunicazione aziendale, copywriting e strategia editoriale a Modena. Viral Digital Agency racconta il tuo brand con autenticità e precisione. Studio a Bastiglia (MO).">
+  <div class="pt-28 md:pt-40">
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Comunicazione · Modena</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Agenzia di Comunicazione<br />a <em class="not-italic text-[var(--electric)]">Modena</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          Ogni azienda modenese ha una storia da raccontare. Noi la prendiamo, la puliamo, la mettiamo al centro e la diffondiamo nei canali giusti. Comunicazione vera, non di facciata.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo del tuo brand</a>
+          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Servizi di Comunicazione</p>
+        <h2 class="section-title mt-3 max-w-3xl">Tutto quello che serve per comunicare bene a Modena e oltre.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Il nostro approccio</p>
+        <h2 class="section-title mt-3 max-w-3xl">La realtà è il miglior argomento di vendita.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">Le aziende di Modena e dell'Emilia-Romagna sono spesso eccellenti nel fare, ma faticano nel comunicare. C'è un artigiano che produce il miglior prodotto della regione, ma nessuno lo sa. C'è una PMI manifatturiera con 50 anni di storia, ma il sito dice solo "qualità e affidabilità". Cambiamo questo.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Crediamo nella forza della realtà. Prendiamo ciò che la tua azienda ha di vero — i tuoi prodotti, le tue persone, i tuoi valori — e lo comunichiamo con la massima cura. Non inventiamo niente. Tiriamo fuori quello che c'è già e lo rendiamo visibile.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Dove siamo</p>
+        <h2 class="section-title mt-3">A Bastiglia (Modena) e a Bologna.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency</strong>
+              <span class="block text-white/80">Piazza Tintori 27</span>
+              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
+              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
+              <span class="block text-white/80">40121 Bologna BO</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Raccontaci</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">La tua azienda modenese merita di essere raccontata bene.</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Scrivici o chiamaci. Ti risponderemo entro 24 ore con idee concrete su come comunicare meglio il tuo brand.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Scrivici subito</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>

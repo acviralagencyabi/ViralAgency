@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const BASE = import.meta.env.BASE_URL;
+const services = [
+  { title: 'Reel & Short Video', desc: "Video verticali per Instagram e TikTok che catturano l'attenzione nei primi 2 secondi. Girati e montati a Modena." },
+  { title: 'Video Aziendali', desc: 'Racconta chi sei con un video corporate che vale più di mille parole. Ideale per siti, fiere e presentazioni.' },
+  { title: 'Video Prodotto', desc: "Dal cibo al macchinario, dal gioiello all'auto: mostriamo i tuoi prodotti modenesi nel modo in cui meritano." },
+  { title: 'Campagne Video Ads', desc: 'Spot per Meta Ads e YouTube progettati per convertire: hook forte, messaggio chiaro, call to action precisa.' },
+  { title: 'Testimonianze & Interviste', desc: 'Le parole dei tuoi clienti modenesi sono la prova più potente. Le filmiamo in modo professionale e autentico.' },
+  { title: 'Behind the Scenes', desc: 'Dietro le quinte del tuo processo, della tua squadra, della tua officina o cucina. Contenuto che crea fiducia.' },
+];
+const schema = JSON.stringify({
+  "@context":"https://schema.org","@graph":[
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Modena","Emilia-Romagna"],"priceRange":"€€"},
+    {"@type":"Service","name":"Video Marketing Modena","serviceType":"Video Production","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Modena","description":"Produzione video e video marketing a Modena. Reel, contenuti social, video aziendali e campagne video per brand della Motor Valley."}
+  ]
+});
+---
+<Layout title="Video Marketing Modena | Viral Digital Agency" description="Produzione video e video marketing a Modena. Reel, contenuti social, video aziendali e campagne video per portare il tuo brand nelle storie dei tuoi clienti. Studio a Bastiglia (MO).">
+  <div class="pt-28 md:pt-40">
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Video Marketing · Modena</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Video Marketing<br />a <em class="not-italic text-[var(--electric)]">Modena</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          La Motor Valley produce eccellenza ogni giorno. Noi la filmiamo. Dal reel che fa fermare lo scroll al video aziendale che racconta 50 anni di storia — produciamo contenuti video per le aziende di Modena e della provincia.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo del tuo progetto video</a>
+          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Tipi di video</p>
+        <h2 class="section-title mt-3 max-w-3xl">Ogni formato video per ogni esigenza della tua azienda modenese.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Il video che funziona davvero</p>
+        <h2 class="section-title mt-3 max-w-3xl">Non vendiamo riprese. Vendiamo risultati.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">Le aziende di Modena — dall'automotive all'agroalimentare, dalla ceramica all'artigianato di lusso — hanno prodotti e persone che meritano di essere mostrati. Un video fatto bene non è solo bello: è uno strumento commerciale che lavora per te 24 ore su 24, sui social, sul sito, nelle fiere di settore.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Il nostro approccio al video marketing parte sempre da una domanda: a chi stai parlando e cosa vuoi che faccia dopo aver visto il video? Costruiamo ogni contenuto video con un obiettivo preciso: più visite, più richieste, più vendite. E poi misuriamo se ci siamo riusciti.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Dove operiamo</p>
+        <h2 class="section-title mt-3">Riprese a Modena, in Emilia-Romagna e ovunque serva.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency</strong>
+              <span class="block text-white/80">Piazza Tintori 27</span>
+              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
+            <address class="not-italic space-y-1 text-[var(--paper)]">
+              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
+              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
+              <span class="block text-white/80">40121 Bologna BO</span>
+              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
+              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+            </address>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Giriamo insieme</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">Il tuo prossimo video parlerà da solo.</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Raccontaci cosa vuoi mostrare. Ti risponderemo con idee concrete e un preventivo trasparente.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Inizia il tuo progetto video</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>
