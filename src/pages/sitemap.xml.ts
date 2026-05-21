@@ -20,10 +20,12 @@ export const GET: APIRoute = async ({ site }) => {
   const base = (site?.toString() ?? 'https://visualdigitalagencydemo.pages.dev').replace(/\/$/, '');
   const today = new Date().toISOString().split('T')[0];
 
-  // Dynamically include every published article
+  // Dynamically include every published article.
+  // Uses `a.id` — the filename without extension (e.g. "atelier-24-14k-follower"),
+  // which is what [slug].astro passes as the route param.
   const articles = await getCollection('articles');
   const articleEntries = articles.map((a) => ({
-    path: `/articoli/${a.slug}/`,
+    path: `/articoli/${a.id.replace(/\.[^.]+$/, '')}/`,
     priority: '0.7',
     changefreq: 'yearly',
   }));
