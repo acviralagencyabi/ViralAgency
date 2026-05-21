@@ -326,16 +326,18 @@ const schemaOrg = {
         });
       });
 
-      // ---------- Split-flap reveal on section titles (scroll-triggered) ----------
-      // Characters cycle through the board alphabet in order, left-to-right,
-      // giving a clean mechanical "departures board" feel instead of chaos.
+      // ---------- Split-flap reveal — section titles + hero display ----------
+      // Characters cycle through the board alphabet in order, left-to-right.
+      // stagger = rAF frames between each char starting; steps = flips per char.
       {
-        // Board character set — ordered, clean (no matrix noise)
         const BOARD = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const STAGGER = 3;  // rAF frames between each char starting  (~50ms @ 60fps)
-        const STEPS   = 5;  // board steps per char before it settles
 
-        const splitFlapRoot = (root: Element, onDone?: () => void) => {
+        const splitFlapRoot = (
+          root: Element,
+          stagger = 3,
+          steps   = 5,
+          onDone?: () => void
+        ) => {
           type CharEntry = {
             to: string; skip: boolean;
             start: number; end: number; flapPos: number;
@@ -351,16 +353,14 @@ const schemaOrg = {
             if (!text.trim()) continue;
 
             const queue: CharEntry[] = [...text].map((ch) => {
-              // Whitespace and punctuation pass through without animation
               if (/[\s\n\r.,!?—–\-:;'"()]/.test(ch)) {
                 return { to: ch, skip: true, start: 0, end: 0, flapPos: 0 };
               }
-              const start = charCount * STAGGER;
-              const end   = start + STEPS;
-              // Start the cycle a few positions before the target in BOARD
+              const start    = charCount * stagger;
+              const end      = start + steps;
               const targetIdx = BOARD.indexOf(ch.toUpperCase());
               const flapPos   = targetIdx >= 0
-                ? (targetIdx - STEPS + BOARD.length * 4) % BOARD.length
+                ? (targetIdx - steps + BOARD.length * 4) % BOARD.length
                 : Math.floor(Math.random() * BOARD.length);
               charCount++;
               return { to: ch, skip: false, start, end, flapPos };
@@ -372,15 +372,11 @@ const schemaOrg = {
           if (!items.length) { onDone?.(); return; }
 
           const maxFrame = items.reduce(
-            (acc, { queue }) => Math.max(acc, ...queue.map((q) => q.end)),
-            0
+            (acc, { queue }) => Math.max(acc, ...queue.map((q) => q.end)), 0
           );
 
-          // Set initial scrambled state (all active chars show their board start)
           items.forEach(({ node, queue }) => {
-            node.textContent = queue.map((q) =>
-              q.skip ? q.to : BOARD[q.flapPos]
-            ).join('');
+            node.textContent = queue.map((q) => q.skip ? q.to : BOARD[q.flapPos]).join('');
           });
 
           let frame = 0;
@@ -388,10 +384,9 @@ const schemaOrg = {
             for (const { node, queue } of items) {
               let out = '';
               for (const q of queue) {
-                if (q.skip)           { out += q.to; continue; }
-                if (frame >= q.end)   { out += q.to; continue; }
-                if (frame < q.start)  { out += BOARD[q.flapPos]; continue; }
-                // Active: advance one board position per frame
+                if (q.skip)          { out += q.to; continue; }
+                if (frame >= q.end)  { out += q.to; continue; }
+                if (frame < q.start) { out += BOARD[q.flapPos]; continue; }
                 out += BOARD[(q.flapPos + (frame - q.start)) % BOARD.length];
               }
               node.textContent = out;
@@ -403,19 +398,29 @@ const schemaOrg = {
           requestAnimationFrame(tick);
         };
 
+        // ── Section titles: fire on scroll into viewport ──────────────────────
         const targets = document.querySelectorAll<HTMLElement>('.section-title');
-        // Fire once, the first time each title enters the viewport.
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
-              splitFlapRoot(entry.target as HTMLElement);
+              splitFlapRoot(entry.target as HTMLElement, 3, 5);
               io.unobserve(entry.target);
             });
           },
           { threshold: 0.35 }
         );
         targets.forEach((el) => io.observe(el));
+
+        // ── Hero h-display: fire after intro overlay begins to fade (~1.2s) ───
+        // stagger=6 (~100ms/char) spreads the reveal across the overlay fade.
+        const heroEl = document.querySelector<HTMLElement>('[data-flap-hero]');
+        if (heroEl) {
+          setTimeout(() => {
+            heroEl.style.opacity = '1';
+            splitFlapRoot(heroEl, 6, 5);
+          }, 1200);
+        }
       }
     </script>
   </body>
