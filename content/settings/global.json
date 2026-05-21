@@ -16,7 +16,7 @@
     "facebook": "https://facebook.com/ViralAgencyAC",
     "instagram": "https://instagram.com/viral.digitalagency",
     "linkedin": null,
-    "googleReviewsUrl": "https://maps.google.com/?kgmid=/g/11m75qc3vq",
+    "googleReviewsUrl": "https://share.google/ElMHV3IYAPCSGd0E7",
     "googleMapsUrl": "https://maps.google.com/?kgmid=/g/11m75qc3vq"
   },
   "analytics": {
@@ -32,5 +32,18 @@
   "legal": {
     "piva": "IT04181410368",
     "codiceDestinatario": "XMXAUP4"
+  },
+  "nav": {
+    "portfolioLabel": "Portfolio",
+    "portfolioMegaDesc": "I nostri lavori per ogni cliente",
+    "aboutLabel": "Chi siamo",
+    "aboutMegaDesc": "Storytelling, team & servizi",
+    "articlesLabel": "Articoli",
+    "contactLabel": "Contatti"
+  },
+  "footer": {
+    "eyebrow": "Parliamone",
+    "tagline": "Communication · Marketing · Social · Branding",
+    "siteCredit": "Site design — REAL GOES VIRAL"
   }
 }

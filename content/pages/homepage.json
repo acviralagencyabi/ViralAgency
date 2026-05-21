@@ -3,6 +3,21 @@
     "title": "REAL GOES VIRAL — Agenzia di comunicazione & marketing",
     "description": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia. Comunicazione, marketing, gestione social media, grafica & branding."
   },
+  "hero": {
+    "badge": "01 / HOMEPAGE",
+    "location": "BOLOGNA · MODENA — IT\nMOTOR VALLEY",
+    "titleLine1": "REAL",
+    "titleLine2": "GOES",
+    "titleLine3": "VIRAL",
+    "tagline": "Agenzia di comunicazione & marketing.",
+    "ctaLabel": "Prenota una Call",
+    "ctaHref": "#contatti",
+    "scrollLabel": "Scroll",
+    "scrollHref": "#manifesto"
+  },
+  "marquee": {
+    "text": "REAL GOES VIRAL"
+  },
   "manifesto": {
     "eyebrow": "01 — Manifesto",
     "title": "Il nostro nome\nè la nostra promessa.",
@@ -16,6 +31,12 @@
       { "num": 3, "suffix": "", "label": "Anni di esperienza" },
       { "num": 97, "suffix": "%", "label": "Clienti che tornano" }
     ]
+  },
+  "portfolioSection": {
+    "eyebrow": "02 — Portfolio",
+    "title": "I lavori migliori, cliente per cliente.",
+    "ctaLabel": "Il tuo prossimo",
+    "ctaHref": "#contatti"
   },
   "servicesList": [
     {
@@ -67,6 +88,11 @@
       ]
     }
   ],
+  "servicesSection": {
+    "eyebrow": "03 — Servizi",
+    "title": "Quello che facciamo, ogni giorno.",
+    "intro": "Un reparto marketing esterno, completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand."
+  },
   "clients": [
     "Ducati Motor",
     "Pasta Garofalo",
@@ -117,6 +143,11 @@
       "photo": null
     }
   ],
+  "teamSection": {
+    "eyebrow": "04 — Team",
+    "title": "Persone vere dietro ogni post.",
+    "subtitle": "Un team piccolo, selezionato, ossessionato dal risultato."
+  },
   "reviews": [
     {
       "quote": "Hanno preso il nostro brand e l'hanno fatto diventare conversazione. Engagement triplicato in sei mesi.",
@@ -137,10 +168,22 @@
       "googleUrl": ""
     }
   ],
+  "reviewsSection": {
+    "eyebrow": "05 — Recensioni",
+    "title": "Lo dicono i nostri clienti."
+  },
+  "articlesSection": {
+    "eyebrow": "06 — Articoli",
+    "title": "Interviste & approfondimenti.",
+    "ctaLabel": "Suggeriscine uno",
+    "ctaHref": "#contatti"
+  },
   "social": {
     "title": "Restiamo connessi"
   },
   "contact": {
+    "eyebrow": "07 — Contatti",
+    "title": "Prenota una call.",
     "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino.",
     "showWhatsapp": true,
     "whatsappLabel": "Scrivici su WhatsApp",

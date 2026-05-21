@@ -1359,10 +1359,17 @@ html.lenis, html.lenis body { height: auto; }
 .pf-card:focus-visible .pf-poster {
   opacity: 0;
 }
-/* On touch devices: keep poster visible until viewport autoplay swaps in the video */
+/* On touch devices: keep poster visible; video playback happens in the lightbox after tap. */
 @media (hover: none) {
-  .pf-card.is-playing .pf-video { opacity: 1; }
-  .pf-card.is-playing .pf-poster { opacity: 0; }
+  .pf-card:hover .pf-video,
+  .pf-card:focus-visible .pf-video {
+    opacity: 0;
+    transform: none;
+  }
+  .pf-card:hover .pf-poster,
+  .pf-card:focus-visible .pf-poster {
+    opacity: 1;
+  }
   /* Always show play indicator so the card looks tappable */
   .pf-play { opacity: 0.8; transform: scale(1); }
   /* Larger tap target on mobile */

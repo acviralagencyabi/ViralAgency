@@ -67,6 +67,7 @@ const servicesList = H.servicesList ?? [];
 const clients: string[] = H.clients ?? [];
 const locations = H.locations ?? [];
 const reviews = H.reviews ?? [];
+const marqueeText = H.marquee?.text || 'REAL GOES VIRAL';
 
 // Team con foto opzionale
 const team = (H.team ?? []).map((m: any) => {
@@ -135,34 +136,34 @@ const link = (path: string) => {
     <div class="container-custom flex-1 flex flex-col">
       <div class="flex flex-wrap items-start justify-between gap-4 mb-auto">
         <p class="mono-label text-[var(--muted)]">
-          01 / HOMEPAGE
+          {H.hero?.badge || '01 / HOMEPAGE'}
         </p>
-        <p class="mono-label text-[var(--muted)] hidden md:block text-right">
-          BOLOGNA · MODENA — IT<br />MOTOR VALLEY
+        <p class="mono-label text-[var(--muted)] hidden md:block text-right whitespace-pre-line">
+          {H.hero?.location || 'BOLOGNA · MODENA — IT\nMOTOR VALLEY'}
         </p>
       </div>
 
       <div class="my-auto py-10 md:py-16">
         <h1 class="h-display text-[clamp(3rem,13vw,11rem)] leading-[0.9]">
-          <span class="line-reveal block" style="--line-delay:1.5s"><span>REAL</span></span>
-          <span class="line-reveal block" style="--line-delay:1.6s"><span>GOES</span></span>
+          <span class="line-reveal block" style="--line-delay:1.5s"><span>{H.hero?.titleLine1 || 'REAL'}</span></span>
+          <span class="line-reveal block" style="--line-delay:1.6s"><span>{H.hero?.titleLine2 || 'GOES'}</span></span>
           <span class="line-reveal block" style="--line-delay:1.7s">
-            <span>VIRAL<span class="inline-block align-top text-[var(--electric)]">.</span></span>
+            <span>{H.hero?.titleLine3 || 'VIRAL'}<span class="inline-block align-top text-[var(--electric)]">.</span></span>
           </span>
         </h1>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end mt-auto">
         <p class="md:col-span-5 quote-big text-[var(--ink)]">
-          Agenzia di comunicazione &amp; marketing.
+          {H.hero?.tagline || 'Agenzia di comunicazione & marketing.'}
         </p>
         <div class="md:col-span-4">
-          <a href="#contatti" class="btn-primary magnetic-btn" data-cursor="prenota">
-            Prenota una Call <span class="btn-arrow">↗</span>
+          <a href={H.hero?.ctaHref || '#contatti'} class="btn-primary magnetic-btn" data-cursor="prenota">
+            {H.hero?.ctaLabel || 'Prenota una Call'} <span class="btn-arrow">↗</span>
           </a>
         </div>
-        <a href="#manifesto" class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
-          <span class="mono-label">Scroll</span>
+        <a href={H.hero?.scrollHref || '#manifesto'} class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
+          <span class="mono-label">{H.hero?.scrollLabel || 'Scroll'}</span>
           <ArrowDown class="w-4 h-4 animate-bounce" />
         </a>
       </div>
@@ -173,16 +174,16 @@ const link = (path: string) => {
   <div class="marquee section-dark">
     <div class="marquee-track">
       <span>
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
       </span>
       <span aria-hidden="true">
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
-        REAL GOES VIRAL <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
+        {marqueeText} <span class="dot"></span>
       </span>
     </div>
   </div>
@@ -247,13 +248,13 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">02 — Portfolio</p>
+          <p class="eyebrow">{H.portfolioSection?.eyebrow || '02 — Portfolio'}</p>
           <h2 class="section-title mt-4 max-w-3xl">
-            I lavori migliori, cliente per cliente.
+            {H.portfolioSection?.title || 'I lavori migliori, cliente per cliente.'}
           </h2>
         </div>
-        <a href="#contatti" class="btn-outline" data-cursor="scrivici">
-          Il tuo prossimo <span class="btn-arrow">↗</span>
+        <a href={H.portfolioSection?.ctaHref || '#contatti'} class="btn-outline" data-cursor="scrivici">
+          {H.portfolioSection?.ctaLabel || 'Il tuo prossimo'} <span class="btn-arrow">↗</span>
         </a>
       </div>
 
@@ -392,44 +393,9 @@ const link = (path: string) => {
       }
     });
 
-    // -------- Mobile: one-at-a-time autoplay for cards in viewport --------
-    // Serialises playback so only ONE video plays at a time (prevents GPU
-    // overload / black-screen glitch on Safari and Firefox mobile).
-    if (isCoarse) {
-      let activeCard = null;
-
-      const stopCard = (card) => {
-        if (!card) return;
-        const v = card.querySelector('video');
-        card.classList.remove('is-playing');
-        try { if (v) { v.pause(); } } catch (_) {}
-      };
-
-      const startCard = (card) => {
-        if (activeCard && activeCard !== card) stopCard(activeCard);
-        activeCard = card;
-        const v = card.querySelector('video');
-        if (!v) return;
-        loadVideoSrc(v);
-        card.classList.add('is-playing');
-        // Small defer lets the browser finish layout before decode
-        setTimeout(() => {
-          try { v.play().catch(() => { card.classList.remove('is-playing'); }); } catch (_) {}
-        }, 60);
-      };
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startCard(entry.target);
-          } else {
-            stopCard(entry.target);
-            if (activeCard === entry.target) activeCard = null;
-          }
-        });
-      }, { threshold: 0.5 });
-      portfolioCards.forEach((c) => io.observe(c));
-    }
+    // On touch devices, avoid viewport autoplay entirely. Cards open the
+    // lightbox on tap, which keeps mobile scrolling stable and prevents
+    // scroll-time decoding of many MP4s.
 
     // -------- Lightbox (video) --------
     const lb = document.getElementById('video-lightbox');
@@ -452,10 +418,14 @@ const link = (path: string) => {
       lb.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       try { lbVideo.pause(); } catch (_) {}
+      lbVideo.removeAttribute('src');
+      try { lbVideo.load(); } catch (_) {}
     }
     function updateLb() {
       const it = items[currentIndex];
+      try { lbVideo.pause(); } catch (_) {}
       lbVideo.src = it.video;
+      try { lbVideo.load(); } catch (_) {}
       lbCaption.textContent = it.title;
       lbCurr.textContent = currentIndex + 1;
       lbTotal.textContent = items.length;
@@ -500,13 +470,12 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
         <div class="lg:col-span-5 reveal-left">
-          <p class="eyebrow">03 — Servizi</p>
-          <h2 class="section-title mt-4">Quello che facciamo, ogni giorno.</h2>
+          <p class="eyebrow">{H.servicesSection?.eyebrow || '03 — Servizi'}</p>
+          <h2 class="section-title mt-4">{H.servicesSection?.title || 'Quello che facciamo, ogni giorno.'}</h2>
         </div>
         <div class="lg:col-span-7 reveal lg:pt-20">
-          <p class="quote-big text-[var(--muted)]">
-            Un reparto marketing esterno, completo. Strategia, contenuti, performance.
-            Nessun pacchetto preconfezionato: solo quello che serve al tuo brand.
+          <p class="quote-big text-[var(--muted)] whitespace-pre-line">
+            {H.servicesSection?.intro || 'Un reparto marketing esterno, completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand.'}
           </p>
         </div>
       </div>
@@ -547,13 +516,13 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">04 — Team</p>
+          <p class="eyebrow">{H.teamSection?.eyebrow || '04 — Team'}</p>
           <h2 class="section-title mt-4 max-w-3xl">
-            Persone vere dietro ogni post.
+            {H.teamSection?.title || 'Persone vere dietro ogni post.'}
           </h2>
         </div>
         <p class="mono-label text-white/60 max-w-xs">
-          Un team piccolo, selezionato, ossessionato dal risultato.
+          {H.teamSection?.subtitle || 'Un team piccolo, selezionato, ossessionato dal risultato.'}
         </p>
       </div>
 
@@ -593,8 +562,14 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">05 — Recensioni</p>
-          <h2 class="section-title mt-4 max-w-3xl">Lo dicono i nostri clienti.</h2>
+          <p class="eyebrow">{H.reviewsSection?.eyebrow || '05 — Recensioni'}</p>
+          {googleReviewsUrl ? (
+            <a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" class="section-title mt-4 max-w-3xl block hover:opacity-70 transition-opacity" data-cursor="vedi su google">
+              {H.reviewsSection?.title || 'Lo dicono i nostri clienti.'}
+            </a>
+          ) : (
+            <h2 class="section-title mt-4 max-w-3xl">{H.reviewsSection?.title || 'Lo dicono i nostri clienti.'}</h2>
+          )}
         </div>
         {googleReviewsUrl && (
           <a
@@ -668,11 +643,11 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">06 — Articoli</p>
-          <h2 class="section-title mt-4 max-w-3xl">Interviste &amp; approfondimenti.</h2>
+          <p class="eyebrow">{H.articlesSection?.eyebrow || '06 — Articoli'}</p>
+          <h2 class="section-title mt-4 max-w-3xl">{H.articlesSection?.title || 'Interviste & approfondimenti.'}</h2>
         </div>
-        <a href="#contatti" class="btn-outline" data-cursor="scrivici">
-          Suggeriscine uno <span class="btn-arrow">↗</span>
+        <a href={H.articlesSection?.ctaHref || '#contatti'} class="btn-outline" data-cursor="scrivici">
+          {H.articlesSection?.ctaLabel || 'Suggeriscine uno'} <span class="btn-arrow">↗</span>
         </a>
       </div>
 
@@ -738,9 +713,9 @@ const link = (path: string) => {
     <div class="container-custom relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
         <div class="lg:col-span-6 reveal-left">
-          <p class="eyebrow text-white/70">07 — Contatti</p>
+          <p class="eyebrow text-white/70">{H.contact?.eyebrow || '07 — Contatti'}</p>
           <h2 class="section-title mt-4 text-[var(--paper)]">
-            Prenota una call.
+            {H.contact?.title || 'Prenota una call.'}
           </h2>
           <p class="quote-big mt-6 text-white/85 max-w-xl">
             {H.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
