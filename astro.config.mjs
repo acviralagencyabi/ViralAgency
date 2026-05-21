@@ -26,5 +26,28 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      dedupe: [
+        'react',
+        'react-dom',
+        '@keystatic/core',
+        '@keystatic/astro',
+        '@keystar/ui',
+        'yjs',
+      ],
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        '@keystatic/core',
+        '@keystatic/core/ui',
+        '@keystatic/astro/ui',
+        '@keystatic/astro/api',
+        'yjs',
+      ],
+    },
   },
 });
