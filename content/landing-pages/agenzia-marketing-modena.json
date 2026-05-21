@@ -1,0 +1,44 @@
+{
+  "title": "agenzia-marketing-modena",
+  "seoTitle": "Agenzia di Marketing Modena | Viral Digital Agency",
+  "seoDescription": "Agenzia di marketing digitale a Modena. Strategie, funnel, advertising e analytics per far crescere il tuo business nel mercato locale e nazionale. Studio a Bastiglia (MO).",
+  "hero": {
+    "eyebrow": "Marketing Digitale · Modena",
+    "titleLine1": "Agenzia di Marketing",
+    "titleLine2": "a Modena",
+    "intro": "Aiutiamo le aziende modenesi a crescere online con strategie di marketing digitale costruite sui dati e sull'esperienza nel territorio. Dalla Motor Valley all'Italia intera.",
+    "ctaLabel": "Richiedi una consulenza"
+  },
+  "services": {
+    "eyebrow": "I nostri servizi",
+    "title": "Marketing integrato per le PMI di Modena e provincia.",
+    "items": [
+      { "title": "Strategia di Marketing", "desc": "Analisi del mercato modenese, definizione del posizionamento, piano d'azione con obiettivi misurabili." },
+      { "title": "Performance Advertising", "desc": "Campagne Meta Ads, Google Ads e TikTok Ads ottimizzate per il costo per acquisizione del tuo settore." },
+      { "title": "Funnel & Lead Generation", "desc": "Costruiamo il percorso che trasforma gli sconosciuti in clienti. Landing page, email automation, CRM." },
+      { "title": "SEO & Contenuti", "desc": "Visibilità organica a lungo termine: contenuti ottimizzati, link building locale, presenza nei risultati di Modena." },
+      { "title": "Email Marketing", "desc": "Newsletter e automation che mantengono caldo il rapporto con i tuoi clienti modenesi tra un acquisto e l'altro." },
+      { "title": "Analitiche & KPI", "desc": "Dashboard personalizzata con i dati che contano davvero. Decisioni basate su numeri reali, non su sensazioni." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Il nostro approccio",
+    "title": "Marketing che si misura. Risultati che si vedono.",
+    "cities": [],
+    "body1": "L'Emilia-Romagna è una delle regioni più competitive d'Italia per le PMI manifatturiere, il food e il terziario avanzato. Le aziende di Modena devono competere localmente ma anche farsi trovare dai clienti di tutta Italia. Costruiamo strategie che funzionano a entrambe le scale.",
+    "body2": "Lavoriamo sempre con obiettivi chiari e misurabili: lead generati, costo per acquisizione, ritorno sull'investimento. Non promettiamo visti o follower generici — promettiamo clienti reali e fatturato. Poi ci rendiamo conto insieme se lo stiamo raggiungendo."
+  },
+  "cta": {
+    "eyebrow": "Parti adesso",
+    "title": "Pronto a far crescere la tua azienda modenese?",
+    "body": "Prenota una consulenza gratuita. In 30 minuti capiamo insieme dove stai lasciando soldi sul tavolo e come recuperarli.",
+    "ctaLabel": "Consulenza gratuita",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Digital Marketing",
+    "serviceName": "Marketing Digitale Modena",
+    "serviceDescription": "Strategie di marketing digitale, advertising, funnel e lead generation per aziende di Modena e provincia.",
+    "areaServed": "Modena"
+  }
+}

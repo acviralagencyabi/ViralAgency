@@ -1,0 +1,44 @@
+{
+  "title": "agenzia-branding-modena",
+  "seoTitle": "Agenzia di Branding Modena | Viral Digital Agency",
+  "seoDescription": "Branding, identità visiva e logo design a Modena. Viral Digital Agency costruisce brand memorabili per aziende modenesi che vogliono distinguersi. Studio a Bastiglia (MO).",
+  "hero": {
+    "eyebrow": "Branding · Modena",
+    "titleLine1": "Agenzia di Branding",
+    "titleLine2": "a Modena",
+    "intro": "Le aziende di Modena sanno fare prodotti eccezionali. Noi le aiutiamo a sembrare eccezionali tanto quanto lo sono. Costruiamo identità visive che resistono al tempo, funzionano su tutti i canali e si differenziano nella piazza modenese.",
+    "ctaLabel": "Costruiamo il tuo brand"
+  },
+  "services": {
+    "eyebrow": "Servizi di Branding",
+    "title": "Tutto quello che serve per costruire un brand solido a Modena.",
+    "items": [
+      { "title": "Logo & Identità Visiva", "desc": "Progettiamo loghi che funzionano su qualsiasi superficie: digitale, stampa, packaging, segnaletica." },
+      { "title": "Brand Book", "desc": "Manuale d'uso del tuo brand: colori, tipografie, immagini, tono di voce e regole d'uso per tutti i canali." },
+      { "title": "Sistema Grafico", "desc": "Template, iconografia, pattern e elementi grafici coerenti che rendono il tuo brand riconoscibile a colpo d'occhio." },
+      { "title": "Packaging Design", "desc": "Confezioni, etichette e packaging per i prodotti delle aziende modenesi. Dal cibo al lusso, dall'industria all'artigianato." },
+      { "title": "Materiali di Stampa", "desc": "Biglietti da visita, brochure, cataloghi, cartoline e materiali promozionali per fiere ed eventi locali." },
+      { "title": "Rebranding", "desc": "Se il tuo brand è cresciuto ma l'immagine è rimasta indietro, ti aiutiamo a rinnovare senza perdere riconoscibilità." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Il nostro processo",
+    "title": "Un brand modenese deve raccontare eccellenza. Noi ci riusciamo.",
+    "cities": [],
+    "body1": "L'Emilia-Romagna, e Modena in particolare, è sinonimo di qualità nel mondo. Automotive, gastronomia, manifattura, moda: i brand modenesi competono a livello internazionale. Un'identità visiva sciatta o datata penalizza anche il prodotto migliore. Noi costruiamo immagini all'altezza dell'eccellenza modenese.",
+    "body2": "Il nostro processo di branding parte sempre dall'ascolto: capire la storia dell'azienda, i valori che la animano, il mercato in cui opera e le persone a cui si rivolge. Solo dopo iniziamo a disegnare. Il risultato è un brand che rispecchia l'azienda reale, non una versione patinata e generica."
+  },
+  "cta": {
+    "eyebrow": "Inizia il percorso",
+    "title": "Il tuo brand modenese merita un'identità visiva al suo livello.",
+    "body": "Parliamo della tua azienda. In 30 minuti capiamo insieme dove si può fare la differenza.",
+    "ctaLabel": "Parliamo di branding",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Brand Design",
+    "serviceName": "Branding e Identità Visiva Modena",
+    "serviceDescription": "Branding, logo design, identità visiva e brand book per aziende di Modena. Costruiamo brand memorabili per il mercato locale e nazionale.",
+    "areaServed": "Modena"
+  }
+}

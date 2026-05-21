@@ -1,0 +1,44 @@
+{
+  "title": "agenzia-comunicazione-modena",
+  "seoTitle": "Agenzia di Comunicazione Modena | Viral Digital Agency",
+  "seoDescription": "Comunicazione aziendale, copywriting e strategia editoriale a Modena. Viral Digital Agency racconta il tuo brand con autenticità e precisione. Studio a Bastiglia (MO).",
+  "hero": {
+    "eyebrow": "Comunicazione · Modena",
+    "titleLine1": "Agenzia di Comunicazione",
+    "titleLine2": "a Modena",
+    "intro": "Ogni azienda modenese ha una storia da raccontare. Noi la prendiamo, la puliamo, la mettiamo al centro e la diffondiamo nei canali giusti. Comunicazione vera, non di facciata.",
+    "ctaLabel": "Parliamo del tuo brand"
+  },
+  "services": {
+    "eyebrow": "Servizi di Comunicazione",
+    "title": "Tutto quello che serve per comunicare bene a Modena e oltre.",
+    "items": [
+      { "title": "Strategia Editoriale", "desc": "Costruiamo il tuo piano di comunicazione annuale: temi, formati, canali e calendario. Niente improvvisazione." },
+      { "title": "Copywriting & Storytelling", "desc": "Testi che vendono senza sembrare pubblicità. Dal sito alla brochure, dalle email ai post social." },
+      { "title": "Identità di Voce", "desc": "Definiamo il tone of voice del tuo brand modenese in modo che sia riconoscibile ovunque e in ogni formato." },
+      { "title": "Comunicazione Istituzionale", "desc": "Comunicati stampa, presentazioni aziendali, relazioni con stakeholder e media locali dell'Emilia-Romagna." },
+      { "title": "Contenuti Corporate", "desc": "Video aziendali, interviste, case history e reportage per mostrare chi sei davvero ai tuoi clienti." },
+      { "title": "Gestione della Reputazione", "desc": "Monitoraggio, risposta alle recensioni e gestione della presenza online del tuo brand a Modena e online." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Il nostro approccio",
+    "title": "La realtà è il miglior argomento di vendita.",
+    "cities": [],
+    "body1": "Le aziende di Modena e dell'Emilia-Romagna sono spesso eccellenti nel fare, ma faticano nel comunicare. C'è un artigiano che produce il miglior prodotto della regione, ma nessuno lo sa. C'è una PMI manifatturiera con 50 anni di storia, ma il sito dice solo 'qualità e affidabilità'. Cambiamo questo.",
+    "body2": "Crediamo nella forza della realtà. Prendiamo ciò che la tua azienda ha di vero — i tuoi prodotti, le tue persone, i tuoi valori — e lo comunichiamo con la massima cura. Non inventiamo niente. Tiriamo fuori quello che c'è già e lo rendiamo visibile."
+  },
+  "cta": {
+    "eyebrow": "Raccontaci",
+    "title": "La tua azienda modenese merita di essere raccontata bene.",
+    "body": "Scrivici o chiamaci. Ti risponderemo entro 24 ore con idee concrete su come comunicare meglio il tuo brand.",
+    "ctaLabel": "Scrivici subito",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Corporate Communication",
+    "serviceName": "Comunicazione Aziendale Modena",
+    "serviceDescription": "Strategia editoriale, copywriting, storytelling e comunicazione istituzionale per aziende di Modena e dell'Emilia-Romagna.",
+    "areaServed": "Modena"
+  }
+}

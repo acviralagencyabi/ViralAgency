@@ -1,0 +1,44 @@
+{
+  "title": "video-marketing-modena",
+  "seoTitle": "Video Marketing Modena | Viral Digital Agency",
+  "seoDescription": "Produzione video e video marketing a Modena. Reel, contenuti social, video aziendali e campagne video per portare il tuo brand nelle storie dei tuoi clienti. Studio a Bastiglia (MO).",
+  "hero": {
+    "eyebrow": "Video Marketing · Modena",
+    "titleLine1": "Video Marketing",
+    "titleLine2": "a Modena",
+    "intro": "La Motor Valley produce eccellenza ogni giorno. Noi la filmiamo. Dal reel che fa fermare lo scroll al video aziendale che racconta 50 anni di storia — produciamo contenuti video per le aziende di Modena e della provincia.",
+    "ctaLabel": "Parliamo del tuo progetto video"
+  },
+  "services": {
+    "eyebrow": "Tipi di video",
+    "title": "Ogni formato video per ogni esigenza della tua azienda modenese.",
+    "items": [
+      { "title": "Reel & Short Video", "desc": "Video verticali per Instagram e TikTok che catturano l'attenzione nei primi 2 secondi. Girati e montati a Modena." },
+      { "title": "Video Aziendali", "desc": "Racconta chi sei con un video corporate che vale più di mille parole. Ideale per siti, fiere e presentazioni." },
+      { "title": "Video Prodotto", "desc": "Dal cibo al macchinario, dal gioiello all'auto: mostriamo i tuoi prodotti modenesi nel modo in cui meritano." },
+      { "title": "Campagne Video Ads", "desc": "Spot per Meta Ads e YouTube progettati per convertire: hook forte, messaggio chiaro, call to action precisa." },
+      { "title": "Testimonianze & Interviste", "desc": "Le parole dei tuoi clienti modenesi sono la prova più potente. Le filmiamo in modo professionale e autentico." },
+      { "title": "Behind the Scenes", "desc": "Dietro le quinte del tuo processo, della tua squadra, della tua officina o cucina. Contenuto che crea fiducia." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Il video che funziona davvero",
+    "title": "Non vendiamo riprese. Vendiamo risultati.",
+    "cities": [],
+    "body1": "Le aziende di Modena — dall'automotive all'agroalimentare, dalla ceramica all'artigianato di lusso — hanno prodotti e persone che meritano di essere mostrati. Un video fatto bene non è solo bello: è uno strumento commerciale che lavora per te 24 ore su 24, sui social, sul sito, nelle fiere di settore.",
+    "body2": "Il nostro approccio al video marketing parte sempre da una domanda: a chi stai parlando e cosa vuoi che faccia dopo aver visto il video? Costruiamo ogni contenuto video con un obiettivo preciso: più visite, più richieste, più vendite. E poi misuriamo se ci siamo riusciti."
+  },
+  "cta": {
+    "eyebrow": "Giriamo insieme",
+    "title": "Il tuo prossimo video parlerà da solo.",
+    "body": "Raccontaci cosa vuoi mostrare. Ti risponderemo con idee concrete e un preventivo trasparente.",
+    "ctaLabel": "Inizia il tuo progetto video",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Video Production",
+    "serviceName": "Video Marketing Modena",
+    "serviceDescription": "Produzione video e video marketing a Modena. Reel, contenuti social, video aziendali e campagne video per brand della Motor Valley.",
+    "areaServed": "Modena"
+  }
+}

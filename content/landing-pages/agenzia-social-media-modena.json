@@ -1,0 +1,44 @@
+{
+  "title": "agenzia-social-media-modena",
+  "seoTitle": "Agenzia Social Media Modena | Viral Digital Agency",
+  "seoDescription": "Viral Digital Agency è l'agenzia social media di Modena che porta il tuo brand a crescere online. Contenuti reali, advertising Meta & TikTok, community management. Studio a Bastiglia (MO).",
+  "hero": {
+    "eyebrow": "Social Media · Modena",
+    "titleLine1": "Agenzia Social Media",
+    "titleLine2": "a Modena",
+    "intro": "Dal nostro studio di Bastiglia, gestiamo i profili social di aziende e brand in tutta la provincia di Modena. Contenuti reali, strategie misurabili, un team dedicato che conosce il mercato locale.",
+    "ctaLabel": "Parliamo del tuo progetto"
+  },
+  "services": {
+    "eyebrow": "Cosa facciamo",
+    "title": "Gestione social media completa per aziende modenesi.",
+    "items": [
+      { "title": "Piano Editoriale", "desc": "Strategia mensile su misura: contenuti, frequenza, tone of voice. Ogni post ha uno scopo preciso, non solo visibilità." },
+      { "title": "Creazione Contenuti", "desc": "Reel, caroselli, stories e video girati e montati dal nostro team creativo di Modena. Nessun template generico." },
+      { "title": "Advertising Meta & TikTok", "desc": "Campagne a performance ottimizzate settimana per settimana. Budget controllato, risultati misurabili." },
+      { "title": "Community Management", "desc": "Risposte ai commenti, DM, menzioni. La tua community modenese cresce quando è curata ogni giorno." },
+      { "title": "Analytics & Report", "desc": "Report mensile chiaro: reach, engagement, conversioni, CPC. Non numeri fini a sé stessi, ma insight utili." },
+      { "title": "Collaborazioni Creator", "desc": "Identifichiamo creator e micro-influencer locali allineati al tuo brand nel territorio modenese e in Emilia-Romagna." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Perché sceglierci",
+    "title": "Conosciamo il mercato modenese. E lavoriamo per fartelo amare.",
+    "cities": [],
+    "body1": "Modena non è una città qualsiasi: è un distretto industriale con aziende che producono eccellenza — dall'automotive all'agroalimentare, dalla ceramica alla moda. Le aziende modenesi hanno storie potenti da raccontare, ma spesso non sanno come tradurle in contenuti social efficaci. Noi lo facciamo ogni giorno.",
+    "body2": "Non offriamo pacchetti standard. Ogni cliente di Modena e provincia ha una strategia costruita sulle sue specificità: il settore, il pubblico target, la stagionalità e gli obiettivi reali di business. Misuriamo tutto e ti mostriamo cosa funziona, settimana dopo settimana."
+  },
+  "cta": {
+    "eyebrow": "Inizia oggi",
+    "title": "Porta i social della tua azienda modenese al livello successivo.",
+    "body": "Raccontaci il tuo brand. Ti risponderemo entro 24 ore con una strategia, non con un listino prezzi.",
+    "ctaLabel": "Contattaci ora",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Social Media Management",
+    "serviceName": "Gestione Social Media Modena",
+    "serviceDescription": "Gestione professionale dei profili social, creazione contenuti, advertising Meta e TikTok per aziende di Modena e della Motor Valley.",
+    "areaServed": "Modena"
+  }
+}

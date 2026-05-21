@@ -105,8 +105,12 @@ export default config({
             instagram: fields.url({ label: 'Instagram' }),
             linkedin: fields.url({ label: 'LinkedIn' }),
             googleReviewsUrl: fields.url({
-              label: 'URL profilo Google (recensioni)',
-              description: 'Link al profilo Google Business per le recensioni.',
+              label: 'URL recensioni Google',
+              description: 'Link al profilo Google Business usato per recensioni e CTA "Google".',
+            }),
+            googleMapsUrl: fields.url({
+              label: 'URL Google Maps',
+              description: 'Link mappa/sede usato nel footer e nelle landing page.',
             }),
           },
           { label: 'Social Media' }
@@ -148,6 +152,56 @@ export default config({
           },
           { label: 'Dati legali' }
         ),
+
+        // ── NAVIGAZIONE ──────────────────────────────────────────────────
+        nav: fields.object(
+          {
+            portfolioLabel: fields.text({
+              label: 'Voce nav — Portfolio',
+              defaultValue: 'Portfolio',
+            }),
+            portfolioMegaDesc: fields.text({
+              label: 'Megamenu Portfolio — descrizione',
+              defaultValue: 'I nostri lavori per ogni cliente',
+            }),
+            aboutLabel: fields.text({
+              label: 'Voce nav — Chi siamo',
+              defaultValue: 'Chi siamo',
+            }),
+            aboutMegaDesc: fields.text({
+              label: 'Megamenu Chi siamo — descrizione',
+              defaultValue: 'Storytelling, team & servizi',
+            }),
+            articlesLabel: fields.text({
+              label: 'Voce nav — Articoli',
+              defaultValue: 'Articoli',
+            }),
+            contactLabel: fields.text({
+              label: 'Voce nav — Contatti (CTA)',
+              defaultValue: 'Contatti',
+            }),
+          },
+          { label: 'Navigazione' }
+        ),
+
+        // ── FOOTER ───────────────────────────────────────────────────────
+        footer: fields.object(
+          {
+            eyebrow: fields.text({
+              label: 'Eyebrow (sopra la email gigante)',
+              defaultValue: 'Parliamone',
+            }),
+            tagline: fields.text({
+              label: 'Tagline brand (sotto il logo)',
+              defaultValue: 'Communication · Marketing · Social · Branding',
+            }),
+            siteCredit: fields.text({
+              label: 'Credito design (in basso a destra)',
+              defaultValue: 'Site design — REAL GOES VIRAL',
+            }),
+          },
+          { label: 'Footer' }
+        ),
       },
     }),
 
@@ -165,6 +219,65 @@ export default config({
             description: fields.text({ label: 'Descrizione SEO', multiline: true }),
           },
           { label: 'SEO' }
+        ),
+
+        // ── HERO ─────────────────────────────────────────────────────────
+        hero: fields.object(
+          {
+            badge: fields.text({
+              label: 'Badge (etichetta in alto a sinistra)',
+              defaultValue: '01 / HOMEPAGE',
+            }),
+            location: fields.text({
+              label: 'Testo location (in alto a destra, usa ↵ per a capo)',
+              multiline: true,
+              defaultValue: 'BOLOGNA · MODENA — IT\nMOTOR VALLEY',
+            }),
+            titleLine1: fields.text({
+              label: 'Titolo — Riga 1',
+              defaultValue: 'REAL',
+            }),
+            titleLine2: fields.text({
+              label: 'Titolo — Riga 2',
+              defaultValue: 'GOES',
+            }),
+            titleLine3: fields.text({
+              label: 'Titolo — Riga 3',
+              defaultValue: 'VIRAL',
+            }),
+            tagline: fields.text({
+              label: 'Tagline (sotto il titolo)',
+              defaultValue: 'Agenzia di comunicazione & marketing.',
+            }),
+            ctaLabel: fields.text({
+              label: 'Testo CTA',
+              defaultValue: 'Prenota una Call',
+            }),
+            ctaHref: fields.text({
+              label: 'Destinazione CTA',
+              defaultValue: '#contatti',
+            }),
+            scrollLabel: fields.text({
+              label: 'Testo Scroll',
+              defaultValue: 'Scroll',
+            }),
+            scrollHref: fields.text({
+              label: 'Destinazione Scroll (ancora)',
+              defaultValue: '#manifesto',
+            }),
+          },
+          { label: 'Hero' }
+        ),
+
+        // ── MARQUEE ──────────────────────────────────────────────────────
+        marquee: fields.object(
+          {
+            text: fields.text({
+              label: 'Testo del marquee (ripetuto in loop)',
+              defaultValue: 'REAL GOES VIRAL',
+            }),
+          },
+          { label: 'Marquee (banda animata)' }
         ),
 
         manifesto: fields.object(
@@ -206,6 +319,26 @@ export default config({
           { label: 'Manifesto (Chi siamo)' }
         ),
 
+        // ── PORTFOLIO SECTION HEADER ──────────────────────────────────────
+        portfolioSection: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '02 — Portfolio' }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'I lavori migliori, cliente per cliente.',
+            }),
+            ctaLabel: fields.text({
+              label: 'Testo CTA (bottone accanto al titolo)',
+              defaultValue: 'Il tuo prossimo',
+            }),
+            ctaHref: fields.text({
+              label: 'Destinazione CTA',
+              defaultValue: '#contatti',
+            }),
+          },
+          { label: 'Sezione Portfolio (intestazione)' }
+        ),
+
         servicesList: fields.array(
           fields.object({
             num: fields.text({ label: 'Numero (es. 01)', defaultValue: '01' }),
@@ -226,6 +359,24 @@ export default config({
             itemLabel: (props) =>
               `${props.fields.num.value} — ${props.fields.title.value}`,
           }
+        ),
+
+        // ── SERVICES SECTION HEADER ───────────────────────────────────────
+        servicesSection: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '03 — Servizi' }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'Quello che facciamo, ogni giorno.',
+            }),
+            intro: fields.text({
+              label: 'Testo introduttivo (colonna destra)',
+              multiline: true,
+              defaultValue:
+                'Un reparto marketing esterno, completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand.',
+            }),
+          },
+          { label: 'Sezione Servizi (intestazione)' }
         ),
 
         clients: fields.array(fields.text({ label: 'Nome cliente' }), {
@@ -268,6 +419,22 @@ export default config({
           }
         ),
 
+        // ── TEAM SECTION HEADER ───────────────────────────────────────────
+        teamSection: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '04 — Team' }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'Persone vere dietro ogni post.',
+            }),
+            subtitle: fields.text({
+              label: 'Sottotitolo (colonna destra)',
+              defaultValue: 'Un team piccolo, selezionato, ossessionato dal risultato.',
+            }),
+          },
+          { label: 'Sezione Team (intestazione)' }
+        ),
+
         reviews: fields.array(
           fields.object({
             quote: fields.text({ label: 'Citazione', multiline: true }),
@@ -285,6 +452,38 @@ export default config({
           }
         ),
 
+        // ── REVIEWS SECTION HEADER ────────────────────────────────────────
+        reviewsSection: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '05 — Recensioni' }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'Lo dicono i nostri clienti.',
+            }),
+          },
+          { label: 'Sezione Recensioni (intestazione)' }
+        ),
+
+        // ── ARTICLES SECTION HEADER ───────────────────────────────────────
+        articlesSection: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '06 — Articoli' }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'Interviste & approfondimenti.',
+            }),
+            ctaLabel: fields.text({
+              label: 'Testo CTA (bottone accanto al titolo)',
+              defaultValue: 'Suggeriscine uno',
+            }),
+            ctaHref: fields.text({
+              label: 'Destinazione CTA',
+              defaultValue: '#contatti',
+            }),
+          },
+          { label: 'Sezione Articoli (intestazione)' }
+        ),
+
         social: fields.object(
           {
             title: fields.text({
@@ -297,8 +496,16 @@ export default config({
 
         contact: fields.object(
           {
+            eyebrow: fields.text({
+              label: 'Eyebrow',
+              defaultValue: '07 — Contatti',
+            }),
+            title: fields.text({
+              label: 'Titolo sezione',
+              defaultValue: 'Prenota una call.',
+            }),
             description: fields.text({
-              label: 'Testo introduttivo (sopra il form contatti)',
+              label: 'Testo introduttivo (sopra i bottoni contatto)',
               multiline: true,
             }),
             showWhatsapp: fields.checkbox({
@@ -487,6 +694,138 @@ export default config({
             },
           },
         }),
+      },
+    }),
+
+    // ──────────────────────────────────────────────────────────────────────
+    // Pagine SEO / Landing Pages
+    // ──────────────────────────────────────────────────────────────────────
+    landingPages: collection({
+      label: 'Pagine SEO',
+      slugField: 'title',
+      path: 'content/landing-pages/*',
+      format: { data: 'json' },
+      schema: {
+        title: fields.slug({
+          name: {
+            label: 'Nome pagina / slug URL',
+            description: 'Es. "agenzia-marketing-modena" → URL /agenzia-marketing-modena',
+          },
+        }),
+
+        seoTitle: fields.text({ label: 'Titolo SEO' }),
+        seoDescription: fields.text({
+          label: 'Meta Description',
+          multiline: true,
+        }),
+
+        // ── HERO ──────────────────────────────────────────────────────────
+        hero: fields.object(
+          {
+            eyebrow: fields.text({
+              label: 'Eyebrow (es. Marketing Digitale · Modena)',
+            }),
+            titleLine1: fields.text({
+              label: 'Titolo — Riga 1 (normale)',
+              description: 'Es. "Agenzia di Marketing"',
+            }),
+            titleLine2: fields.text({
+              label: 'Titolo — Riga 2 (in colore accent)',
+              description: 'Es. "a Modena" — appare in giallo/electric',
+            }),
+            intro: fields.text({
+              label: 'Testo introduttivo',
+              multiline: true,
+            }),
+            ctaLabel: fields.text({
+              label: 'Testo CTA principale',
+              defaultValue: 'Richiedi una consulenza',
+            }),
+          },
+          { label: 'Hero' }
+        ),
+
+        // ── SEZIONE SERVIZI ────────────────────────────────────────────────
+        services: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: 'I nostri servizi' }),
+            title: fields.text({ label: 'Titolo sezione' }),
+            items: fields.array(
+              fields.object({
+                title: fields.text({ label: 'Titolo servizio' }),
+                desc: fields.text({ label: 'Descrizione', multiline: true }),
+              }),
+              {
+                label: 'Servizi',
+                itemLabel: (props) => props.fields.title.value || '(nuovo)',
+              }
+            ),
+          },
+          { label: 'Sezione Servizi' }
+        ),
+
+        // ── SEZIONE APPROCCIO ──────────────────────────────────────────────
+        approach: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: 'Il nostro approccio' }),
+            title: fields.text({ label: 'Titolo' }),
+            cities: fields.array(
+              fields.text({ label: 'Città' }),
+              {
+                label: 'Città servite (opzionale, mostrate come tag colorati)',
+                itemLabel: (props) => props.value || '(vuota)',
+              }
+            ),
+            body1: fields.text({
+              label: 'Paragrafo 1',
+              multiline: true,
+            }),
+            body2: fields.text({
+              label: 'Paragrafo 2',
+              multiline: true,
+            }),
+          },
+          { label: 'Sezione Approccio' }
+        ),
+
+        // ── CTA FINALE ─────────────────────────────────────────────────────
+        cta: fields.object(
+          {
+            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: 'Parti adesso' }),
+            title: fields.text({ label: 'Titolo' }),
+            body: fields.text({ label: 'Testo', multiline: true }),
+            ctaLabel: fields.text({
+              label: 'Testo bottone principale',
+              defaultValue: 'Consulenza gratuita',
+            }),
+            ctaEmailLabel: fields.text({
+              label: 'Testo bottone email (vuoto = usa indirizzo email)',
+              defaultValue: '',
+              description: 'Lascia vuoto per mostrare direttamente l\'indirizzo email.',
+            }),
+          },
+          { label: 'CTA finale' }
+        ),
+
+        // ── SCHEMA.ORG ─────────────────────────────────────────────────────
+        schemaService: fields.object(
+          {
+            serviceType: fields.text({
+              label: 'Tipo di servizio (schema.org)',
+              defaultValue: 'Digital Marketing',
+            }),
+            serviceName: fields.text({ label: 'Nome servizio (schema.org)' }),
+            serviceDescription: fields.text({
+              label: 'Descrizione servizio (schema.org)',
+              multiline: true,
+            }),
+            areaServed: fields.text({
+              label: 'Area servita (es. Modena, Emilia-Romagna)',
+              defaultValue: 'Modena',
+            }),
+          },
+          { label: 'Schema.org (SEO strutturato)' }
+        ),
       },
     }),
   },

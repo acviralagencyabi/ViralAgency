@@ -1,0 +1,44 @@
+{
+  "title": "gestione-social-media-emilia-romagna",
+  "seoTitle": "Gestione Social Media Emilia-Romagna | Viral Digital Agency",
+  "seoDescription": "Gestione professionale dei social media in tutta l'Emilia-Romagna. Viral Digital Agency segue aziende di Modena, Bologna, Reggio Emilia, Parma e dintorni.",
+  "hero": {
+    "eyebrow": "Social Media · Emilia-Romagna",
+    "titleLine1": "Gestione Social Media",
+    "titleLine2": "in Emilia-Romagna",
+    "intro": "Con sedi a Modena e Bologna, seguiamo aziende in tutta la regione. Che tu sia a Reggio Emilia, Parma, Ferrara o Rimini: il nostro team porta i tuoi social al livello che meriti.",
+    "ctaLabel": "Parliamo del tuo progetto"
+  },
+  "services": {
+    "eyebrow": "Servizi Social",
+    "title": "Gestione social media a 360° per aziende emiliane e romagnole.",
+    "items": [
+      { "title": "Social Media Strategy", "desc": "Piano editoriale annuale, definizione del tono di voce e degli obiettivi per ogni canale social della tua azienda." },
+      { "title": "Contenuti Originali", "desc": "Foto, video, reel, caroselli e stories creati dal nostro team per far risaltare il tuo brand in Emilia-Romagna e oltre." },
+      { "title": "Meta Ads & TikTok Ads", "desc": "Campagne pubblicitarie sui social con targeting preciso per il pubblico di Modena, Bologna, Reggio Emilia e dintorni." },
+      { "title": "Gestione Community", "desc": "Rispondiamo a commenti e messaggi, gestiamo le crisi, costruiamo relazioni reali con i tuoi follower." },
+      { "title": "Influencer & Creator", "desc": "Collaborazioni con creator dell'Emilia-Romagna selezionati per coerenza con il tuo brand e audience reale." },
+      { "title": "Reporting Mensile", "desc": "Ogni mese un report completo con i dati che contano: crescita, engagement, click, conversioni, ROI delle campagne." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Copertura regionale",
+    "title": "Siamo ovunque ci siano aziende emiliane e romagnole da far crescere.",
+    "cities": ["Modena", "Bologna", "Reggio Emilia", "Parma", "Ferrara", "Ravenna", "Forlì", "Rimini", "Piacenza"],
+    "body1": "L'Emilia-Romagna è una delle regioni più produttive d'Italia, con un tessuto imprenditoriale fatto di PMI eccellenti in ogni settore. Molte di queste aziende hanno una presenza social minima o assente, perdendo ogni giorno opportunità di visibilità, contatti commerciali e fidelizzazione dei clienti già acquisiti.",
+    "body2": "Non serve essere fisicamente vicini per fare un buon lavoro: con videocall, strumenti collaborativi e la nostra rete creativa, seguiamo clienti in tutto il territorio regionale con la stessa qualità e attenzione dei clienti locali. Ma quando serve, siamo lì."
+  },
+  "cta": {
+    "eyebrow": "Da dove sei",
+    "title": "Ovunque tu sia in Emilia-Romagna, possiamo lavorare insieme.",
+    "body": "Scrivici. Ti rispondiamo entro 24 ore con una proposta concreta per la tua azienda.",
+    "ctaLabel": "Contattaci ora",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Social Media Management",
+    "serviceName": "Gestione Social Media Emilia-Romagna",
+    "serviceDescription": "Gestione professionale dei social media per aziende di tutta l'Emilia-Romagna: Modena, Bologna, Reggio Emilia, Parma e oltre.",
+    "areaServed": "Emilia-Romagna"
+  }
+}

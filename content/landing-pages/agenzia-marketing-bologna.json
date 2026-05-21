@@ -1,0 +1,44 @@
+{
+  "title": "agenzia-marketing-bologna",
+  "seoTitle": "Agenzia di Marketing Bologna | Viral Digital Agency",
+  "seoDescription": "Agenzia di marketing digitale a Bologna. Performance marketing, social media, branding e video per aziende bolognesi in crescita. Sede a V.le Pietramellara, Bologna.",
+  "hero": {
+    "eyebrow": "Marketing Digitale · Bologna",
+    "titleLine1": "Agenzia di Marketing",
+    "titleLine2": "a Bologna",
+    "intro": "Il nostro HQ è a Bologna. Da qui gestiamo brand in tutta l'Emilia-Romagna e in Italia, con un team che unisce creatività bolognese e rigore data-driven. Ogni progetto è una storia vera da raccontare.",
+    "ctaLabel": "Parliamo del tuo progetto"
+  },
+  "services": {
+    "eyebrow": "Cosa offriamo",
+    "title": "Servizi di marketing completi per aziende di Bologna.",
+    "items": [
+      { "title": "Social Media Marketing", "desc": "Gestione completa di Instagram, Facebook, TikTok e LinkedIn per aziende bolognesi con contenuti creati ad hoc." },
+      { "title": "Google & Meta Ads", "desc": "Campagne pubblicitarie a pagamento ottimizzate per il mercato di Bologna, dall'e-commerce al locale." },
+      { "title": "Brand Identity", "desc": "Logo, palette, tipografia e sistema visivo coerente per far riconoscere il tuo brand in tutta Bologna." },
+      { "title": "Video Production", "desc": "Video per social, reel, spot e video istituzionali prodotti dal nostro team con riprese a Bologna." },
+      { "title": "Siti & Landing Page", "desc": "Presenza digitale curata: siti vetrina, landing page ad alta conversione, ottimizzazione per Bologna e dintorni." },
+      { "title": "Consulenza Strategica", "desc": "Analisi del tuo mercato a Bologna, dei competitor e dei margini di crescita. Poi costruiamo un piano d'azione." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Perché sceglierci a Bologna",
+    "title": "Bologna è una piazza esigente. Noi la conosciamo bene.",
+    "cities": [],
+    "body1": "Bologna è un mercato dinamico: università, startup, PMI storiche, retail e ristorazione di eccellenza. La concorrenza è alta e il pubblico bolognese è attento e selettivo. Le campagne generiche non funzionano qui. Serve conoscenza del territorio e dei suoi consumatori.",
+    "body2": "Con il nostro headquarter nel cuore di Bologna, siamo presenti ogni volta che serve un incontro, una ripresa o una sessione di strategia. Lavoriamo con aziende bolognesi di ogni settore e dimensione, portando risultati misurabili nel tempo."
+  },
+  "cta": {
+    "eyebrow": "Siamo qui",
+    "title": "Lavoriamo insieme a Bologna per portare il tuo brand ovunque.",
+    "body": "Scrivici o chiamaci per una prima chiacchierata. Nessun impegno, tante idee.",
+    "ctaLabel": "Contattaci a Bologna",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Digital Marketing",
+    "serviceName": "Marketing Digitale Bologna",
+    "serviceDescription": "Agenzia di marketing digitale con sede a Bologna. Social media, advertising, branding e video per aziende bolognesi.",
+    "areaServed": "Bologna"
+  }
+}

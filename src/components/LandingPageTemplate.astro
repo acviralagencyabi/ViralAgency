@@ -1,0 +1,258 @@
+---
+/**
+ * LandingPageTemplate.astro
+ * Template condiviso per tutte le pagine SEO / landing page.
+ * I dati vengono iniettati via `data` prop (da content/landing-pages/*.json).
+ * Contatti e sedi sono letti da global.json e homepage.json (unica fonte di verità).
+ */
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+import homepage from '../../content/pages/homepage.json';
+
+interface ServiceItem {
+  title: string;
+  desc: string;
+}
+
+interface LandingData {
+  seoTitle: string;
+  seoDescription: string;
+  hero: {
+    eyebrow: string;
+    titleLine1: string;
+    titleLine2: string;
+    intro: string;
+    ctaLabel: string;
+  };
+  services: {
+    eyebrow: string;
+    title: string;
+    items: ServiceItem[];
+  };
+  approach: {
+    eyebrow: string;
+    title: string;
+    cities?: string[];
+    body1: string;
+    body2: string;
+  };
+  cta: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    ctaLabel: string;
+    ctaEmailLabel?: string;
+  };
+  schemaService?: {
+    serviceType: string;
+    serviceName: string;
+    serviceDescription: string;
+    areaServed: string;
+  };
+}
+
+interface Props {
+  data: LandingData;
+}
+
+const { data } = Astro.props;
+
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const mapsUrl =
+  (globalSettings.social as any)?.googleMapsUrl ||
+  (globalSettings.social as any)?.googleReviewsUrl ||
+  '';
+const BASE = import.meta.env.BASE_URL;
+const locations = (homepage as any).locations ?? [];
+
+// Schema.org dinamico dalla globalSettings + dati della pagina
+const businessAddresses = locations.map((loc: any) => ({
+  '@type': 'PostalAddress',
+  streetAddress: loc.address?.split(',')[0]?.trim() || '',
+  addressLocality: loc.city || '',
+  addressCountry: 'IT',
+}));
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'LocalBusiness',
+      '@id': 'https://viralagency.it/#business',
+      name: globalSettings.companyName,
+      url: 'https://viralagency.it',
+      telephone: (globalSettings.contact?.phone || '').replace(/\s/g, '').replace('+', ''),
+      email: globalSettings.contact?.email || '',
+      hasMap: mapsUrl || undefined,
+      address: businessAddresses.length > 0 ? businessAddresses : undefined,
+      priceRange: '€€',
+    },
+    ...(data.schemaService
+      ? [
+          {
+            '@type': 'Service',
+            name: data.schemaService.serviceName,
+            serviceType: data.schemaService.serviceType,
+            provider: { '@id': 'https://viralagency.it/#business' },
+            areaServed: data.schemaService.areaServed,
+            description: data.schemaService.serviceDescription,
+          },
+        ]
+      : []),
+  ],
+});
+---
+
+<Layout title={data.seoTitle} description={data.seoDescription}>
+  <div class="pt-28 md:pt-40">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         HERO
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">{data.hero.eyebrow}</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          {data.hero.titleLine1}<br />
+          <em class="not-italic text-[var(--electric)]">{data.hero.titleLine2}</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          {data.hero.intro}
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a
+            href={`${BASE}#contatti`}
+            class="btn-primary magnetic-btn"
+            data-cursor="parliamo"
+          >
+            {data.hero.ctaLabel}
+          </a>
+          <a href={`tel:${phone.replace(/\s/g, '')}`} class="btn-outline">{phone}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SERVIZI
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">{data.services.eyebrow}</p>
+        <h2 class="section-title mt-3 max-w-3xl">{data.services.title}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {data.services.items.map((s) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{s.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         APPROCCIO
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">{data.approach.eyebrow}</p>
+        <h2 class="section-title mt-3 max-w-3xl">{data.approach.title}</h2>
+
+        {data.approach.cities && data.approach.cities.length > 0 && (
+          <div class="flex flex-wrap gap-3 mt-8">
+            {data.approach.cities.map((city) => (
+              <span class="reveal px-4 py-2 border border-[var(--hairline)] text-sm font-medium text-[var(--ink)] rounded-sm">
+                {city}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          {data.approach.body1 && (
+            <p class="text-[var(--muted)] leading-relaxed reveal">{data.approach.body1}</p>
+          )}
+          {data.approach.body2 && (
+            <p class="text-[var(--muted)] leading-relaxed reveal">{data.approach.body2}</p>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SEDI (dati da global + homepage — unica fonte di verità)
+         ═══════════════════════════════════════════════════════════════════ -->
+    {locations.length > 0 && (
+      <section class="section section-dark">
+        <div class="container-custom">
+          <p class="eyebrow reveal">Dove siamo</p>
+          <h2 class="section-title mt-3">
+            {locations.map((l: any) => l.city).join(' e ')} — il nostro team è qui.
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+            {locations.map((loc: any) => (
+              <div class="reveal">
+                <p class="mono-label text-white/60 mb-4">
+                  {loc.tag} — {loc.city}
+                </p>
+                <address class="not-italic space-y-1 text-[var(--paper)]">
+                  <strong class="block text-lg">{globalSettings.companyName}</strong>
+                  {loc.address && (
+                    <span class="block text-white/80">{loc.address}</span>
+                  )}
+                  <a
+                    href={`tel:${phone.replace(/\s/g, '')}`}
+                    class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4"
+                  >
+                    {phone}
+                  </a>
+                  <a
+                    href={`mailto:${email}`}
+                    class="block text-white/80 hover:text-[var(--electric)] transition-colors"
+                  >
+                    {email}
+                  </a>
+                </address>
+                {mapsUrl && (
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline"
+                  >
+                    Vedi su Google Maps ↗
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CTA FINALE
+         ═══════════════════════════════════════════════════════════════════ -->
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">{data.cta.eyebrow}</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">{data.cta.title}</h2>
+        {data.cta.body && (
+          <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">
+            {data.cta.body}
+          </p>
+        )}
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">{data.cta.ctaLabel}</a>
+          <a href={`mailto:${email}`} class="btn-outline">
+            {data.cta.ctaEmailLabel || email}
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>
