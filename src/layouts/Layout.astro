@@ -133,8 +133,8 @@ const schemaOrg = {
           const len = target.length;
           const queue: { to: string; end: number }[] = [];
           for (let i = 0; i < len; i++) {
-            // Slower: ~250ms → ~1100ms per letter at 60fps
-            const end = 15 + Math.floor(Math.random() * 50);
+            // Fast: ~120ms → ~480ms per letter at 60fps
+            const end = 7 + Math.floor(Math.random() * 22);
             queue.push({ to: target[i], end });
           }
 
@@ -335,7 +335,7 @@ const schemaOrg = {
               node: n as Text,
               queue: [...text].map((ch) => ({
                 to: ch,
-                end: Math.round((14 + Math.floor(Math.random() * 38)) * speed),
+                end: Math.round((7 + Math.floor(Math.random() * 18)) * speed),
               })),
             });
           }
@@ -376,7 +376,7 @@ const schemaOrg = {
             entries.forEach((entry) => {
               if (!entry.isIntersecting) return;
               const el = entry.target as HTMLElement;
-              scrambleRoot(el, 1);
+              scrambleRoot(el, 0.5);
               io.unobserve(el);
             });
           },

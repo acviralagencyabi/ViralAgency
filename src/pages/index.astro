@@ -241,34 +241,6 @@ const link = (path: string) => {
   </section>
 
   <!-- =======================================================================
-       CLIENTI
-       ======================================================================= -->
-  <section id="clienti" class="section-tight section-divider">
-    <div class="container-custom">
-      <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
-        <div class="reveal-left">
-          <p class="eyebrow">— Clienti</p>
-          <h2 class="section-title mt-3 max-w-2xl text-[clamp(1.6rem,3.5vw,2.8rem)]">Brand che ci hanno scelto.</h2>
-        </div>
-        <p class="mono-label text-[var(--muted)] max-w-xs">
-          Una selezione di chi ha visto crescere i propri numeri lavorando con noi.
-        </p>
-      </div>
-
-      <ul class="clients-grid stagger-children">
-        {clients.map((name: string) => (
-          <li>
-            <a href="#contatti" class="client-cell" data-cursor="prossimo">
-              <span class="client-name">{name}</span>
-              <span class="client-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- =======================================================================
        PORTFOLIO — griglia asimmetrica con video hover
        ======================================================================= -->
   <section id="portfolio" class="section section-dark">

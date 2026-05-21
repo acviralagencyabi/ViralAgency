@@ -1243,10 +1243,11 @@ html.lenis, html.lenis body { height: auto; }
    distributed column-by-column.
    ========================================================================= */
 .portfolio-grid {
-  column-count: 2;
-  column-gap: clamp(0.6rem, 1.2vw, 1rem);
+  column-count: 1;
+  column-gap: 0.5rem;
 }
-@media (min-width: 768px)  { .portfolio-grid { column-count: 3; } }
+@media (min-width: 480px) { .portfolio-grid { column-count: 2; column-gap: clamp(0.5rem, 1vw, 0.75rem); } }
+@media (min-width: 768px)  { .portfolio-grid { column-count: 3; column-gap: clamp(0.6rem, 1.2vw, 1rem); } }
 @media (min-width: 1100px) { .portfolio-grid { column-count: 4; } }
 
 .pf-card {
@@ -1259,14 +1260,19 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--paper);
   display: block;
   width: 100%;
-  margin-bottom: clamp(0.6rem, 1.2vw, 1rem);
+  margin-bottom: 0.5rem;
   break-inside: avoid;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   aspect-ratio: 3 / 4;
   transition: transform 0.45s var(--ease-out);
+  border-radius: 4px;
 }
+@media (min-width: 480px) { .pf-card { margin-bottom: clamp(0.5rem, 1vw, 0.75rem); } }
+@media (min-width: 768px)  { .pf-card { margin-bottom: clamp(0.6rem, 1.2vw, 1rem); border-radius: 0; } }
 .pf-card.pf-tall { aspect-ratio: 9 / 16; }
+/* On mobile single-column, tall cards are too long — use 3:4 instead */
+@media (max-width: 479px) { .pf-card.pf-tall { aspect-ratio: 3 / 4; } }
 /* Backwards-compat: any legacy size collapses to regular */
 .pf-card.pf-wide,
 .pf-card.pf-featured { aspect-ratio: 3 / 4; }
@@ -1308,6 +1314,13 @@ html.lenis, html.lenis body { height: auto; }
 @media (hover: none) {
   .pf-card.is-playing .pf-video { opacity: 1; }
   .pf-card.is-playing .pf-poster { opacity: 0; }
+  /* Always show play indicator so the card looks tappable */
+  .pf-play { opacity: 0.8; transform: scale(1); }
+  /* Larger tap target on mobile */
+  .pf-play { width: 2.8rem; height: 2.8rem; }
+  /* Meta text: slightly larger on mobile for readability */
+  .pf-card .meta .title { font-size: 0.95rem; }
+  .pf-card .meta { padding: 0.8rem 1rem; }
 }
 
 .pf-play {
