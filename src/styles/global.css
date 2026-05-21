@@ -517,6 +517,27 @@ button:hover .btn-arrow,
 .stagger-children.active > *:nth-child(8) { transition-delay: 0.54s; }
 .stagger-children.active > *:nth-child(9) { transition-delay: 0.61s; }
 
+/* =========================================================================
+   Word-reveal — section titles slide up word by word (.sf-active via JS)
+   .wr  = outer clip container (overflow:hidden)
+   .wr-i = inner word, starts below and rises on .sf-active
+   ========================================================================= */
+.wr {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: inherit;
+  /* Prevent descender clipping */
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.wr-i {
+  display: inline-block;
+  transform: translateY(115%);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sf-active .wr-i { transform: translateY(0); }
+
 /* Text line reveal (masked) */
 .line-reveal {
   display: inline-block;
@@ -1257,16 +1278,30 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* =========================================================================
-   Portfolio — Pinterest masonry via CSS columns (no gaps, ever)
-   Vertical-video friendly: regular 3:4, tall 9:16. Items keep source order
-   distributed column-by-column.
+   Portfolio — two explicit flex columns with offset for true masonry stagger.
+   Each column is a flex-column; the second column has a top margin so cards
+   never line up with those in column 1.
    ========================================================================= */
-.portfolio-grid {
-  column-count: 2;
-  column-gap: clamp(0.4rem, 1vw, 0.75rem);
+.pf-masonry {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.4rem, 1vw, 0.75rem);
 }
-@media (min-width: 768px)  { .portfolio-grid { column-count: 3; column-gap: clamp(0.6rem, 1.2vw, 1rem); } }
-@media (min-width: 1100px) { .portfolio-grid { column-count: 4; } }
+.pf-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 1vw, 0.75rem);
+}
+/* Second column pushed down: guarantees stagger regardless of card heights */
+.pf-col-b {
+  margin-top: clamp(1.5rem, 5vw, 3.5rem);
+}
+@media (min-width: 768px) {
+  .pf-masonry,
+  .pf-col { gap: clamp(0.75rem, 1.5vw, 1.2rem); }
+  .pf-col-b { margin-top: clamp(3.5rem, 7vw, 6rem); }
+}
 
 .pf-card {
   position: relative;
@@ -1278,17 +1313,12 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--paper);
   display: block;
   width: 100%;
-  margin-bottom: clamp(0.4rem, 1vw, 1rem);
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
   aspect-ratio: 3 / 4;
   transition: transform 0.45s var(--ease-out);
   border-radius: 3px;
 }
-@media (min-width: 768px)  { .pf-card { border-radius: 0; } }
-.pf-card.pf-tall { aspect-ratio: 9 / 16; }
-/* pf-short: square-ish cards for extra variety in the masonry */
+@media (min-width: 768px) { .pf-card { border-radius: 0; } }
+.pf-card.pf-tall  { aspect-ratio: 9 / 16; }
 .pf-card.pf-short { aspect-ratio: 1 / 1; }
 /* Backwards-compat: any legacy size collapses to regular */
 .pf-card.pf-wide,

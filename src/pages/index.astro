@@ -60,6 +60,10 @@ const portfolio = Object.entries(portfolioFiles)
   .filter((p) => p.featured && p.videoSrc)
   .sort((a, b) => a.order - b.order);
 
+// Split portfolio into two columns for true masonry stagger
+const pfCol1 = portfolio.filter((_, i) => i % 2 === 0);
+const pfCol2 = portfolio.filter((_, i) => i % 2 !== 0);
+
 // ---------- Homepage content (tutto editabile via Keystatic) ----------
 const H: any = homepage;
 const manifesto = H.manifesto;
@@ -259,48 +263,55 @@ const link = (path: string) => {
         </a>
       </div>
 
-      <div class="portfolio-grid stagger-children" id="portfolio-grid">
-        {portfolio.map((item, index) => (
-          <button
-            type="button"
-            class={`portfolio-card pf-card pf-${item.gridSize}`}
-            data-index={index}
-            data-video={item.videoSrc}
-            data-cursor="apri"
-            aria-label={`Apri ${item.brand}`}
-          >
-            <div class="pf-media">
-              {item.poster && (
-                <Image
-                  src={item.poster}
-                  alt={item.brand}
-                  class="pf-poster"
-                  loading="lazy"
-                  width={800}
-                  height={1000}
-                />
-              )}
-              <video
-                class="pf-video"
-                src={item.videoSrc}
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                aria-hidden="true"
-              ></video>
-              <span class="pf-play" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><polygon points="7,5 19,12 7,19"/></svg>
-              </span>
-            </div>
-            <div class="meta">
-              <div>
-                <span class="tag">{item.categoryLabel}</span>
-                <span class="title block mt-1">{item.brand}</span>
-              </div>
-              <span class="tag">↗</span>
-            </div>
-          </button>
+      <div class="pf-masonry" id="portfolio-grid">
+        {[pfCol1, pfCol2].map((col, colIdx) => (
+          <div class={colIdx === 1 ? 'pf-col pf-col-b' : 'pf-col'}>
+            {col.map((item) => {
+              const index = portfolio.indexOf(item);
+              return (
+                <button
+                  type="button"
+                  class={`portfolio-card pf-card pf-${item.gridSize}`}
+                  data-index={index}
+                  data-video={item.videoSrc}
+                  data-cursor="apri"
+                  aria-label={`Apri ${item.brand}`}
+                >
+                  <div class="pf-media">
+                    {item.poster && (
+                      <Image
+                        src={item.poster}
+                        alt={item.brand}
+                        class="pf-poster"
+                        loading="lazy"
+                        width={800}
+                        height={1000}
+                      />
+                    )}
+                    <video
+                      class="pf-video"
+                      src={item.videoSrc}
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                      aria-hidden="true"
+                    ></video>
+                    <span class="pf-play" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><polygon points="7,5 19,12 7,19"/></svg>
+                    </span>
+                  </div>
+                  <div class="meta">
+                    <div>
+                      <span class="tag">{item.categoryLabel}</span>
+                      <span class="title block mt-1">{item.brand}</span>
+                    </div>
+                    <span class="tag">↗</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         ))}
       </div>
     </div>

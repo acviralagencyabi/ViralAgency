@@ -398,22 +398,7 @@ const schemaOrg = {
           requestAnimationFrame(tick);
         };
 
-        // ── Section titles: fire on scroll into viewport ──────────────────────
-        const targets = document.querySelectorAll<HTMLElement>('.section-title');
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              splitFlapRoot(entry.target as HTMLElement, 3, 5);
-              io.unobserve(entry.target);
-            });
-          },
-          { threshold: 0.35 }
-        );
-        targets.forEach((el) => io.observe(el));
-
-        // ── Hero h-display: fire after intro overlay begins to fade (~1.2s) ───
-        // stagger=6 (~100ms/char) spreads the reveal across the overlay fade.
+        // ── Hero h-display only: fire after intro overlay begins to fade ──────
         const heroEl = document.querySelector<HTMLElement>('[data-flap-hero]');
         if (heroEl) {
           setTimeout(() => {
@@ -421,6 +406,57 @@ const schemaOrg = {
             splitFlapRoot(heroEl, 6, 5);
           }, 1200);
         }
+      }
+
+      // ---------- Word-by-word reveal on section titles (scroll-triggered) ----
+      // Each word slides up from behind its overflow:hidden container.
+      // Pure CSS transition, no text mutation, works on all pages.
+      {
+        const wrapWords = (el: HTMLElement) => {
+          const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+          const nodes: Text[] = [];
+          let n: Node | null;
+          while ((n = walker.nextNode())) {
+            if (((n as Text).textContent || '').trim()) nodes.push(n as Text);
+          }
+          let wi = 0;
+          nodes.forEach((node) => {
+            const parts = (node.textContent || '').split(/(\s+)/);
+            const frag  = document.createDocumentFragment();
+            parts.forEach((part) => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) {
+                frag.appendChild(document.createTextNode(part));
+              } else {
+                const outer = document.createElement('span');
+                outer.className = 'wr';
+                const inner = document.createElement('span');
+                inner.className = 'wr-i';
+                inner.style.transitionDelay = `${wi * 0.07}s`;
+                inner.textContent = part;
+                outer.appendChild(inner);
+                frag.appendChild(outer);
+                wi++;
+              }
+            });
+            node.parentNode?.replaceChild(frag, node);
+          });
+        };
+
+        const io2 = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              wrapWords(el);
+              requestAnimationFrame(() => el.classList.add('sf-active'));
+              io2.unobserve(el);
+            });
+          },
+          { threshold: 0.3 }
+        );
+        document.querySelectorAll<HTMLElement>('.section-title')
+          .forEach((el) => io2.observe(el));
       }
     </script>
   </body>
