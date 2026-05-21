@@ -1370,6 +1370,54 @@ html.lenis, html.lenis body { height: auto; }
   /* Meta text: slightly larger on mobile for readability */
   .pf-card .meta .title { font-size: 0.95rem; }
   .pf-card .meta { padding: 0.8rem 1rem; }
+
+  /* ── GPU / black-flash fix ───────────────────────────────────────────────
+     On mobile, every translateZ(0) + transition:transform + backdrop-filter
+     creates a separate compositor layer. With 8+ cards the GPU texture budget
+     is exhausted → unpainted tiles flash BLACK while scrolling.
+     Solution: strip every compositing-promotion we don't need on touch.       */
+
+  /* Cards: no hover animation on touch → no compositor layer needed */
+  .pf-card {
+    transition: none;
+    will-change: auto;
+  }
+
+  /* Videos: remove translateZ GPU-promote trick.
+     It creates one compositor layer per video even when opacity:0,
+     exhausting mobile VRAM on scroll. The poster covers it anyway. */
+  .pf-video {
+    transform: none;
+    -webkit-transform: none;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+  }
+
+  /* poster + video: transition only opacity, drop the transform part
+     (scale-on-hover doesn't fire on touch → no reason to keep it) */
+  .pf-poster,
+  .pf-video {
+    transition: opacity 0.4s ease;
+  }
+
+  /* backdrop-filter creates its own compositor layer on every .pf-play —
+     remove it; compensate with a slightly more opaque background. */
+  .pf-play {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(10, 10, 10, 0.78);
+  }
+
+  /* Reveal animations: filter:blur() is a compositing trigger and very GPU-
+     intensive on mobile. Replace with plain translate — still feels alive. */
+  .reveal        { filter: none; transform: translateY(16px); }
+  .reveal-left   { filter: none; transform: translateX(-16px); }
+  .reveal-right  { filter: none; transform: translateX(16px); }
+  .reveal-scale  { filter: none; transform: scale(0.97); }
+  .reveal.active,
+  .reveal-left.active,
+  .reveal-right.active,
+  .reveal-scale.active { filter: none; }
 }
 
 .pf-play {
