@@ -1243,10 +1243,9 @@ html.lenis, html.lenis body { height: auto; }
    distributed column-by-column.
    ========================================================================= */
 .portfolio-grid {
-  column-count: 1;
-  column-gap: 0.5rem;
+  column-count: 2;
+  column-gap: clamp(0.4rem, 1vw, 0.75rem);
 }
-@media (min-width: 480px) { .portfolio-grid { column-count: 2; column-gap: clamp(0.5rem, 1vw, 0.75rem); } }
 @media (min-width: 768px)  { .portfolio-grid { column-count: 3; column-gap: clamp(0.6rem, 1.2vw, 1rem); } }
 @media (min-width: 1100px) { .portfolio-grid { column-count: 4; } }
 
@@ -1260,19 +1259,18 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--paper);
   display: block;
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: clamp(0.4rem, 1vw, 1rem);
   break-inside: avoid;
   -webkit-column-break-inside: avoid;
   page-break-inside: avoid;
   aspect-ratio: 3 / 4;
   transition: transform 0.45s var(--ease-out);
-  border-radius: 4px;
+  border-radius: 3px;
 }
-@media (min-width: 480px) { .pf-card { margin-bottom: clamp(0.5rem, 1vw, 0.75rem); } }
-@media (min-width: 768px)  { .pf-card { margin-bottom: clamp(0.6rem, 1.2vw, 1rem); border-radius: 0; } }
+@media (min-width: 768px)  { .pf-card { border-radius: 0; } }
 .pf-card.pf-tall { aspect-ratio: 9 / 16; }
-/* On mobile single-column, tall cards are too long — use 3:4 instead */
-@media (max-width: 479px) { .pf-card.pf-tall { aspect-ratio: 3 / 4; } }
+/* pf-short: square-ish cards for extra variety in the masonry */
+.pf-card.pf-short { aspect-ratio: 1 / 1; }
 /* Backwards-compat: any legacy size collapses to regular */
 .pf-card.pf-wide,
 .pf-card.pf-featured { aspect-ratio: 3 / 4; }
