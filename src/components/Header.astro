@@ -88,9 +88,9 @@ const aboutMenu = [
         <a href={anchor('#articoli')} class="nav-link">Articoli</a>
       </div>
 
-      <!-- Right: Contatti mailto -->
+      <!-- Right: Contatti → scroll to #contatti -->
       <div class="hidden lg:flex items-center gap-3">
-        <a href={`mailto:${email}`} class="nav-link is-cta" data-cursor="scrivici">
+        <a href={anchor('#contatti')} class="nav-link is-cta" data-cursor="scrivici">
           Contatti <span aria-hidden="true">↗</span>
         </a>
       </div>
@@ -126,7 +126,7 @@ const aboutMenu = [
         <a href={anchor('#manifesto')} class="mm-link">Chi siamo <span>↗</span></a>
         <a href={anchor('#servizi')} class="mm-link">Servizi <span>↗</span></a>
         <a href={anchor('#articoli')} class="mm-link">Articoli <span>↗</span></a>
-        <a href={`mailto:${email}`} class="mm-link">Contatti <span>↗</span></a>
+        <a href={anchor('#contatti')} class="mm-link">Contatti <span>↗</span></a>
       </nav>
     </div>
     <div class="pt-8 mt-8 border-t border-white/10">

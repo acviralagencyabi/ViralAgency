@@ -39,7 +39,7 @@
   --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Spacing rhythm */
-  --section-y: clamp(5rem, 10vw, 10rem);
+  --section-y: clamp(4rem, 7vw, 6.5rem);
   --gutter: clamp(1rem, 3vw, 2.5rem);
 
   /* Motion */
@@ -154,8 +154,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-tight {
-  padding-top: clamp(3rem, 6vw, 5rem);
-  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-top: clamp(2.5rem, 4.5vw, 4rem);
+  padding-bottom: clamp(2.5rem, 4.5vw, 4rem);
 }
 
 .section-dark {
