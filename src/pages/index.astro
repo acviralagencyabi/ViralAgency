@@ -325,7 +325,7 @@ const link = (path: string) => {
       </svg>
     </button>
     <div class="lightbox-content">
-      <video id="lightbox-video" class="lightbox-video" controls playsinline></video>
+      <video id="lightbox-video" class="lightbox-video" controls playsinline preload="metadata"></video>
       <p id="lightbox-caption" class="lightbox-caption"></p>
     </div>
     <div class="lightbox-counter">
@@ -358,7 +358,18 @@ const link = (path: string) => {
 
     // -------- Hover-to-play on the asymmetric grid --------
     const portfolioCards = allCards;
-    const isCoarse = window.matchMedia('(hover: none)').matches;
+    const isCoarse =
+      window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      (window.navigator?.maxTouchPoints || 0) > 0 ||
+      window.innerWidth < 768;
+
+    if (isCoarse) {
+      portfolioCards.forEach((card) => {
+        const video = card.querySelector('video.pf-video');
+        if (video) video.remove();
+      });
+    }
 
     // Lazy-load a video's src only when about to play (prevents pre-loading
     // every video on page load, which crashes mobile GPU/memory).
@@ -429,6 +440,7 @@ const link = (path: string) => {
       lbCaption.textContent = it.title;
       lbCurr.textContent = currentIndex + 1;
       lbTotal.textContent = items.length;
+      if (isCoarse) return;
       try {
         const p = lbVideo.play();
         if (p && typeof p.catch === 'function') p.catch(() => {});
