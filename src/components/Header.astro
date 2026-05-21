@@ -30,6 +30,15 @@ const homeHref = isHome ? '#home' : BASE;
 // Le voci di menu si comportano allo stesso modo
 const anchor = (a: string) => (isHome ? a : `${BASE}${a}`);
 
+const nav = (globalSettings as any).nav ?? {};
+
+const portfolioLabel = nav.portfolioLabel || 'Portfolio';
+const portfolioMegaDesc = nav.portfolioMegaDesc || 'I nostri lavori per ogni cliente';
+const aboutLabel = nav.aboutLabel || 'Chi siamo';
+const aboutMegaDesc = nav.aboutMegaDesc || 'Storytelling, team & servizi';
+const articlesLabel = nav.articlesLabel || 'Articoli';
+const contactLabel = nav.contactLabel || 'Contatti';
+
 const portfolioMenu = [
   { label: 'Lavori', href: anchor('#portfolio') },
   { label: 'Clienti', href: anchor('#clienti') },
@@ -56,9 +65,9 @@ const aboutMenu = [
       <!-- Desktop nav -->
       <div class="hidden lg:flex items-center gap-1">
         <div class="nav-item">
-          <a href={anchor('#portfolio')} class="nav-link">Portfolio</a>
+          <a href={anchor('#portfolio')} class="nav-link">{portfolioLabel}</a>
           <div class="megamenu">
-            <p class="mono-label mb-3">I nostri lavori per ogni cliente</p>
+            <p class="mono-label mb-3">{portfolioMegaDesc}</p>
             <div class="megamenu-grid">
               {portfolioMenu.map((item) => (
                 <a href={item.href} class="megamenu-link">
@@ -71,9 +80,9 @@ const aboutMenu = [
         </div>
 
         <div class="nav-item">
-          <a href={anchor('#manifesto')} class="nav-link">Chi siamo</a>
+          <a href={anchor('#manifesto')} class="nav-link">{aboutLabel}</a>
           <div class="megamenu">
-            <p class="mono-label mb-3">Storytelling, team & servizi</p>
+            <p class="mono-label mb-3">{aboutMegaDesc}</p>
             <div class="megamenu-grid">
               {aboutMenu.map((item) => (
                 <a href={item.href} class="megamenu-link">
@@ -85,13 +94,13 @@ const aboutMenu = [
           </div>
         </div>
 
-        <a href={anchor('#articoli')} class="nav-link">Articoli</a>
+        <a href={anchor('#articoli')} class="nav-link">{articlesLabel}</a>
       </div>
 
       <!-- Right: Contatti → scroll to #contatti -->
       <div class="hidden lg:flex items-center gap-3">
         <a href={anchor('#contatti')} class="nav-link is-cta" data-cursor="scrivici">
-          Contatti <span aria-hidden="true">↗</span>
+          {contactLabel} <span aria-hidden="true">↗</span>
         </a>
       </div>
 
@@ -122,11 +131,11 @@ const aboutMenu = [
     <div class="flex-1">
       <p class="mono-label opacity-60 mb-8">Menu</p>
       <nav class="flex flex-col gap-5">
-        <a href={anchor('#portfolio')} class="mm-link">Portfolio <span>↗</span></a>
-        <a href={anchor('#manifesto')} class="mm-link">Chi siamo <span>↗</span></a>
+        <a href={anchor('#portfolio')} class="mm-link">{portfolioLabel} <span>↗</span></a>
+        <a href={anchor('#manifesto')} class="mm-link">{aboutLabel} <span>↗</span></a>
         <a href={anchor('#servizi')} class="mm-link">Servizi <span>↗</span></a>
-        <a href={anchor('#articoli')} class="mm-link">Articoli <span>↗</span></a>
-        <a href={anchor('#contatti')} class="mm-link">Contatti <span>↗</span></a>
+        <a href={anchor('#articoli')} class="mm-link">{articlesLabel} <span>↗</span></a>
+        <a href={anchor('#contatti')} class="mm-link">{contactLabel} <span>↗</span></a>
       </nav>
     </div>
     <div class="pt-8 mt-8 border-t border-white/10">
@@ -193,9 +202,8 @@ const aboutMenu = [
     toggleMenu(mobileMenu?.classList.contains('hidden') ?? false);
   });
 
-  mobileMenu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => toggleMenu(false));
-  });
+  // Chiudi il menu cliccando su qualsiasi punto dell'overlay (link o sfondo)
+  mobileMenu?.addEventListener('click', () => toggleMenu(false));
 
   // Close mega-menu after clicking one of its links
   // (otherwise :focus-within keeps the dropdown open)

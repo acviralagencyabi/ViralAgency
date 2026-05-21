@@ -18,6 +18,10 @@ const logoFull =
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const locations = (homepage as any).locations ?? [];
+const footerData = (globalSettings as any).footer ?? {};
+const footerEyebrow = footerData.eyebrow || 'Parliamone';
+const footerTagline = footerData.tagline || 'Communication · Marketing · Social · Branding';
+const footerSiteCredit = footerData.siteCredit || 'Site design — REAL GOES VIRAL';
 
 const BASE = import.meta.env.BASE_URL;
 const privacyHref = BASE + 'privacy-policy/';
@@ -34,7 +38,7 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
   <div class="container-custom py-16 md:py-24">
     <!-- Huge mailto -->
     <div class="mb-16 md:mb-24 reveal">
-      <p class="eyebrow text-white/60">Parliamone</p>
+      <p class="eyebrow text-white/60">{footerEyebrow}</p>
       <a
         href={`mailto:${email}`}
         class="block h-display text-[clamp(2.5rem,9vw,7rem)] text-[var(--paper)] hover:text-[var(--electric)] transition-colors duration-500 leading-[0.9] mt-4 break-all"
@@ -51,7 +55,7 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
         <p class="mono-label text-white/60 mb-3">Brand</p>
         <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto img-darken" />
         <p class="mono-label text-white/40 mt-4">
-          {globalSettings.companyName} — Communication · Marketing · Social · Branding
+          {globalSettings.companyName} — {footerTagline}
         </p>
       </div>
 
@@ -147,7 +151,7 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
         <button type="button" id="footer-cookie-prefs" class="hover:text-[var(--electric)] transition-colors mono-label text-white/50 bg-transparent border-0 cursor-pointer p-0">
           {managePrefsLabel}
         </button>
-        <span class="hidden md:inline">Site design — REAL GOES VIRAL · {currentYear}</span>
+        <span class="hidden md:inline">{footerSiteCredit} · {currentYear}</span>
       </div>
     </div>
   </div>
