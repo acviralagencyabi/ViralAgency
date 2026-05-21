@@ -1292,15 +1292,11 @@ html.lenis, html.lenis body { height: auto; }
   display: flex;
   flex-direction: column;
   gap: clamp(0.4rem, 1vw, 0.75rem);
-}
-/* Second column pushed down: guarantees stagger regardless of card heights */
-.pf-col-b {
-  margin-top: clamp(1.5rem, 5vw, 3.5rem);
+  /* margin-top stagger offset is set via inline style by JS */
 }
 @media (min-width: 768px) {
   .pf-masonry,
   .pf-col { gap: clamp(0.75rem, 1.5vw, 1.2rem); }
-  .pf-col-b { margin-top: clamp(3.5rem, 7vw, 6rem); }
 }
 
 .pf-card {
