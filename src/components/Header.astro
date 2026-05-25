@@ -202,26 +202,56 @@ const aboutMenu = [
     toggleMenu(mobileMenu?.classList.contains('hidden') ?? false);
   });
 
-  const isMobileMenuLink = (target: EventTarget | null) =>
-    target instanceof Element && Boolean(target.closest('#mobile-menu a'));
+  function goToMenuLink(link: HTMLAnchorElement) {
+    const href = link.getAttribute('href');
+    if (!href) return;
 
-  // Chiudi il menu mobile appena l'utente sceglie una voce, anche se il link
-  // punta all'hash già attivo e quindi non scatena una nuova navigazione.
-  mobileMenu?.addEventListener(
-    'pointerup',
-    (event) => {
-      if (isMobileMenuLink(event.target)) toggleMenu(false);
-    },
-    { capture: true }
-  );
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) {
+      window.location.href = href;
+      return;
+    }
+
+    const targetUrl = new URL(link.href, window.location.href);
+    const currentPath = `${window.location.origin}${window.location.pathname}`;
+    const targetPath = `${targetUrl.origin}${targetUrl.pathname}`;
+
+    if (targetUrl.origin === window.location.origin && targetUrl.hash && targetPath === currentPath) {
+      const target = document.querySelector<HTMLElement>(targetUrl.hash);
+      if (target) {
+        history.pushState(null, '', targetUrl.hash);
+        requestAnimationFrame(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return;
+      }
+    }
+
+    window.location.href = targetUrl.href;
+  }
 
   // Fallback utile per gli anchor link gestiti da smooth scroll / hash navigation.
   window.addEventListener('hashchange', () => toggleMenu(false));
 
-  // Chiudi anche toccando lo sfondo dell'overlay o cliccando un link.
-  mobileMenu?.addEventListener('click', (event) => {
-    if (isMobileMenuLink(event.target) || event.target === mobileMenu) toggleMenu(false);
-  });
+  // Un solo punto di controllo per i click del menu mobile.
+  // Deve girare in capture perché lo smooth scroll globale intercetta gli anchor.
+  mobileMenu?.addEventListener(
+    'click',
+    (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const link = event.target.closest<HTMLAnchorElement>('a');
+      if (link && mobileMenu.contains(link)) {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleMenu(false);
+        goToMenuLink(link);
+        return;
+      }
+
+      if (event.target === mobileMenu) toggleMenu(false);
+    },
+    { capture: true }
+  );
 
   // Close mega-menu after clicking one of its links
   // (otherwise :focus-within keeps the dropdown open)
