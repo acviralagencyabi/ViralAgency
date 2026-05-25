@@ -1,0 +1,26 @@
+---
+import LandingPageTemplate from '../components/LandingPageTemplate.astro';
+
+type LandingPageModule = { default: Record<string, unknown> };
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  const landingPageFiles = import.meta.glob<LandingPageModule>(
+    '../../content/landing-pages/*.json',
+    { eager: true }
+  );
+
+  return Object.entries(landingPageFiles).map(([filePath, mod]) => {
+    const slug = filePath.split('/').pop()?.replace('.json', '') || '';
+    return {
+      params: { slug },
+      props: { data: mod.default },
+    };
+  });
+}
+
+const { data } = Astro.props as { data: any };
+---
+
+<LandingPageTemplate data={data} />

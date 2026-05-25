@@ -202,8 +202,26 @@ const aboutMenu = [
     toggleMenu(mobileMenu?.classList.contains('hidden') ?? false);
   });
 
-  // Chiudi il menu cliccando su qualsiasi punto dell'overlay (link o sfondo)
-  mobileMenu?.addEventListener('click', () => toggleMenu(false));
+  const isMobileMenuLink = (target: EventTarget | null) =>
+    target instanceof Element && Boolean(target.closest('#mobile-menu a'));
+
+  // Chiudi il menu mobile appena l'utente sceglie una voce, anche se il link
+  // punta all'hash già attivo e quindi non scatena una nuova navigazione.
+  mobileMenu?.addEventListener(
+    'pointerup',
+    (event) => {
+      if (isMobileMenuLink(event.target)) toggleMenu(false);
+    },
+    { capture: true }
+  );
+
+  // Fallback utile per gli anchor link gestiti da smooth scroll / hash navigation.
+  window.addEventListener('hashchange', () => toggleMenu(false));
+
+  // Chiudi anche toccando lo sfondo dell'overlay o cliccando un link.
+  mobileMenu?.addEventListener('click', (event) => {
+    if (isMobileMenuLink(event.target) || event.target === mobileMenu) toggleMenu(false);
+  });
 
   // Close mega-menu after clicking one of its links
   // (otherwise :focus-within keeps the dropdown open)

@@ -11,10 +11,24 @@ import cloudflare from '@astrojs/cloudflare';
 const isCloudflare = process.env.CF_PAGES === '1';
 const isGitHubActions = process.env.CI === 'true' && !isCloudflare;
 
+const siteUrl =
+  process.env.SITE_URL ||
+  process.env.PUBLIC_SITE_URL ||
+  'https://www.viralagency.it';
+
+const rawBasePath = process.env.BASE_PATH || process.env.PUBLIC_BASE_PATH || '/';
+const basePath =
+  rawBasePath === ''
+    ? '/'
+    : rawBasePath.startsWith('/')
+      ? rawBasePath
+      : `/${rawBasePath}`;
+const normalizedBasePath = basePath.endsWith('/') ? basePath : `${basePath}/`;
+
 // https://astro.build/config
 export default defineConfig({
-  site: isGitHubActions ? 'https://tommasopatriti.me': 'https://visualdigitalagencydemo.pages.dev',
-  base: isGitHubActions ? '/VisualDigitalAgencyDemo/' : '/',
+  site: siteUrl,
+  base: normalizedBasePath,
   output: isGitHubActions ? 'static' : 'server',
   adapter: isGitHubActions ? undefined : cloudflare(),
 
@@ -26,28 +40,5 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      dedupe: [
-        'react',
-        'react-dom',
-        '@keystatic/core',
-        '@keystatic/astro',
-        '@keystar/ui',
-        'yjs',
-      ],
-    },
-    optimizeDeps: {
-      include: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime',
-        '@keystatic/core',
-        '@keystatic/core/ui',
-        '@keystatic/astro/ui',
-        '@keystatic/astro/api',
-        'yjs',
-      ],
-    },
   },
 });

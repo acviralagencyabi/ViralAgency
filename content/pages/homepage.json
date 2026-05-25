@@ -109,12 +109,38 @@
     {
       "city": "Bologna",
       "tag": "HQ",
-      "address": "V.le Pietro Pietramellara, 33, 40121 Bologna BO"
+      "address": "V.le Pietro Pietramellara, 33, 40121 Bologna BO",
+      "mapsUrl": "https://www.google.com/maps/search/?api=1&query=V.le%20Pietro%20Pietramellara%2C%2033%2C%2040121%20Bologna%20BO",
+      "phone": "",
+      "whatsappNumber": "",
+      "whatsappMessage": ""
     },
     {
       "city": "Modena",
       "tag": "Studio Creativo",
-      "address": "Piazza Tintori 27, Bastiglia (MO) – 41033"
+      "address": "Piazza Tintori 27, Bastiglia (MO) – 41033",
+      "mapsUrl": "https://maps.google.com/?kgmid=/g/11m75qc3vq",
+      "phone": "",
+      "whatsappNumber": "",
+      "whatsappMessage": ""
+    },
+    {
+      "city": "Milano",
+      "tag": "Sede",
+      "address": "Milano",
+      "mapsUrl": "https://share.google/6WuvkGnqAxtKMvScq",
+      "phone": "",
+      "whatsappNumber": "",
+      "whatsappMessage": ""
+    },
+    {
+      "city": "Roma",
+      "tag": "Sede",
+      "address": "Via Cosmo Egiziano, 9, 00176 Roma RM",
+      "mapsUrl": "https://share.google/PZTkVqlKuwR5pehte",
+      "phone": "",
+      "whatsappNumber": "",
+      "whatsappMessage": ""
     }
   ],
   "team": [

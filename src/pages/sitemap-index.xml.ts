@@ -3,7 +3,9 @@ import type { APIRoute } from 'astro';
 // Canonical sitemap index: points to /sitemap.xml
 // Kept for compatibility with crawlers that look for /sitemap-index.xml
 export const GET: APIRoute = ({ site }) => {
-  const base = (site?.toString() ?? 'https://visualdigitalagencydemo.pages.dev').replace(/\/$/, '');
+  const siteUrl = (site?.toString() ?? 'https://www.viralagency.it').replace(/\/$/, '');
+  const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const base = `${siteUrl}${basePath === '' || basePath === '/' ? '' : basePath}`;
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>

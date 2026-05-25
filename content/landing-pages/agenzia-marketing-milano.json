@@ -1,0 +1,45 @@
+{
+  "title": "agenzia-marketing-milano",
+  "seoTitle": "Agenzia di Marketing Milano | Viral Digital Agency",
+  "seoDescription": "Agenzia di marketing digitale a Milano. Strategie, contenuti, advertising, branding e video per aziende milanesi che vogliono crescere online.",
+  "hero": {
+    "eyebrow": "Marketing Digitale · Milano",
+    "titleLine1": "Agenzia di Marketing",
+    "titleLine2": "a Milano",
+    "intro": "Aiutiamo aziende e brand di Milano a crescere con strategie digitali concrete: contenuti, performance marketing, social media e storytelling pensati per un mercato veloce, competitivo e internazionale.",
+    "ctaLabel": "Parliamo del tuo progetto"
+  },
+  "services": {
+    "eyebrow": "Cosa offriamo",
+    "title": "Servizi di marketing completi per aziende di Milano.",
+    "items": [
+      { "title": "Social Media Marketing", "desc": "Piani editoriali, contenuti video e gestione completa dei canali social per brand milanesi che vogliono farsi notare." },
+      { "title": "Google & Meta Ads", "desc": "Campagne pubblicitarie ottimizzate per lead, vendite e crescita locale o nazionale, con dati leggibili e budget controllati." },
+      { "title": "Brand Identity", "desc": "Logo, palette, tono di voce e sistema visivo coerente per posizionarti in modo chiaro nel mercato di Milano." },
+      { "title": "Video Production", "desc": "Reel, spot, video aziendali e contenuti short-form pensati per social, campagne e landing page." },
+      { "title": "Siti & Landing Page", "desc": "Pagine veloci, curate e orientate alla conversione, costruite intorno ai bisogni reali dei tuoi clienti." },
+      { "title": "Consulenza Strategica", "desc": "Analisi di mercato, competitor e opportunità di crescita per trasformare le idee in un piano operativo." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Perché sceglierci a Milano",
+    "title": "Milano corre. La comunicazione deve tenere il passo.",
+    "cities": [],
+    "body1": "Milano è una piazza ad alta intensità: aziende, retail, moda, food, professionisti, startup e servizi competono ogni giorno per attenzione e fiducia. Qui non basta esserci: serve un messaggio riconoscibile, una strategia precisa e contenuti che arrivano al pubblico giusto.",
+    "body2": "Costruiamo percorsi misurabili: dall'identità del brand alle campagne, dalla produzione contenuti alle landing page. Ogni scelta creativa deve avere una direzione commerciale chiara, così il marketing non resta estetica ma diventa crescita."
+  },
+  "cta": {
+    "eyebrow": "Siamo qui",
+    "title": "Portiamo il tuo brand nel ritmo di Milano.",
+    "body": "Scrivici o chiamaci per una prima consulenza. Capiremo insieme cosa comunicare, dove investire e come misurare i risultati.",
+    "ctaLabel": "Contattaci a Milano",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Digital Marketing",
+    "serviceName": "Marketing Digitale Milano",
+    "serviceDescription": "Agenzia di marketing digitale per aziende di Milano. Social media, advertising, branding, video e landing page orientate alla crescita.",
+    "areaServed": "Milano"
+  }
+}
+

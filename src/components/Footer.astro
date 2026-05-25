@@ -3,8 +3,9 @@ import { Image } from 'astro:assets';
 import globalSettings from '../../content/settings/global.json';
 import homepage from '../../content/pages/homepage.json';
 import cookieBanner from '../../content/pages/cookie-banner.json';
-import { Instagram, Facebook } from 'lucide-astro';
+import { Instagram, Facebook, Phone, MessageCircle } from 'lucide-astro';
 import logoFullDefault from '../assets/images/brand/logo-black-tagline.png';
+import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 
 const brandImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/brand/**/*.{png,jpg,jpeg,gif,webp,svg}',
@@ -18,6 +19,9 @@ const logoFull =
 const currentYear = new Date().getFullYear();
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const locations = (homepage as any).locations ?? [];
+const whatsappRaw = (globalSettings as any).whatsapp?.number || '';
+const whatsappMessage = (globalSettings as any).whatsapp?.defaultMessage || '';
+const globalWhatsappUrl = whatsappHref(whatsappRaw, whatsappMessage);
 const footerData = (globalSettings as any).footer ?? {};
 const footerEyebrow = footerData.eyebrow || 'Parliamone';
 const footerTagline = footerData.tagline || 'Communication · Marketing · Social · Branding';
@@ -28,10 +32,14 @@ const privacyHref = BASE + 'privacy-policy/';
 const cookieHref = BASE + 'cookie-policy/';
 const managePrefsLabel = (cookieBanner as any).managePrefsLabel || 'Gestisci cookie';
 
-const mapsUrl = (loc: { city?: string; address?: string }) => {
+const mapsUrl = (loc: { city?: string; address?: string; mapsUrl?: string }) => {
+  if (loc.mapsUrl) return loc.mapsUrl;
   const q = [loc.address, loc.city].filter(Boolean).join(', ');
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 };
+const locationPhone = (loc: any) => loc.phone || globalSettings.contact?.phone || '';
+const locationWhatsappUrl = (loc: any) =>
+  whatsappHref(loc.whatsappNumber || whatsappRaw, loc.whatsappMessage || whatsappMessage);
 ---
 
 <footer class="section-dark mt-0">
@@ -65,7 +73,20 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
         <ul class="space-y-2 text-sm text-white/80">
           <li><a href={`mailto:${email}`} class="hover:text-[var(--electric)] transition-colors">{email}</a></li>
           {globalSettings.contact?.phone && (
-            <li><a href={`tel:${globalSettings.contact.phone.replace(/\s/g, '')}`} class="hover:text-[var(--electric)] transition-colors">{globalSettings.contact.phone}</a></li>
+            <li>
+              <a href={`tel:${cleanPhoneHref(globalSettings.contact.phone)}`} class="inline-flex items-center gap-1.5 hover:text-[var(--electric)] transition-colors" aria-label={`Chiama ${globalSettings.contact.phone}`}>
+                <Phone class="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                <span>{globalSettings.contact.phone}</span>
+              </a>
+            </li>
+          )}
+          {globalWhatsappUrl && (
+            <li>
+              <a href={globalWhatsappUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 hover:text-[var(--electric)] transition-colors" aria-label="Scrivici su WhatsApp">
+                <MessageCircle class="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                <span>WhatsApp</span>
+              </a>
+            </li>
           )}
         </ul>
 
@@ -94,6 +115,30 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
                       {loc.city}{loc.tag && <span class="text-white/40"> — {loc.tag}</span>}
                     </span>
                   )}
+                  <span class="block mt-1 space-x-3">
+                    {locationPhone(loc) && (
+                      <a
+                        href={`tel:${cleanPhoneHref(locationPhone(loc))}`}
+                        class="inline-flex items-center gap-1.5 text-white/60 hover:text-[var(--electric)] transition-colors"
+                        aria-label={`Chiama la sede di ${loc.city}`}
+                      >
+                        <Phone class="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                        <span>{locationPhone(loc)}</span>
+                      </a>
+                    )}
+                    {locationWhatsappUrl(loc) && (
+                      <a
+                        href={locationWhatsappUrl(loc)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 text-white/60 hover:text-[var(--electric)] transition-colors"
+                        aria-label={`Scrivi alla sede di ${loc.city} su WhatsApp`}
+                      >
+                        <MessageCircle class="w-3.5 h-3.5 shrink-0" strokeWidth={1.8} />
+                        <span>WhatsApp</span>
+                      </a>
+                    )}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -119,6 +164,11 @@ const mapsUrl = (loc: { city?: string; address?: string }) => {
           {globalSettings.social?.facebook && (
             <a href={globalSettings.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-10 h-10 rounded-full border border-white/30 grid place-items-center hover:bg-[var(--electric)] hover:border-[var(--electric)] transition-colors">
               <Facebook class="w-4 h-4" strokeWidth={1.5} />
+            </a>
+          )}
+          {globalWhatsappUrl && (
+            <a href={globalWhatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-10 h-10 rounded-full border border-white/30 grid place-items-center hover:bg-[var(--electric)] hover:border-[var(--electric)] transition-colors">
+              <MessageCircle class="w-4 h-4" strokeWidth={1.5} />
             </a>
           )}
           {(globalSettings.social as any)?.googleMapsUrl && (

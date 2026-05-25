@@ -1,8 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import globalSettings from '../../content/settings/global.json';
+import homepage from '../../content/pages/homepage.json';
+import { Phone, MessageCircle } from 'lucide-astro';
+import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const whatsappRaw = (globalSettings as any).whatsapp?.number || '';
+const whatsappMessage = (globalSettings as any).whatsapp?.defaultMessage || '';
+const globalWhatsappUrl = whatsappHref(whatsappRaw, whatsappMessage);
+const locations = (homepage as any).locations ?? [];
+const mapsUrl = (loc: any) => {
+  if (loc.mapsUrl) return loc.mapsUrl;
+  const q = [loc.address, loc.city].filter(Boolean).join(', ');
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+};
+const locationPhone = (loc: any) => loc.phone || phone;
+const locationWhatsappUrl = (loc: any) =>
+  whatsappHref(loc.whatsappNumber || whatsappRaw, loc.whatsappMessage || whatsappMessage);
 const BASE = import.meta.env.BASE_URL;
 const included = [
   { title: 'Analisi iniziale', desc: 'Audit dei tuoi profili attuali, analisi dei competitor modenesi e definizione degli obiettivi di crescita.' },
@@ -14,7 +29,7 @@ const included = [
 ];
 const schema = JSON.stringify({
   "@context":"https://schema.org","@graph":[
-    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":"+393713767488","email":"info@viralagency.it","hasMap":"https://maps.google.com/?kgmid=/g/11m75qc3vq","address":[{"@type":"PostalAddress","streetAddress":"Piazza Tintori 27","addressLocality":"Bastiglia","addressRegion":"MO","postalCode":"41033","addressCountry":"IT"},{"@type":"PostalAddress","streetAddress":"V.le Pietro Pietramellara, 33","addressLocality":"Bologna","addressRegion":"BO","postalCode":"40121","addressCountry":"IT"}],"areaServed":["Modena","Emilia-Romagna"],"priceRange":"€€"},
+    {"@type":"LocalBusiness","@id":"https://viralagency.it/#business","name":"Viral Digital Agency | Agenzia di Marketing","url":"https://viralagency.it","telephone":cleanPhoneHref(phone),"email":email,"hasMap":locations[0]?.mapsUrl || "https://maps.google.com/?kgmid=/g/11m75qc3vq","address":locations.map((loc: any) => ({"@type":"PostalAddress","streetAddress":loc.address || "","addressLocality":loc.city || "","addressCountry":"IT"})),"areaServed":["Modena","Emilia-Romagna",...locations.map((loc: any) => loc.city).filter(Boolean)],"priceRange":"€€"},
     {"@type":"Service","name":"Social Media Manager Modena","serviceType":"Social Media Management","provider":{"@id":"https://viralagency.it/#business"},"areaServed":"Modena","description":"Servizi di social media manager professionale per aziende di Modena. Gestione completa di Instagram, Facebook, TikTok e LinkedIn."}
   ]
 });
@@ -32,7 +47,16 @@ const schema = JSON.stringify({
         </p>
         <div class="flex flex-wrap gap-4 mt-10 reveal">
           <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Parliamo dei tuoi social</a>
-          <a href={`tel:${phone.replace(/\s/g,'')}`} class="btn-outline">{phone}</a>
+          <a href={`tel:${cleanPhoneHref(phone)}`} class="btn-outline" aria-label={`Chiama ${phone}`}>
+            <Phone class="w-4 h-4 shrink-0" strokeWidth={1.8} />
+            <span>{phone}</span>
+          </a>
+          {globalWhatsappUrl && (
+            <a href={globalWhatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-outline" data-cursor="whatsapp" aria-label="Scrivici su WhatsApp">
+              <MessageCircle class="w-4 h-4 shrink-0" strokeWidth={1.8} />
+              <span>WhatsApp</span>
+            </a>
+          )}
         </div>
       </div>
     </section>
@@ -62,30 +86,30 @@ const schema = JSON.stringify({
     </section>
     <section class="section section-dark">
       <div class="container-custom">
-        <p class="eyebrow reveal">Il nostro studio</p>
-        <h2 class="section-title mt-3">Siamo a Bastiglia, in provincia di Modena.</h2>
+        <p class="eyebrow reveal">Le nostre sedi</p>
+        <h2 class="section-title mt-3">Siamo presenti a {locations.map((loc: any) => loc.city).join(', ')}.</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
-          <div class="reveal">
-            <p class="mono-label text-white/60 mb-4">Studio Creativo — Modena</p>
-            <address class="not-italic space-y-1 text-[var(--paper)]">
-              <strong class="block text-lg">Viral Digital Agency</strong>
-              <span class="block text-white/80">Piazza Tintori 27</span>
-              <span class="block text-white/80">Bastiglia (MO) – 41033</span>
-              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
-              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
-            </address>
-            <a href="https://maps.google.com/?kgmid=/g/11m75qc3vq" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
-          </div>
-          <div class="reveal">
-            <p class="mono-label text-white/60 mb-4">Sede HQ — Bologna</p>
-            <address class="not-italic space-y-1 text-[var(--paper)]">
-              <strong class="block text-lg">Viral Digital Agency — HQ</strong>
-              <span class="block text-white/80">V.le Pietro Pietramellara, 33</span>
-              <span class="block text-white/80">40121 Bologna BO</span>
-              <a href={`tel:${phone.replace(/\s/g,'')}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors mt-4">{phone}</a>
-              <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
-            </address>
-          </div>
+          {locations.map((loc: any) => (
+            <div class="reveal">
+              <p class="mono-label text-white/60 mb-4">{loc.tag} — {loc.city}</p>
+              <address class="not-italic space-y-1 text-[var(--paper)]">
+                <strong class="block text-lg">Viral Digital Agency</strong>
+                {loc.address && <span class="block text-white/80">{loc.address}</span>}
+                <a href={`tel:${cleanPhoneHref(locationPhone(loc))}`} class="inline-flex items-center gap-2 text-white/80 hover:text-[var(--electric)] transition-colors mt-4" aria-label={`Chiama la sede di ${loc.city}`}>
+                  <Phone class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                  <span>{locationPhone(loc)}</span>
+                </a>
+                {locationWhatsappUrl(loc) && (
+                  <a href={locationWhatsappUrl(loc)} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-white/80 hover:text-[var(--electric)] transition-colors" aria-label={`Scrivi alla sede di ${loc.city} su WhatsApp`}>
+                    <MessageCircle class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                    <span>WhatsApp</span>
+                  </a>
+                )}
+                <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+              </address>
+              <a href={mapsUrl(loc)} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+            </div>
+          ))}
         </div>
       </div>
     </section>

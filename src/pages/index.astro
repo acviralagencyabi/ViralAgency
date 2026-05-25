@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import ServiceIcons from '../components/ServiceIcons.astro';
 import { ArrowDown, Instagram, Facebook, Phone, Mail, MessageCircle, Star } from 'lucide-astro';
+import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 
 import homepage from '../../content/pages/homepage.json';
 import globalSettings from '../../content/settings/global.json';
@@ -78,19 +79,20 @@ const team = (H.team ?? []).map((m: any) => {
   };
 });
 
-const mapsUrl = (loc: { city?: string; address?: string }) => {
+const mapsUrl = (loc: { city?: string; address?: string; mapsUrl?: string }) => {
+  if (loc.mapsUrl) return loc.mapsUrl;
   const q = [loc.address, loc.city].filter(Boolean).join(', ');
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 };
 
 // WhatsApp
 const whatsappRaw = (globalSettings as any).whatsapp?.number || '';
-const whatsappNumber = whatsappRaw.replace(/[^0-9]/g, '');
 const whatsappMessage = (globalSettings as any).whatsapp?.defaultMessage || '';
-const whatsappUrl = whatsappNumber
-  ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
-  : '';
+const whatsappUrl = whatsappHref(whatsappRaw, whatsappMessage);
 const showWhatsapp = H.contact?.showWhatsapp !== false && Boolean(whatsappUrl);
+const locationPhone = (loc: any) => loc.phone || globalSettings.contact?.phone || '';
+const locationWhatsappUrl = (loc: any) =>
+  whatsappHref(loc.whatsappNumber || whatsappRaw, loc.whatsappMessage || whatsappMessage);
 
 // Google Reviews URL (fallback)
 const googleReviewsUrl = (globalSettings as any).social?.googleReviewsUrl || '';
@@ -753,7 +755,7 @@ const link = (path: string) => {
             )}
             {globalSettings.contact?.phone && (
               <a
-                href={`tel:${(globalSettings.contact?.phone || '').replace(/\s/g, '')}`}
+                href={`tel:${cleanPhoneHref(globalSettings.contact?.phone)}`}
                 class="contact-btn contact-btn-phone"
                 data-cursor="chiamaci"
               >
@@ -782,12 +784,12 @@ const link = (path: string) => {
             <p class="mono-label text-white/60 mb-6">— Sedi</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {locations.map((loc: any) => (
-                loc.address ? (
+                <div class="location-card">
                   <a
                     href={mapsUrl(loc)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="location-card group block"
+                    class="group block"
                     data-cursor="apri mappa"
                     aria-label={`Apri ${loc.city ?? loc.address} su Google Maps`}
                   >
@@ -795,16 +797,35 @@ const link = (path: string) => {
                       <span class="h-display text-2xl text-[var(--paper)] group-hover:text-white transition-colors">{loc.city}</span>
                       <span class="mono-label text-white/60">{loc.tag}</span>
                     </div>
-                    <p class="text-white/75 mt-2 group-hover:text-white transition-colors">{loc.address}</p>
+                    {loc.address && (
+                      <p class="text-white/75 mt-2 group-hover:text-white transition-colors">{loc.address}</p>
+                    )}
                   </a>
-                ) : (
-                  <div class="location-card">
-                    <div class="flex items-baseline justify-between gap-3">
-                      <span class="h-display text-2xl text-[var(--paper)]">{loc.city}</span>
-                      <span class="mono-label text-white/60">{loc.tag}</span>
-                    </div>
+                  <div class="flex flex-wrap gap-x-4 gap-y-2 mt-4 text-sm">
+                    {locationPhone(loc) && (
+                      <a
+                        href={`tel:${cleanPhoneHref(locationPhone(loc))}`}
+                        class="inline-flex items-center gap-1.5 text-white/70 hover:text-[var(--electric)] transition-colors"
+                        aria-label={`Chiama la sede di ${loc.city}`}
+                      >
+                        <Phone class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                        <span>{locationPhone(loc)}</span>
+                      </a>
+                    )}
+                    {locationWhatsappUrl(loc) && (
+                      <a
+                        href={locationWhatsappUrl(loc)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 text-white/70 hover:text-[var(--electric)] transition-colors"
+                        aria-label={`Scrivi alla sede di ${loc.city} su WhatsApp`}
+                      >
+                        <MessageCircle class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                        <span>WhatsApp</span>
+                      </a>
+                    )}
                   </div>
-                )
+                </div>
               ))}
             </div>
           </div>

@@ -1,0 +1,45 @@
+{
+  "title": "agenzia-marketing-roma",
+  "seoTitle": "Agenzia di Marketing Roma | Viral Digital Agency",
+  "seoDescription": "Agenzia di marketing digitale a Roma. Strategie, social media, advertising, branding e video per aziende romane che vogliono crescere online.",
+  "hero": {
+    "eyebrow": "Marketing Digitale · Roma",
+    "titleLine1": "Agenzia di Marketing",
+    "titleLine2": "a Roma",
+    "intro": "Affianchiamo aziende e professionisti di Roma con strategie digitali complete: contenuti social, campagne advertising, branding, video e landing page pensate per generare contatti reali.",
+    "ctaLabel": "Parliamo del tuo progetto"
+  },
+  "services": {
+    "eyebrow": "Cosa offriamo",
+    "title": "Servizi di marketing completi per aziende di Roma.",
+    "items": [
+      { "title": "Social Media Marketing", "desc": "Gestione strategica di Instagram, Facebook, TikTok e LinkedIn con contenuti progettati per il pubblico romano." },
+      { "title": "Google & Meta Ads", "desc": "Campagne mirate per intercettare domanda locale, generare lead e dare continuità alla crescita commerciale." },
+      { "title": "Brand Identity", "desc": "Identità visiva e tono di voce per rendere il tuo brand riconoscibile in un mercato grande e frammentato." },
+      { "title": "Video Production", "desc": "Video verticali, reel, spot e contenuti aziendali adatti a social, campagne e pagine di vendita." },
+      { "title": "Siti & Landing Page", "desc": "Siti e landing page veloci, curate e orientate alla conversione per trasformare traffico in richieste." },
+      { "title": "Consulenza Strategica", "desc": "Analisi del mercato, dei competitor e del percorso cliente per costruire un piano di marketing pratico." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "Perché sceglierci a Roma",
+    "title": "Roma è enorme. La strategia deve essere precisa.",
+    "cities": [],
+    "body1": "Roma è un mercato vasto e molto diverso da zona a zona: turismo, servizi, professionisti, ristorazione, retail e imprese locali hanno pubblici differenti e bisogni specifici. Le campagne generiche disperdono budget; servono messaggi, canali e contenuti progettati con attenzione.",
+    "body2": "Lavoriamo per dare ordine al marketing: posizionamento, contenuti, campagne e misurazione. Ogni attività deve contribuire a un obiettivo chiaro, che sia generare richieste, aumentare la reputazione o rendere il brand più riconoscibile."
+  },
+  "cta": {
+    "eyebrow": "Siamo qui",
+    "title": "Facciamo crescere il tuo brand a Roma.",
+    "body": "Scrivici o chiamaci per una prima consulenza. Partiamo dai tuoi obiettivi e costruiamo una direzione concreta.",
+    "ctaLabel": "Contattaci a Roma",
+    "ctaEmailLabel": ""
+  },
+  "schemaService": {
+    "serviceType": "Digital Marketing",
+    "serviceName": "Marketing Digitale Roma",
+    "serviceDescription": "Agenzia di marketing digitale per aziende di Roma. Social media, advertising, branding, video e landing page per generare contatti e crescita.",
+    "areaServed": "Roma"
+  }
+}
+

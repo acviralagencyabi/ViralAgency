@@ -388,7 +388,28 @@ export default config({
           fields.object({
             city: fields.text({ label: 'Città' }),
             tag: fields.text({ label: 'Etichetta (es. HQ, Studio Creativo)' }),
-            address: fields.text({ label: 'Indirizzo' }),
+            address: fields.text({
+              label: 'Indirizzo',
+              description: 'Può essere anche solo la città se la scheda Google non mostra un indirizzo completo.',
+            }),
+            mapsUrl: fields.url({
+              label: 'Link Google Maps',
+              description:
+                'Link specifico della sede. Se vuoto, il sito genera una ricerca Maps dall’indirizzo.',
+            }),
+            phone: fields.text({
+              label: 'Telefono sede',
+              description: 'Lascia vuoto per usare il numero globale.',
+            }),
+            whatsappNumber: fields.text({
+              label: 'WhatsApp sede (con prefisso, senza +)',
+              description: 'Lascia vuoto per usare il WhatsApp globale.',
+            }),
+            whatsappMessage: fields.text({
+              label: 'Messaggio WhatsApp sede',
+              multiline: true,
+              description: 'Lascia vuoto per usare il messaggio globale.',
+            }),
           }),
           {
             label: 'Sedi',
