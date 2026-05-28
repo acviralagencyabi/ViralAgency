@@ -1356,7 +1356,7 @@ html.lenis, html.lenis body { height: auto; }
 .pf-card:hover,
 .pf-card:focus-visible {
   z-index: 6;
-  transform: scale(1.28);
+  transform: scale(1.42);
   border-color: rgba(245, 243, 238, 0.36);
   box-shadow: 0 0.9rem 2.2rem rgba(0, 0, 0, 0.28);
 }
@@ -1369,16 +1369,27 @@ html.lenis, html.lenis body { height: auto; }
   .pf-dot-grid { --dot-size: clamp(4.8rem, 23vw, 6.2rem); }
   .pf-card:hover,
   .pf-card:focus-visible {
-    transform: scale(1.1);
+    transform: scale(1.12);
   }
 }
 
-/* Media stack: poster + video + play marker */
 .pf-media {
   position: absolute;
   inset: 0;
-  background: var(--ink-soft);
+  background: #121212;
   overflow: hidden;
+}
+.pf-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 38% 28%, rgba(245, 243, 238, 0.16), transparent 32%),
+    linear-gradient(110deg, rgba(245, 243, 238, 0.04) 8%, rgba(245, 243, 238, 0.13) 18%, rgba(245, 243, 238, 0.04) 33%);
+  background-size: 220% 100%;
+  opacity: 0.75;
+  animation: pf-media-loading 1.25s ease-in-out infinite;
 }
 .pf-poster,
 .pf-video {
@@ -1391,7 +1402,7 @@ html.lenis, html.lenis body { height: auto; }
 }
 .pf-video {
   opacity: 0;
-  z-index: 1;
+  z-index: 2;
   /* Force a GPU compositing layer to prevent black-screen glitches
      on Safari and Firefox mobile when object-fit:cover is active. */
   transform: translateZ(0);
@@ -1401,16 +1412,25 @@ html.lenis, html.lenis body { height: auto; }
 }
 .pf-poster {
   opacity: 1;
-  z-index: 0;
+  z-index: 1;
 }
-.pf-card:hover .pf-video,
-.pf-card:focus-visible .pf-video {
+.pf-card.is-video-ready:hover .pf-video,
+.pf-card.is-video-ready:focus-visible .pf-video {
   opacity: 1;
-  transform: scale(1.08);
+  transform: scale(1.04);
 }
-.pf-card:hover .pf-poster,
-.pf-card:focus-visible .pf-poster {
+.pf-card.is-video-ready:hover .pf-poster,
+.pf-card.is-video-ready:focus-visible .pf-poster {
   opacity: 0;
+}
+
+@keyframes pf-media-loading {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-media::before { animation: none; }
 }
 /* On touch devices: keep poster visible; video playback happens in the lightbox after tap. */
 @media (hover: none), (pointer: coarse) {

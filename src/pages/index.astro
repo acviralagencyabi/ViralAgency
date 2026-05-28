@@ -277,8 +277,8 @@ const link = (path: string) => {
                   alt={item.brand}
                   class="pf-poster"
                   loading="lazy"
-                  width={800}
-                  height={1000}
+                  width={360}
+                  height={450}
                 />
               )}
               <video
@@ -365,6 +365,9 @@ const link = (path: string) => {
     portfolioCards.forEach((card) => {
       const video = card.querySelector('video');
       if (!video) return;
+      video.addEventListener('loadeddata', () => card.classList.add('is-video-ready'));
+      video.addEventListener('canplay', () => card.classList.add('is-video-ready'));
+      video.addEventListener('error', () => card.classList.remove('is-video-ready'));
 
       const play = () => {
         try {
