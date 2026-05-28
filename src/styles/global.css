@@ -1313,6 +1313,18 @@ html.lenis, html.lenis body { height: auto; }
   gap: clamp(0.75rem, 1.6vw, 1.15rem);
 }
 
+@media (max-width: 640px) {
+  #portfolio .container-custom {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+
+  #portfolio .pf-dot-grid {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .pf-card {
   position: relative;
   overflow: hidden;
