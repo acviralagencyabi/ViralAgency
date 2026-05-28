@@ -244,9 +244,9 @@ const link = (path: string) => {
   </section>
 
   <!-- =======================================================================
-       PORTFOLIO — griglia asimmetrica con video hover
+       PORTFOLIO — griglia compatta con video hover
        ======================================================================= -->
-  <section id="portfolio" class="section section-dark">
+  <section id="portfolio" class="section-tight section-dark">
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
@@ -260,7 +260,7 @@ const link = (path: string) => {
         </a>
       </div>
 
-      <div class="pf-masonry" id="portfolio-grid" style="opacity:0">
+      <div class="pf-dot-grid" id="portfolio-grid">
         {portfolio.map((item, index) => (
           <button
             type="button"
@@ -336,29 +336,9 @@ const link = (path: string) => {
   </div>
 
   <script is:inline define:vars={{ portfolioData: portfolio.map((p) => ({ video: p.videoSrc, title: p.brand })) }}>
-    // ── Build responsive masonry columns with per-column stagger offsets ──────
-    // JS splits the flat card list into N columns; each column has a different
-    // top margin so cards never align across columns (true Pinterest stagger).
     const allCards = [...document.querySelectorAll('#portfolio-grid .pf-card')];
-    {
-      const w     = window.innerWidth;
-      const ncols = w >= 1100 ? 4 : w >= 640 ? 3 : 2;
-      // Stagger offsets (rem) per column — vary deliberately for organic look
-      const ofs   = [0, 2, 0.8, 2.5].slice(0, ncols);
-      const grid  = document.getElementById('portfolio-grid');
-      const cols  = Array.from({ length: ncols }, (_, i) => {
-        const d = document.createElement('div');
-        d.className = 'pf-col';
-        if (ofs[i]) d.style.marginTop = ofs[i] + 'rem';
-        return d;
-      });
-      allCards.forEach((card, i) => cols[i % ncols].appendChild(card));
-      while (grid.firstChild) grid.removeChild(grid.firstChild);
-      cols.forEach(col => grid.appendChild(col));
-      grid.style.opacity = '1';
-    }
 
-    // -------- Hover-to-play on the asymmetric grid --------
+    // -------- Hover-to-play on the compact dot grid --------
     const portfolioCards = allCards;
     const isCoarse =
       window.matchMedia('(hover: none)').matches ||

@@ -4,7 +4,7 @@ import globalSettings from '../../content/settings/global.json';
 import homepage from '../../content/pages/homepage.json';
 import cookieBanner from '../../content/pages/cookie-banner.json';
 import { Instagram, Facebook, Phone, MessageCircle } from 'lucide-astro';
-import logoFullDefault from '../assets/images/brand/logo-black-tagline.png';
+import logoFullDefault from '../assets/images/brand/logo-white-tagline.png';
 import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 
 const brandImages = import.meta.glob<{ default: ImageMetadata }>(
@@ -61,7 +61,7 @@ const locationWhatsappUrl = (loc: any) =>
       <!-- Brand -->
       <div class="col-span-2">
         <p class="mono-label text-white/60 mb-3">Brand</p>
-        <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto img-darken" />
+        <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto" />
         <p class="mono-label text-white/40 mt-4">
           {globalSettings.companyName} — {footerTagline}
         </p>
