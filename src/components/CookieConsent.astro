@@ -94,6 +94,40 @@ const privacyPolicyHref = BASE + 'privacy-policy/';
       return payload;
     }
 
+    function gaCookieNames(id) {
+      const suffix = String(id || '').replace(/^G-/, '').replace(/-/g, '_');
+      return ['_ga', '_gid', '_gat', suffix ? `_ga_${suffix}` : ''].filter(Boolean);
+    }
+
+    function cookieDomains() {
+      const host = window.location.hostname;
+      if (!host || host === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(host)) return [''];
+      const parts = host.split('.');
+      const domains = [''];
+      for (let i = 0; i <= parts.length - 2; i++) {
+        domains.push(`.${parts.slice(i).join('.')}`);
+      }
+      return domains;
+    }
+
+    function deleteCookie(name, domain) {
+      const encoded = encodeURIComponent(name);
+      const domainPart = domain ? `; domain=${domain}` : '';
+      document.cookie = `${encoded}=; Max-Age=0; path=/${domainPart}; SameSite=Lax`;
+      document.cookie = `${encoded}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${domainPart}; SameSite=Lax`;
+    }
+
+    function deleteGACookies() {
+      gaCookieNames(gaId).forEach((name) => {
+        cookieDomains().forEach((domain) => deleteCookie(name, domain));
+      });
+    }
+
+    function setGADisabled(disabled) {
+      if (!gaId) return;
+      window[`ga-disable-${gaId}`] = Boolean(disabled);
+    }
+
     function showBanner() {
       if (!banner) return;
       // Defer so the slide-in animation actually plays
@@ -123,11 +157,13 @@ const privacyPolicyHref = BASE + 'privacy-policy/';
 
     function loadGA(id) {
       if (!id) return;
+      setGADisabled(false);
       if (window.__gaLoaded) return;
       window.__gaLoaded = true;
 
       const s = document.createElement('script');
       s.async = true;
+      s.dataset.cookieManaged = 'analytics';
       s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
       document.head.appendChild(s);
 
@@ -135,16 +171,24 @@ const privacyPolicyHref = BASE + 'privacy-policy/';
       function gtag(){ window.dataLayer.push(arguments); }
       window.gtag = gtag;
       gtag('js', new Date());
-      gtag('config', id, { anonymize_ip: true });
+      gtag('config', id, {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure',
+      });
     }
 
     function applyConsent(consent) {
       if (consent?.analytics && gaId) {
         loadGA(gaId);
+      } else {
+        setGADisabled(true);
+        deleteGACookies();
       }
       // Optional: dispatch a global event so other scripts can react
       document.dispatchEvent(new CustomEvent('cookie-consent:update', { detail: consent }));
     }
+
+    setGADisabled(true);
 
     // Wire up banner buttons
     banner?.addEventListener('click', (e) => {

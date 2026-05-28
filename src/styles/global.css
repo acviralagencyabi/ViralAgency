@@ -1315,13 +1315,20 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (max-width: 640px) {
   #portfolio .container-custom {
-    padding-left: 0.45rem;
-    padding-right: 0.45rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
   }
 
   #portfolio .pf-dot-grid {
+    max-width: none;
     padding-left: 0;
     padding-right: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.35rem, 1.8vw, 0.55rem);
+  }
+
+  #portfolio .pf-card {
+    width: 100%;
   }
 }
 
@@ -1362,7 +1369,7 @@ html.lenis, html.lenis body { height: auto; }
   .pf-dot-grid { --dot-size: clamp(4.8rem, 23vw, 6.2rem); }
   .pf-card:hover,
   .pf-card:focus-visible {
-    transform: scale(1.18);
+    transform: scale(1.1);
   }
 }
 
