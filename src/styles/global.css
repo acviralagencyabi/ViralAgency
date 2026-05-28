@@ -1356,7 +1356,7 @@ html.lenis, html.lenis body { height: auto; }
 .pf-card:hover,
 .pf-card:focus-visible {
   z-index: 6;
-  transform: scale(1.42);
+  transform: scale(1.58);
   border-color: rgba(245, 243, 238, 0.36);
   box-shadow: 0 0.9rem 2.2rem rgba(0, 0, 0, 0.28);
 }
@@ -1369,7 +1369,7 @@ html.lenis, html.lenis body { height: auto; }
   .pf-dot-grid { --dot-size: clamp(4.8rem, 23vw, 6.2rem); }
   .pf-card:hover,
   .pf-card:focus-visible {
-    transform: scale(1.12);
+    transform: scale(1.16);
   }
 }
 
