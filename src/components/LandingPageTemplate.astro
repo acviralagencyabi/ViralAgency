@@ -53,11 +53,16 @@ interface LandingData {
   };
 }
 
+import { relatedLandingLinks } from '../lib/internalLinks';
+
 interface Props {
   data: LandingData;
+  slug?: string;
 }
 
-const { data } = Astro.props;
+const { data, slug = '' } = Astro.props;
+
+const related = relatedLandingLinks(slug);
 
 const email = globalSettings.contact?.email || 'info@viralagency.it';
 const phone = globalSettings.contact?.phone || '+39 371 376 7488';
@@ -94,9 +99,9 @@ const schema = JSON.stringify({
   '@graph': [
     {
       '@type': 'LocalBusiness',
-      '@id': 'https://viralagency.it/#business',
+      '@id': 'https://www.viralagency.it/#business',
       name: globalSettings.companyName,
-      url: 'https://viralagency.it',
+      url: 'https://www.viralagency.it',
       telephone: (globalSettings.contact?.phone || '').replace(/\s/g, '').replace('+', ''),
       email: globalSettings.contact?.email || '',
       hasMap: globalMapsUrl || undefined,
@@ -109,7 +114,7 @@ const schema = JSON.stringify({
             '@type': 'Service',
             name: data.schemaService.serviceName,
             serviceType: data.schemaService.serviceType,
-            provider: { '@id': 'https://viralagency.it/#business' },
+            provider: { '@id': 'https://www.viralagency.it/#business' },
             areaServed: data.schemaService.areaServed,
             description: data.schemaService.serviceDescription,
           },
@@ -272,6 +277,23 @@ const schema = JSON.stringify({
               </div>
             ))}
           </div>
+        </div>
+      </section>
+    )}
+
+    {related.length > 0 && (
+      <section class="section pt-12 pb-14">
+        <div class="container-custom">
+          <p class="mono-label text-[var(--muted)] mb-3">Vedi anche</p>
+          <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            {related.map((l) => (
+              <li>
+                <a href={l.href} class="text-[var(--muted)] hover:text-[var(--electric)] transition-colors">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
     )}

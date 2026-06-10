@@ -6,6 +6,7 @@ import cookieBanner from '../../content/pages/cookie-banner.json';
 import { Instagram, Facebook, Phone, MessageCircle } from 'lucide-astro';
 import logoFullDefault from '../assets/images/brand/logo-white-tagline.png';
 import { cleanPhoneHref, whatsappHref } from '../lib/contact';
+import { landingLinks } from '../lib/internalLinks';
 
 const brandImages = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/brand/**/*.{png,jpg,jpeg,gif,webp,svg}',
@@ -192,6 +193,19 @@ const locationWhatsappUrl = (loc: any) =>
         )}
       </div>
     </div>
+
+    {landingLinks.length > 0 && (
+      <nav aria-label="Servizi e aree" class="mt-14">
+        <p class="mono-label text-white/40 mb-3">Servizi e aree</p>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/45">
+          {landingLinks.map((l) => (
+            <li>
+              <a href={l.href} class="hover:text-[var(--electric)] transition-colors">{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
 
     <div class="mt-16 pt-8 border-t border-white/10 flex flex-wrap gap-4 items-center justify-between mono-label text-white/50">
       <span>© {currentYear} {globalSettings.companyName} — Tutti i diritti riservati</span>

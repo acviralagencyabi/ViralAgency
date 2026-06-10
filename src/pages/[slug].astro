@@ -15,12 +15,12 @@ export function getStaticPaths() {
     const slug = filePath.split('/').pop()?.replace('.json', '') || '';
     return {
       params: { slug },
-      props: { data: mod.default },
+      props: { data: mod.default, slug },
     };
   });
 }
 
-const { data } = Astro.props as { data: any };
+const { data, slug } = Astro.props as { data: any; slug: string };
 ---
 
-<LandingPageTemplate data={data} />
+<LandingPageTemplate data={data} slug={slug} />
