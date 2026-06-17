@@ -6,7 +6,7 @@ const storage = isLocal
   ? { kind: 'local' as const }
   : {
       kind: 'github' as const,
-      repo: 'Ro0t-set/VisualDigitalAgencyDemo' as const,
+      repo: 'WebViralAgency/ViralAgency' as const,
     };
 
 // ──────────────────────────────────────────────────────────────────────────────
