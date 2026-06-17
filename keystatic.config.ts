@@ -1,6 +1,9 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
 
-const isLocal = process.env.NODE_ENV === 'development' || import.meta.env?.DEV;
+const forceGitHubMode =
+  import.meta.env?.PUBLIC_KEYSTATIC_FORCE_GITHUB === 'true' ||
+  (typeof process !== 'undefined' && process.env?.KEYSTATIC_FORCE_GITHUB === 'true');
+const isLocal = !forceGitHubMode && (import.meta.env?.DEV ?? false);
 
 const storage = isLocal
   ? { kind: 'local' as const }
