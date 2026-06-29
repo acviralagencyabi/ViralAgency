@@ -1,0 +1,323 @@
+---
+import Layout from '../layouts/Layout.astro';
+import globalSettings from '../../content/settings/global.json';
+import homepage from '../../content/pages/homepage.json';
+import { Phone, MessageCircle } from 'lucide-astro';
+import { cleanPhoneHref, whatsappHref } from '../lib/contact';
+
+const email = globalSettings.contact?.email || 'info@viralagency.it';
+const phone = globalSettings.contact?.phone || '+39 371 376 7488';
+const whatsappRaw = (globalSettings as any).whatsapp?.number || '';
+const whatsappMessage = (globalSettings as any).whatsapp?.defaultMessage || '';
+const globalWhatsappUrl = whatsappHref(whatsappRaw, whatsappMessage);
+const locations = (homepage as any).locations ?? [];
+const BASE = import.meta.env.BASE_URL;
+
+const mapsUrl = (loc: any) => {
+  if (loc.mapsUrl) return loc.mapsUrl;
+  const q = [loc.address, loc.city].filter(Boolean).join(', ');
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+};
+const locationPhone = (loc: any) => loc.phone || phone;
+const locationWhatsappUrl = (loc: any) =>
+  whatsappHref(loc.whatsappNumber || whatsappRaw, loc.whatsappMessage || whatsappMessage);
+
+const benefits = [
+  { title: 'Strategie personalizzate', desc: 'Ogni business ha obiettivi diversi. Costruiamo piani social su misura sul tuo mercato e sul tuo pubblico, non format preconfezionati.' },
+  { title: 'Contenuti che generano attenzione', desc: 'Creiamo contenuti progettati per aumentare engagement, autorevolezza e conversioni — non per inseguire vanity metrics.' },
+  { title: 'Performance marketing', desc: 'Ogni campagna advertising viene ottimizzata per massimizzare il ritorno sull’investimento, non solo le impression.' },
+  { title: 'Analisi e reportistica', desc: 'Monitoriamo ogni attività con KPI chiari e report periodici: sai sempre cosa stai ottenendo e perché.' },
+];
+
+const process = [
+  { n: '01', title: 'Analisi del business', desc: 'Studiamo il mercato, i competitor e il posizionamento del tuo brand.' },
+  { n: '02', title: 'Definizione della strategia', desc: 'Costruiamo un piano editoriale e una strategia di acquisizione coerenti con i tuoi obiettivi aziendali.' },
+  { n: '03', title: 'Produzione dei contenuti', desc: 'Realizziamo creatività, video, copy e asset ottimizzati per ogni piattaforma.' },
+  { n: '04', title: 'Gestione e ottimizzazione', desc: 'Monitoriamo costantemente le performance per migliorare risultati e conversioni nel tempo.' },
+];
+
+const services = [
+  { title: 'Gestione Social Media', desc: 'Gestiamo in modo completo i profili aziendali su Instagram, Facebook, LinkedIn, TikTok e altre piattaforme.' },
+  { title: 'Social Media Advertising', desc: 'Creiamo campagne Meta Ads e strategie di acquisizione clienti orientate alla performance.' },
+  { title: 'Content Creation', desc: 'Produciamo contenuti fotografici, video e format creativi pensati per aumentare la visibilità del brand.' },
+  { title: 'Influencer Marketing', desc: 'Collaboriamo con creator e influencer per amplificare la notorietà e raggiungere nuovi segmenti di pubblico.' },
+];
+
+const results = [
+  { metric: '+350%', desc: 'richieste commerciali per un’azienda del settore immobiliare.' },
+  { metric: '+220%', desc: 'crescita dell’engagement per un brand fashion.' },
+  { metric: '5M+', desc: 'visualizzazioni generate tra strategie organiche e campagne paid.' },
+];
+
+const pricingFactors = [
+  'Numero di piattaforme gestite',
+  'Quantità di contenuti prodotti',
+  'Investimenti in advertising',
+  'Obiettivi di crescita',
+  'Complessità del progetto',
+];
+
+const faqs = [
+  { q: 'Quanto costa un’agenzia di social media marketing?', a: 'Il costo varia in base ai servizi richiesti, alle piattaforme coinvolte e agli obiettivi di business. Realizziamo preventivi personalizzati per aziende di diverse dimensioni.' },
+  { q: 'Quali social network gestite?', a: 'Gestiamo Instagram, Facebook, LinkedIn, TikTok, YouTube e altre piattaforme in funzione del target e della strategia.' },
+  { q: 'Gestite anche le campagne pubblicitarie?', a: 'Sì. Ci occupiamo della pianificazione, creazione e ottimizzazione delle campagne Meta Ads e di social advertising.' },
+  { q: 'In quanto tempo si vedono i risultati?', a: 'Le campagne advertising possono generare risultati in tempi brevi, mentre la crescita organica richiede generalmente alcuni mesi di lavoro continuativo.' },
+  { q: 'Posso richiedere solo la produzione dei contenuti?', a: 'Sì. Offriamo servizi modulari che includono anche la sola creazione di contenuti foto e video.' },
+];
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'LocalBusiness',
+      '@id': 'https://www.viralagency.it/#business',
+      name: globalSettings.companyName,
+      url: 'https://www.viralagency.it',
+      telephone: (globalSettings.contact?.phone || '').replace(/\s/g, '').replace('+', ''),
+      email,
+      hasMap: (globalSettings.social as any)?.googleMapsUrl || undefined,
+      address: locations.map((loc: any) => ({
+        '@type': 'PostalAddress',
+        streetAddress: loc.address?.split(',')[0]?.trim() || '',
+        addressLocality: loc.city || '',
+        addressCountry: 'IT',
+      })),
+      priceRange: '€€',
+    },
+    {
+      '@type': 'Service',
+      name: 'Agenzia di Social Media Marketing',
+      serviceType: 'Social Media Marketing',
+      provider: { '@id': 'https://www.viralagency.it/#business' },
+      areaServed: ['Modena', 'Emilia-Romagna', 'Italia'],
+      description: 'Agenzia di social media marketing: strategia, gestione social, content creation e advertising orientato alle conversioni per aziende e brand.',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+});
+---
+
+<Layout
+  title="Agenzia di Social Media Marketing | Viral Digital Agency"
+  description="Viral Agency è l’agenzia di social media marketing che aiuta aziende e brand a crescere con strategie, contenuti e campagne advertising orientate ai risultati. Richiedi una consulenza gratuita."
+>
+  <div class="pt-28 md:pt-40">
+
+    <!-- HERO -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Social Media Marketing</p>
+        <h1 class="h-display text-[clamp(2.5rem,6.5vw,5.5rem)] leading-[0.92] mt-3 max-w-4xl reveal">
+          Agenzia di Social Media Marketing per aziende che vogliono <em class="not-italic text-[var(--electric)]">crescere davvero</em>
+        </h1>
+        <p class="text-[1.125rem] text-[var(--muted)] max-w-2xl mt-6 leading-relaxed reveal">
+          Costruiamo strategie social, contenuti e campagne advertising che trasformano follower e visualizzazioni in clienti e fatturato.
+        </p>
+        <div class="flex flex-wrap gap-4 mt-10 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn" data-cursor="parliamo">Richiedi una consulenza gratuita</a>
+          <a href={`tel:${cleanPhoneHref(phone)}`} class="btn-outline" aria-label={`Chiama ${phone}`}>
+            <Phone class="w-4 h-4 shrink-0" strokeWidth={1.8} />
+            <span>{phone}</span>
+          </a>
+          {globalWhatsappUrl && (
+            <a href={globalWhatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-outline" data-cursor="whatsapp" aria-label="Scrivici su WhatsApp">
+              <MessageCircle class="w-4 h-4 shrink-0" strokeWidth={1.8} />
+              <span>WhatsApp</span>
+            </a>
+          )}
+        </div>
+        <p class="mono-label text-[var(--muted)] mt-8 reveal">★★★★★ &nbsp;Più di 100 aziende supportate nella crescita digitale.</p>
+      </div>
+    </section>
+
+    <!-- PROBLEMA / SOLUZIONE -->
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Perché investire nel social media marketing</p>
+        <h2 class="section-title mt-3 max-w-3xl">Essere presenti sui social non basta.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-3">Il problema</p>
+            <p class="text-white/70 leading-relaxed">Senza una strategia chiara, contenuti efficaci e campagne ottimizzate, il rischio è investire tempo e budget senza ottenere risultati concreti.</p>
+          </div>
+          <div class="reveal">
+            <p class="mono-label text-white/60 mb-3">La soluzione</p>
+            <p class="text-white/70 leading-relaxed">Viral Agency è un’agenzia di social media marketing specializzata nella crescita di aziende e brand attraverso strategie personalizzate, produzione di contenuti e advertising orientato alle conversioni.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICI -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Perché scegliere Viral Agency</p>
+        <h2 class="section-title mt-3 max-w-3xl">Crescita concreta, non metriche di vanità.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-12">
+          {benefits.map((b) => (
+            <div class="reveal border border-[var(--hairline)] p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--ink)] mb-2">{b.title}</h3>
+              <p class="text-sm text-[var(--muted)] leading-relaxed">{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- COME LAVORIAMO -->
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Come lavoriamo</p>
+        <h2 class="section-title mt-3 max-w-3xl">Un metodo in quattro passi, dalla strategia ai risultati.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
+          {process.map((p) => (
+            <div class="reveal border border-white/10 p-6 rounded-sm">
+              <p class="mono-label text-[var(--electric)] mb-4">{p.n}</p>
+              <h3 class="font-semibold text-[var(--paper)] mb-2">{p.title}</h3>
+              <p class="text-sm text-white/70 leading-relaxed">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVIZI -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">I nostri servizi</p>
+        <h2 class="section-title mt-3 max-w-3xl">Tutto quello che serve per crescere sui social.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-12">
+          {services.map((s) => (
+            <div class="reveal border border-[var(--hairline)] p-6 rounded-sm hover:border-[var(--electric)] transition-colors">
+              <h3 class="font-semibold text-[var(--ink)] mb-2">{s.title}</h3>
+              <p class="text-sm text-[var(--muted)] leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CASE STUDY / RISULTATI -->
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Case study e risultati</p>
+        <h2 class="section-title mt-3 max-w-3xl">Alcuni risultati ottenuti per i nostri clienti.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+          {results.map((r) => (
+            <div class="reveal">
+              <p class="h-display text-[clamp(2.5rem,5vw,3.5rem)] text-[var(--electric)] leading-none">{r.metric}</p>
+              <p class="text-white/70 leading-relaxed mt-3">{r.desc}</p>
+            </div>
+          ))}
+        </div>
+        <!-- TODO cliente: inserire testimonianze e casi studio reali con nome azienda/persona -->
+      </div>
+    </section>
+
+    <!-- PERCHÉ UN'AGENZIA -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Agenzia vs gestione interna</p>
+        <h2 class="section-title mt-3 max-w-3xl">Perché scegliere un’agenzia di social media marketing.</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl">
+          <p class="text-[var(--muted)] leading-relaxed reveal">Affidarsi a un’agenzia significa avere accesso a competenze strategiche, creative e pubblicitarie difficilmente replicabili internamente. Un team specializzato sviluppa contenuti professionali, ottimizza gli investimenti pubblicitari e costruisce una presenza digitale coerente con gli obiettivi aziendali.</p>
+          <p class="text-[var(--muted)] leading-relaxed reveal">Lavorare con Viral Agency significa poter contare su un partner focalizzato sulla crescita concreta del business, non soltanto sull’aumento delle metriche di vanità. Obiettivi chiari, report leggibili e una strategia che si adatta nel tempo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUANTO COSTA -->
+    <section class="section section-dark">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Quanto costa</p>
+        <h2 class="section-title mt-3 max-w-3xl">Quanto costa una gestione social professionale?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-4xl items-start">
+          <p class="text-white/70 leading-relaxed reveal">Il costo di un servizio di social media marketing dipende da diversi fattori. Per questo realizziamo preventivi personalizzati e strategie costruite sulle esigenze specifiche di ogni azienda.</p>
+          <ul class="space-y-3 reveal">
+            {pricingFactors.map((f) => (
+              <li class="flex items-start gap-3 text-white/80">
+                <span class="text-[var(--electric)] mt-1">—</span>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container-custom">
+        <p class="eyebrow reveal">Domande frequenti</p>
+        <h2 class="section-title mt-3 max-w-3xl">Le risposte alle domande più comuni.</h2>
+        <div class="max-w-3xl mt-12 divide-y divide-[var(--hairline)]">
+          {faqs.map((f) => (
+            <details class="group py-5 reveal">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 font-semibold text-[var(--ink)] list-none">
+                <span>{f.q}</span>
+                <span class="text-[var(--electric)] transition-transform group-open:rotate-45">+</span>
+              </summary>
+              <p class="text-[var(--muted)] leading-relaxed mt-3">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- SEDI -->
+    {locations.length > 0 && (
+      <section class="section section-dark">
+        <div class="container-custom">
+          <p class="eyebrow reveal">Dove siamo</p>
+          <h2 class="section-title mt-3">{locations.map((l: any) => l.city).join(', ')} — il nostro team è qui.</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 mt-12">
+            {locations.map((loc: any) => (
+              <div class="reveal">
+                <p class="mono-label text-white/60 mb-4">{loc.tag} — {loc.city}</p>
+                <address class="not-italic space-y-1 text-[var(--paper)]">
+                  <strong class="block text-lg">{globalSettings.companyName}</strong>
+                  {loc.address && <span class="block text-white/80">{loc.address}</span>}
+                  <a href={`tel:${cleanPhoneHref(locationPhone(loc))}`} class="inline-flex items-center gap-2 text-white/80 hover:text-[var(--electric)] transition-colors mt-4" aria-label={`Chiama la sede di ${loc.city}`}>
+                    <Phone class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                    <span>{locationPhone(loc)}</span>
+                  </a>
+                  {locationWhatsappUrl(loc) && (
+                    <a href={locationWhatsappUrl(loc)} target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-white/80 hover:text-[var(--electric)] transition-colors" aria-label={`Scrivi alla sede di ${loc.city} su WhatsApp`}>
+                      <MessageCircle class="w-4 h-4 shrink-0" strokeWidth={1.7} />
+                      <span>WhatsApp</span>
+                    </a>
+                  )}
+                  <a href={`mailto:${email}`} class="block text-white/80 hover:text-[var(--electric)] transition-colors">{email}</a>
+                </address>
+                <a href={mapsUrl(loc)} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 mt-5 text-sm text-[var(--electric)] hover:underline">Vedi su Google Maps ↗</a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA FINALE -->
+    <section class="section cta-section noise-overlay">
+      <div class="container-custom text-center">
+        <p class="eyebrow reveal">Parliamone</p>
+        <h2 class="section-title mt-3 max-w-2xl mx-auto">Cerchi un’agenzia di social media marketing per far crescere il tuo business?</h2>
+        <p class="text-[var(--paper)]/80 max-w-xl mx-auto mt-4 leading-relaxed reveal">Parla con i nostri specialisti e scopri la strategia più adatta ai tuoi obiettivi. In 30 minuti capiamo insieme dove si può fare la differenza.</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8 reveal">
+          <a href={`${BASE}#contatti`} class="btn-primary magnetic-btn">Richiedi una consulenza gratuita</a>
+          <a href={`mailto:${email}`} class="btn-outline">{email}</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script is:inline type="application/ld+json" set:html={schema} />
+</Layout>
