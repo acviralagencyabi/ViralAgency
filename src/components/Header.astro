@@ -41,12 +41,10 @@ const contactLabel = nav.contactLabel || 'Contatti';
 
 const portfolioMenu = [
   { label: 'Lavori', href: anchor('#portfolio') },
-  { label: 'Clienti', href: anchor('#clienti') },
   { label: 'Recensioni', href: anchor('#recensioni') },
 ];
 
 const aboutMenu = [
-  { label: 'Manifesto', href: anchor('#manifesto') },
   { label: 'Servizi', href: anchor('#servizi') },
   { label: 'Il team', href: anchor('#team') },
 ];
@@ -80,7 +78,7 @@ const aboutMenu = [
         </div>
 
         <div class="nav-item">
-          <a href={anchor('#manifesto')} class="nav-link">{aboutLabel}</a>
+          <a href={anchor('#servizi')} class="nav-link">{aboutLabel}</a>
           <div class="megamenu">
             <p class="mono-label mb-3">{aboutMegaDesc}</p>
             <div class="megamenu-grid">
@@ -132,7 +130,7 @@ const aboutMenu = [
       <p class="mono-label opacity-60 mb-8">Menu</p>
       <nav class="flex flex-col gap-5">
         <a href={anchor('#portfolio')} class="mm-link">{portfolioLabel} <span>↗</span></a>
-        <a href={anchor('#manifesto')} class="mm-link">{aboutLabel} <span>↗</span></a>
+        <a href={anchor('#servizi')} class="mm-link">{aboutLabel} <span>↗</span></a>
         <a href={anchor('#servizi')} class="mm-link">Servizi <span>↗</span></a>
         <a href={anchor('#articoli')} class="mm-link">{articlesLabel} <span>↗</span></a>
         <a href={anchor('#contatti')} class="mm-link">{contactLabel} <span>↗</span></a>
@@ -172,14 +170,27 @@ const aboutMenu = [
   const menuIconClose = document.getElementById('menu-icon-close');
   const navLogo = document.querySelector<HTMLAnchorElement>('.nav-logo');
 
-  // Scrolled state for navbar
+  // On the NOVA homepage the header is transparent + white while it sits over
+  // the dark scroll-video hero, then becomes the solid bar over light content.
+  const heroEl = document.querySelector<HTMLElement>('.nova-scope');
+
+  // Scrolled state for navbar (+ over-hero state on the video homepage)
   const onScroll = () => {
     if (!header) return;
-    if (window.scrollY > 24) header.classList.add('is-scrolled');
+    const y = window.scrollY;
+    if (y > 24) header.classList.add('is-scrolled');
     else header.classList.remove('is-scrolled');
+
+    if (heroEl) {
+      const heroBottom = heroEl.offsetTop + heroEl.offsetHeight;
+      // White header while the dark hero is still behind the bar.
+      if (y < heroBottom - header.offsetHeight - 8) header.classList.add('is-over-hero');
+      else header.classList.remove('is-over-hero');
+    }
   };
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
 
   function waveNavHand() {
     if (!navLogo) return;

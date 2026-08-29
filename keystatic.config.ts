@@ -227,34 +227,43 @@ export default config({
         // ── HERO ─────────────────────────────────────────────────────────
         hero: fields.object(
           {
-            badge: fields.text({
-              label: 'Badge (etichetta in alto a sinistra)',
-              defaultValue: '01 / HOMEPAGE',
+            word: fields.text({
+              label: 'Parola 3D (headline gigante)',
+              defaultValue: 'VIRALITÀ',
             }),
-            location: fields.text({
-              label: 'Testo location (in alto a destra, usa ↵ per a capo)',
+            syllables: fields.text({
+              label: 'Sillabazione (sopra la parola, stile dizionario)',
+              defaultValue: 'vi·ra·li·tà',
+            }),
+            wordTag: fields.text({
+              label: 'Tag grammaticale (es. s.f.)',
+              defaultValue: 's.f.',
+            }),
+            definition: fields.text({
+              label: 'Definizione (citazione stile dizionario)',
               multiline: true,
-              defaultValue: 'BOLOGNA · MODENA — IT\nMOTOR VALLEY',
+              defaultValue:
+                "La viralità è la capacità di un contenuto o di un'informazione di diffondersi in modo estremamente rapido, capillare e incontrollato sul web, grazie alla condivisione a catena da parte degli utenti.",
             }),
-            titleLine1: fields.text({
-              label: 'Titolo — Riga 1',
-              defaultValue: 'REAL',
+            definitionKeywords: fields.text({
+              label: 'Parole evidenziate nella definizione (separate da virgola)',
+              defaultValue: 'estremamente rapido, capillare, incontrollato, condivisione a catena',
             }),
-            titleLine2: fields.text({
-              label: 'Titolo — Riga 2',
-              defaultValue: 'GOES',
+            definitionSource: fields.text({
+              label: 'Fonte della definizione',
+              defaultValue: 'Accademia della Crusca',
             }),
-            titleLine3: fields.text({
-              label: 'Titolo — Riga 3',
-              defaultValue: 'VIRAL',
+            punchline: fields.text({
+              label: 'Frase di chiusura (sotto la definizione)',
+              defaultValue: 'Noi la progettiamo ogni giorno, per brand come il tuo.',
             }),
             tagline: fields.text({
-              label: 'Tagline (sotto il titolo)',
+              label: 'Microcopy sotto la CTA',
               defaultValue: 'Agenzia di comunicazione & marketing.',
             }),
             ctaLabel: fields.text({
               label: 'Testo CTA',
-              defaultValue: 'Prenota una Call',
+              defaultValue: 'Voglio diventare virale',
             }),
             ctaHref: fields.text({
               label: 'Destinazione CTA',
@@ -283,29 +292,37 @@ export default config({
           { label: 'Marquee (banda animata)' }
         ),
 
-        manifesto: fields.object(
+        problem: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '01 — Manifesto' }),
             title: fields.text({
               label: 'Titolo (multilinea: usa Invio per andare a capo)',
               multiline: true,
+              defaultValue: "Nel 2026 l'attenzione\nè la valuta più rara che esista.",
             }),
             body: fields.text({
-              label: 'Corpo del manifesto',
+              label: 'Testo di apertura (il problema)',
               multiline: true,
+              defaultValue:
+                'Il tuo cliente ideale scorre centinaia di contenuti al giorno e decide in una frazione di secondo cosa merita un secondo sguardo. In questo rumore, un brand che non si fa notare semplicemente non esiste.',
             }),
-            tagline: fields.text({
-              label: 'Tagline (frase di chiusura)',
+            points: fields.array(fields.text({ label: 'Punto (sintomo del problema)' }), {
+              label: 'Punti (elenco dei sintomi)',
+              itemLabel: (props) => props.value || '(vuoto)',
+            }),
+            turn: fields.text({
+              label: 'Frase di svolta (dal problema alla soluzione)',
               multiline: true,
+              defaultValue: 'Non ti serve più budget. Ti serve diventare impossibile da ignorare.',
             }),
-            ctaLabel: fields.text({
-              label: 'Testo CTA arcobaleno',
-              defaultValue: 'Parliamo del tuo progetto',
-            }),
-            ctaHref: fields.text({
-              label: 'Destinazione CTA (es. #contatti)',
-              defaultValue: '#contatti',
-            }),
+            ctaLabel: fields.text({ label: 'Testo CTA', defaultValue: 'Parliamone' }),
+            ctaHref: fields.text({ label: 'Destinazione CTA', defaultValue: '#contatti' }),
+          },
+          { label: 'Sezione Problema' }
+        ),
+
+        // KPI di credibilità (mostrati nella sezione Recensioni/Proof)
+        manifesto: fields.object(
+          {
             kpis: fields.array(
               fields.object({
                 num: fields.number({ label: 'Numero', defaultValue: 0 }),
@@ -319,13 +336,12 @@ export default config({
               }
             ),
           },
-          { label: 'Manifesto (Chi siamo)' }
+          { label: 'Numeri / KPI (proof)' }
         ),
 
         // ── PORTFOLIO SECTION HEADER ──────────────────────────────────────
         portfolioSection: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '02 — Portfolio' }),
             title: fields.text({
               label: 'Titolo sezione',
               defaultValue: 'I lavori migliori, cliente per cliente.',
@@ -367,7 +383,6 @@ export default config({
         // ── SERVICES SECTION HEADER ───────────────────────────────────────
         servicesSection: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '03 — Servizi' }),
             title: fields.text({
               label: 'Titolo sezione',
               defaultValue: 'Quello che facciamo, ogni giorno.',
@@ -446,7 +461,6 @@ export default config({
         // ── TEAM SECTION HEADER ───────────────────────────────────────────
         teamSection: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '04 — Team' }),
             title: fields.text({
               label: 'Titolo sezione',
               defaultValue: 'Persone vere dietro ogni post.',
@@ -479,19 +493,26 @@ export default config({
         // ── REVIEWS SECTION HEADER ────────────────────────────────────────
         reviewsSection: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '05 — Recensioni' }),
             title: fields.text({
-              label: 'Titolo sezione',
-              defaultValue: 'Lo dicono i nostri clienti.',
+              label: 'Titolo sezione (multilinea)',
+              multiline: true,
+              defaultValue: 'Non lo diciamo noi.\nLo dicono i clienti, su Google.',
+            }),
+            rating: fields.text({
+              label: 'Voto medio Google (es. 5,0)',
+              defaultValue: '5,0',
+            }),
+            count: fields.number({
+              label: 'Numero di recensioni Google',
+              defaultValue: 159,
             }),
           },
-          { label: 'Sezione Recensioni (intestazione)' }
+          { label: 'Sezione Recensioni (proof Google)' }
         ),
 
         // ── ARTICLES SECTION HEADER ───────────────────────────────────────
         articlesSection: fields.object(
           {
-            eyebrow: fields.text({ label: 'Eyebrow', defaultValue: '06 — Articoli' }),
             title: fields.text({
               label: 'Titolo sezione',
               defaultValue: 'Interviste & approfondimenti.',
@@ -520,10 +541,6 @@ export default config({
 
         contact: fields.object(
           {
-            eyebrow: fields.text({
-              label: 'Eyebrow',
-              defaultValue: '07 — Contatti',
-            }),
             title: fields.text({
               label: 'Titolo sezione',
               defaultValue: 'Prenota una call.',

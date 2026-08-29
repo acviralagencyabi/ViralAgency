@@ -1958,6 +1958,458 @@ a.review-card { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================================
+   Immersive engine — companion styles (src/scripts/immersive.ts)
+   ========================================================================= */
+
+/* Scroll progress bar — electric hairline above the navbar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--electric);
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 130;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Marquee driven by JS (scroll-velocity reactive) — kill the CSS loop */
+.marquee-track.is-js { animation: none; }
+
+/* Scrub text — words start dim and light up while you read.
+   Base opacity is set by GSAP; this only prevents layout shift. */
+.scrub-text .sw { display: inline; }
+
+/* Button label roll — text flips up revealing its duplicate on hover */
+.roll {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* Avoid clipping descenders of lowercase labels */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.roll-a,
+.roll-b {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+.roll-b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(115%);
+}
+.btn-fx:hover .roll-a { transform: translateY(-115%); }
+.btn-fx:hover .roll-b { transform: translateY(0); }
+
+/* Sheen sweep on solid buttons */
+.btn-primary,
+.btn-outline,
+.btn-pill,
+.btn-ghost {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after,
+.btn-pill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -80%;
+  width: 55%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+.btn-primary:hover::after,
+.btn-pill:hover::after {
+  animation: btn-sheen 0.7s ease forwards;
+}
+@keyframes btn-sheen {
+  from { left: -80%; }
+  to { left: 130%; }
+}
+
+/* =========================================================================
+   Hero 3D — la parola "VIRALITÀ" si moltiplica nello spazio
+   (condivisione a catena resa visiva: eco che si propagano in profondità)
+   ========================================================================= */
+
+.hero-stage {
+  perspective: 1100px;
+  perspective-origin: 42% 38%;
+}
+
+.hero-dict-head {
+  display: block;
+  margin-bottom: clamp(0.6rem, 1.4vw, 1.2rem);
+  letter-spacing: 0.22em;
+  text-transform: none; /* stile dizionario: sillabazione minuscola */
+}
+.hero-dict-tag {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 999px;
+  padding: 0.12em 0.55em;
+  margin-left: 0.35em;
+}
+
+.viral-stack {
+  position: relative;
+  transform-style: preserve-3d;
+  /* Base tilt: la profondità si legge anche prima del primo mousemove.
+     GSAP legge questo transform e parte da qui. */
+  transform: rotateX(7deg) rotateY(-8deg);
+  will-change: transform;
+  --viral-size: clamp(2.7rem, 15vw, 13rem);
+}
+.viral-float {
+  transform-style: preserve-3d;
+}
+
+.viral-word {
+  position: relative;
+  font-size: var(--viral-size);
+  line-height: 0.9;
+  transform: translateZ(0);
+}
+
+.viral-echo {
+  position: absolute;
+  inset: 0;
+  font-size: var(--viral-size);
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(10, 10, 10, 0.55);
+  pointer-events: none;
+  user-select: none;
+}
+.viral-echo-1 { transform: translateZ(-75px);  opacity: 0.55; -webkit-text-stroke-color: var(--electric); }
+.viral-echo-2 { transform: translateZ(-150px); opacity: 0.38; -webkit-text-stroke-color: rgba(31, 75, 255, 0.75); }
+.viral-echo-3 { transform: translateZ(-225px); opacity: 0.26; }
+.viral-echo-4 { transform: translateZ(-300px); opacity: 0.16; }
+.viral-echo-5 { transform: translateZ(-375px); opacity: 0.09; }
+
+@media (max-width: 767px) {
+  .viral-stack { transform: rotateX(5deg) rotateY(-5deg); }
+  .viral-echo { -webkit-text-stroke-width: 1px; }
+  .viral-echo-4, .viral-echo-5 { display: none; }
+}
+
+/* Definizione da dizionario (Accademia della Crusca) */
+.hero-def-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.02rem, 1.45vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 34rem;
+}
+.hero-def-text .kw {
+  color: inherit;
+  font-weight: 600;
+  padding: 0 0.06em;
+  background-color: transparent;
+  background-image: linear-gradient(rgba(31, 75, 255, 0.26), rgba(31, 75, 255, 0.26));
+  background-repeat: no-repeat;
+  background-position: 0 82%;
+  background-size: 100% 0.45em; /* default pieno: no-JS e reduced-motion */
+}
+.hero-punch {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  max-width: 30rem;
+}
+
+/* CTA "contagio" — pillola electric con anelli che si propagano */
+.btn-viral {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.82rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 1.35rem 2.4rem;
+  border-radius: 999px;
+  background: var(--electric);
+  color: #ffffff;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 12px 32px -14px rgba(31, 75, 255, 0.65);
+  transition: background 0.25s ease, box-shadow 0.3s ease;
+}
+.btn-viral:hover {
+  background: var(--electric-hover);
+  box-shadow: 0 16px 44px -14px rgba(31, 75, 255, 0.8);
+}
+.btn-viral::before,
+.btn-viral::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid var(--electric);
+  opacity: 0;
+  pointer-events: none;
+  animation: viral-ring 2.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+.btn-viral::after { animation-delay: 1.3s; }
+.btn-viral:hover::before,
+.btn-viral:hover::after { animation-duration: 1.1s; }
+
+@keyframes viral-ring {
+  0% { transform: scale(1); opacity: 0.85; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-viral::before,
+  .btn-viral::after { animation: none; }
+}
+
+/* =========================================================================
+   Sezione Problema — immedesimazione (agitazione del dolore)
+   ========================================================================= */
+.problem-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+  max-width: 62rem;
+}
+.problem-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.2vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--ink);
+  transition: padding-left 0.35s var(--ease-out), color 0.3s ease;
+}
+.problem-item:hover { padding-left: 0.6rem; }
+.problem-x {
+  color: var(--coupon);
+  font-weight: 700;
+  font-size: 1.05em;
+  line-height: 1.15;
+  flex-shrink: 0;
+}
+.problem-turn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2.5rem;
+}
+.problem-turn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 36rem;
+  color: var(--ink);
+}
+
+/* =========================================================================
+   Sezione Recensioni — proof reale da Google
+   ========================================================================= */
+.reviews-proof {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  align-items: center;
+}
+@media (min-width: 1024px) {
+  .reviews-proof { grid-template-columns: 1.25fr 1fr; }
+}
+.rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.rating-num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3.5rem, 7vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.rating-stars {
+  display: inline-flex;
+  gap: 0.15rem;
+  color: var(--electric);
+}
+.rating-google {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  align-self: flex-end;
+  padding-bottom: 0.4rem;
+}
+.rating-meta {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  color: var(--muted);
+  margin-top: 1rem;
+}
+.rating-meta strong { color: var(--ink); font-weight: 600; }
+.reviews-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2rem;
+}
+
+/* =========================================================================
+   NOVA_AI hero — font Flexo scoped al solo blocco intro (.nova-scope)
+   così il resto del sito Viral resta su Space Grotesk / IBM Plex Mono.
+   ========================================================================= */
+.nova-scope {
+  font-family: 'Flexo Soft Medium', system-ui, sans-serif;
+  /* Il testo NOVA è bianco sul video: le regole non-layered di Viral
+     (h1{color}, body{color}) altrimenti vincerebbero sulle utility text-white */
+  color: #fff;
+}
+.nova-scope :is(h1, h2, h3, h4, h5, h6) {
+  color: inherit;
+}
+.nova-scope [class~='font-mono'],
+.nova-scope [class~='font-sans'] {
+  font-family: 'Flexo Soft Medium', system-ui, sans-serif !important;
+}
+.nova-scope ::selection {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Il video di sfondo NOVA è `fixed` a z-index negativo. Sulla home Viral,
+   html E body hanno entrambi uno sfondo paper opaco: quello del body,
+   dipinto sopra gli elementi a z negativo, coprirebbe il video. Rendendo il
+   body trasparente (solo in home) il video torna visibile dietro l'intro. */
+body.body-nova {
+  background: transparent;
+}
+/* …e le sezioni Viral sotto l'intro devono restare opache per coprire il
+   video fisso mentre le scorri (le .section erano trasparenti sul body). */
+body.body-nova .section,
+body.body-nova .section-tight {
+  background: var(--paper);
+}
+body.body-nova .section-dark,
+body.body-nova .cta-section {
+  background: var(--ink);
+}
+body.body-nova .cta-section {
+  background: var(--deep);
+}
+
+/* Header: trasparente e bianco sopra la hero video scura; ridiventa la barra
+   solida (leggibile) appena si scende sul contenuto chiaro. Lo stato
+   `is-over-hero` è gestito via JS in Header.astro. */
+body.body-nova .nav-root {
+  background: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+body.body-nova .nav-root.is-over-hero {
+  color: #fff;
+}
+body.body-nova .nav-root.is-over-hero .nav-logo img:not([alt='']) {
+  filter: brightness(0) invert(1);
+}
+body.body-nova .nav-root.is-scrolled:not(.is-over-hero) {
+  background: rgba(245, 243, 238, 0.96);
+  border-bottom-color: var(--hairline-strong);
+  box-shadow: 0 8px 24px -16px rgba(10, 10, 10, 0.35);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Magnetic buttons — GSAP drives transform per-frame; remove `transform`
+   from the CSS transition list or every frame gets re-eased (laggy). */
+.is-magnetic {
+  transition-property: background, color, border-color, box-shadow;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+  will-change: transform;
+}
+
+/* 3D tilt cards — glare follows the cursor */
+[data-tilt] {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    circle at var(--gx, 50%) var(--gy, 50%),
+    rgba(245, 243, 238, 0.22),
+    transparent 55%
+  );
+}
+
+/* CTA glow blob — --glow-y is animated on scroll by GSAP */
+.cta-section::after {
+  transform: translate3d(0, var(--glow-y, 0%), 0);
+  will-change: transform;
+}
+
+/* Lightbox — content zooms in softly when opening */
+.lightbox-content {
+  transform: scale(0.94) translateY(10px);
+  opacity: 0;
+  transition: transform 0.45s var(--ease-out), opacity 0.35s ease;
+}
+.lightbox.active .lightbox-content {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none; }
+  .btn-primary::after,
+  .btn-pill::after { display: none; }
+  .lightbox-content { transform: none; opacity: 1; transition: none; }
+}
+
+/* =========================================================================
    Accessibility
    ========================================================================= */
 

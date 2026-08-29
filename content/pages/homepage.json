@@ -4,27 +4,35 @@
     "description": "Nati nel cuore della Motor Valley, scaliamo brand in tutta Italia. Comunicazione, marketing, gestione social media, grafica & branding."
   },
   "hero": {
-    "badge": "01 / HOMEPAGE",
-    "location": "BOLOGNA · MODENA — IT\nMOTOR VALLEY",
-    "titleLine1": "REAL",
-    "titleLine2": "GOES",
-    "titleLine3": "VIRAL",
+    "word": "VIRALITÀ",
+    "syllables": "vi·ra·li·tà",
+    "wordTag": "s.f.",
+    "definition": "La viralità è la capacità di un contenuto o di un'informazione di diffondersi in modo estremamente rapido, capillare e incontrollato sul web, grazie alla condivisione a catena da parte degli utenti.",
+    "definitionKeywords": "estremamente rapido, capillare, incontrollato, condivisione a catena",
+    "definitionSource": "Accademia della Crusca",
+    "punchline": "Noi la progettiamo ogni giorno, per brand come il tuo.",
     "tagline": "Agenzia di comunicazione & marketing.",
-    "ctaLabel": "Prenota una Call",
+    "ctaLabel": "Voglio diventare virale",
     "ctaHref": "#contatti",
     "scrollLabel": "Scroll",
-    "scrollHref": "#manifesto"
+    "scrollHref": "#problema"
   },
   "marquee": {
     "text": "REAL GOES VIRAL"
   },
+  "problem": {
+    "title": "i tuoi problemi sono:",
+    "body": "",
+    "points": [
+      "Pubblichi con costanza, ma i numeri restano piatti.",
+      "I tuoi contenuti non raccontano quanto vali davvero.",
+      "Competitor meno bravi di te sembrano ovunque. Tu, quasi invisibile."
+    ],
+    "turn": "Non ti serve più budget. Ti serve diventare impossibile da ignorare.",
+    "ctaLabel": "Parliamone",
+    "ctaHref": "#contatti"
+  },
   "manifesto": {
-    "eyebrow": "01 — Manifesto",
-    "title": "Il nostro nome\nè la nostra promessa.",
-    "body": "Crediamo nella forza della realtà. Il nostro lavoro è prendere ciò che la tua azienda ha di vero - i tuoi prodotti, le tue persone, i tuoi valori - e comunicarlo con la massima cura.",
-    "tagline": "",
-    "ctaLabel": "Parliamo del tuo progetto",
-    "ctaHref": "#contatti",
     "kpis": [
       { "num": 120, "suffix": "+", "label": "Progetti consegnati" },
       { "num": 48, "suffix": "M", "label": "Views generate" },
@@ -33,7 +41,6 @@
     ]
   },
   "portfolioSection": {
-    "eyebrow": "02 — Portfolio",
     "title": "I lavori migliori, cliente per cliente.",
     "ctaLabel": "Il tuo prossimo",
     "ctaHref": "#contatti"
@@ -89,9 +96,8 @@
     }
   ],
   "servicesSection": {
-    "eyebrow": "03 — Servizi",
     "title": "Quello che facciamo, ogni giorno.",
-    "intro": "Un reparto marketing esterno, completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand."
+    "intro": "Un reparto marketing completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand."
   },
   "clients": [
     "Ducati Motor",
@@ -170,36 +176,16 @@
     }
   ],
   "teamSection": {
-    "eyebrow": "04 — Team",
     "title": "Persone vere dietro ogni post.",
     "subtitle": "Un team piccolo, selezionato, ossessionato dal risultato."
   },
-  "reviews": [
-    {
-      "quote": "Hanno preso il nostro brand e l'hanno fatto diventare conversazione. Engagement triplicato in sei mesi.",
-      "author": "Laura P.",
-      "role": "Marketing Manager, FoodCo",
-      "googleUrl": ""
-    },
-    {
-      "quote": "Velocità, qualità e una visione chiara. Non un'agenzia, un reparto marketing esterno.",
-      "author": "Davide S.",
-      "role": "CEO, Atelier 24",
-      "googleUrl": ""
-    },
-    {
-      "quote": "Ci hanno rimesso in pista dopo un rebranding andato male. Hanno capito in due chiamate.",
-      "author": "Federica M.",
-      "role": "Founder, Nord Studio",
-      "googleUrl": ""
-    }
-  ],
+  "reviews": [],
   "reviewsSection": {
-    "eyebrow": "05 — Recensioni",
-    "title": "Lo dicono i nostri clienti."
+    "title": "Non lo diciamo noi.\nLo dicono i clienti, su Google.",
+    "rating": "5,0",
+    "count": 159
   },
   "articlesSection": {
-    "eyebrow": "06 — Articoli",
     "title": "Interviste & approfondimenti.",
     "ctaLabel": "Suggeriscine uno",
     "ctaHref": "#contatti"
@@ -208,7 +194,6 @@
     "title": "Restiamo connessi"
   },
   "contact": {
-    "eyebrow": "07 — Contatti",
     "title": "Prenota una call.",
     "description": "Raccontaci il tuo progetto. Ti rispondiamo entro 24 ore, con una strategia, non con un listino.",
     "showWhatsapp": true,

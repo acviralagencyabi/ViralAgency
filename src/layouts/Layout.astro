@@ -10,9 +10,13 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Homepage NOVA hero: transparent scroll-scrubbed video background.
+      Makes the body transparent (so the fixed video shows) and switches
+      the header into its transparent/over-hero mode. */
+  heroVideo?: boolean;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, heroVideo } = Astro.props;
 
 // ────────────────────────────────────────────────────────────────────────────
 // CUSTOM CURSOR TOGGLE
@@ -73,6 +77,8 @@ const schemaOrg = {
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- NOVA_AI hero display font -->
+    <link href="https://db.onlinewebfonts.com/c/4556933d6966c60eda45bebad34d9c90?family=Flexo+Soft+Medium" rel="stylesheet" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
@@ -98,7 +104,7 @@ const schemaOrg = {
 
     <title>{fullTitle}</title>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class:list={["min-h-screen flex flex-col", heroVideo && "body-nova"]}>
     <!-- Skip link -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
@@ -124,6 +130,13 @@ const schemaOrg = {
     <CookieConsent />
 
     <script>
+      import { initImmersive } from '../scripts/immersive';
+
+      // ---------- Immersive engine: Lenis + GSAP scroll effects ----------
+      // (progress bar, hero parallax, marquee velocity, scrub text,
+      //  portfolio/team entrances, magnetic buttons, label roll, tilt)
+      initImmersive();
+
       // ---------- Split-flap reveal — intro wordmark (page-load) ----------
       // Each character flips through a short ordered sequence before landing,
       // left-to-right, mimicking a Solari/departures-board flip panel.
@@ -257,19 +270,6 @@ const schemaOrg = {
         document.querySelector('.intro-overlay')?.remove();
       }, 2500);
 
-      // ---------- Magnetic buttons ----------
-      document.querySelectorAll<HTMLElement>('.magnetic-btn').forEach((btn) => {
-        btn.addEventListener('mousemove', (e: MouseEvent) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-          btn.style.transform = 'translate(0, 0)';
-        });
-      });
-
       // ---------- KPI counter ----------
       const counters = document.querySelectorAll<HTMLElement>('[data-counter]');
       const counterObserver = new IntersectionObserver((entries) => {
@@ -293,38 +293,6 @@ const schemaOrg = {
         });
       }, { threshold: 0.5 });
       counters.forEach((c) => counterObserver.observe(c));
-
-      // ---------- Lenis smooth scroll (team99-style inertia) ----------
-      import('lenis').then(({ default: Lenis }) => {
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (prefersReduced) return;
-
-        const lenis = new Lenis({
-          duration: 1.15,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          smoothWheel: true,
-          touchMultiplier: 1.4,
-        });
-
-        const rafLoop = (time: number) => {
-          lenis.raf(time);
-          requestAnimationFrame(rafLoop);
-        };
-        requestAnimationFrame(rafLoop);
-
-        // Intercept anchor links → smooth scroll via Lenis
-        document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
-          anchor.addEventListener('click', (e) => {
-            const href = anchor.getAttribute('href');
-            if (!href || href === '#') return;
-            const target = document.querySelector(href);
-            if (!target) return;
-            e.preventDefault();
-            e.stopPropagation();
-            lenis.scrollTo(target as HTMLElement, { offset: -60 });
-          }, true);
-        });
-      });
 
       // ---------- Word-by-word reveal on section titles (scroll-triggered) ----
       // Each word slides up from behind its overflow:hidden container.

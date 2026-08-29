@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import ServiceIcons from '../components/ServiceIcons.astro';
+import NovaHero from '../components/nova/NovaHero';
 import { ArrowDown, Instagram, Facebook, Phone, Mail, MessageCircle, Star } from 'lucide-astro';
 import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 
@@ -63,11 +64,37 @@ const portfolio = Object.entries(portfolioFiles)
 
 // ---------- Homepage content (tutto editabile via Keystatic) ----------
 const H: any = homepage;
-const manifesto = H.manifesto;
+
+// Sezione problema (immedesimazione)
+const problem = {
+  title: H.problem?.title || "Nel 2026 l'attenzione\nè la valuta più rara che esista.",
+  body:
+    H.problem?.body ||
+    'Il tuo cliente ideale scorre centinaia di contenuti al giorno e decide in una frazione di secondo cosa merita un secondo sguardo. In questo rumore, un brand che non si fa notare semplicemente non esiste.',
+  points:
+    H.problem?.points ?? [
+      'Pubblichi con costanza, ma i numeri restano piatti.',
+      'I tuoi contenuti non raccontano quanto vali davvero.',
+      'Competitor meno bravi di te sembrano ovunque. Tu, quasi invisibile.',
+    ],
+  turn:
+    H.problem?.turn ||
+    'Non ti serve più budget. Ti serve diventare impossibile da ignorare.',
+  ctaLabel: H.problem?.ctaLabel || 'Parliamone',
+  ctaHref: H.problem?.ctaHref || '#contatti',
+};
+
+// KPI di credibilità (mostrati nella sezione recensioni/proof)
+const kpis = H.manifesto?.kpis ?? [];
+
 const servicesList = H.servicesList ?? [];
 const clients: string[] = H.clients ?? [];
 const locations = H.locations ?? [];
 const reviews = H.reviews ?? [];
+const reviewsAgg = {
+  rating: H.reviewsSection?.rating || '5,0',
+  count: H.reviewsSection?.count || 159,
+};
 const marqueeText = H.marquee?.text || 'REAL GOES VIRAL';
 
 // Team con foto opzionale
@@ -127,50 +154,41 @@ const link = (path: string) => {
   if (path.startsWith('#')) return path;
   return BASE + path.replace(/^\//, '');
 };
+
+// ---------- Hero: parola 3D + definizione con keyword evidenziate ----------
+const heroWord: string = H.hero?.word || 'VIRALITÀ';
+const heroSyllables: string = H.hero?.syllables || 'vi·ra·li·tà';
+const heroWordTag: string = H.hero?.wordTag || 's.f.';
+const heroDefinition: string =
+  H.hero?.definition ||
+  "La viralità è la capacità di un contenuto o di un'informazione di diffondersi in modo estremamente rapido, capillare e incontrollato sul web, grazie alla condivisione a catena da parte degli utenti.";
+const heroKeywords: string[] = (H.hero?.definitionKeywords ||
+  'estremamente rapido, capillare, incontrollato, condivisione a catena')
+  .split(',')
+  .map((k: string) => k.trim())
+  .filter(Boolean);
+const heroDefinitionSource: string = H.hero?.definitionSource || 'Accademia della Crusca';
+const heroPunchline: string = H.hero?.punchline || 'Noi la progettiamo ogni giorno, per brand come il tuo.';
+
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+
+// Evidenzia la prima occorrenza di ogni keyword nella definizione (case-insensitive)
+const heroDefinitionHtml = heroKeywords.reduce((html, kw) => {
+  const pattern = escapeHtml(kw).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return html.replace(new RegExp(`(${pattern})`, 'i'), '<mark class="kw">$1</mark>');
+}, escapeHtml(heroDefinition));
+
+// Livelli eco dietro la parola (profondità 3D crescente)
+const heroEchoes = [1, 2, 3, 4, 5];
 ---
 
-<Layout title={homepage.seo.title} description={homepage.seo.description}>
+<Layout title={homepage.seo.title} description={homepage.seo.description} heroVideo={true}>
 
   <!-- =======================================================================
-       HERO — minimale
+       HERO — NOVA_AI cinematic intro (scroll-scrubbed video)
        ======================================================================= -->
-  <section id="home" class="min-h-screen flex flex-col justify-between pt-28 pb-10 md:pt-36" style="background: #DBEAFE;">
-    <div class="container-custom flex-1 flex flex-col">
-      <div class="flex flex-wrap items-start justify-between gap-4 mb-auto">
-        <p class="mono-label text-[var(--muted)]">
-          {H.hero?.badge || '01 / HOMEPAGE'}
-        </p>
-        <p class="mono-label text-[var(--muted)] hidden md:block text-right whitespace-pre-line">
-          {H.hero?.location || 'BOLOGNA · MODENA — IT\nMOTOR VALLEY'}
-        </p>
-      </div>
-
-      <div class="my-auto py-10 md:py-16">
-        <h1 class="h-display text-[clamp(3rem,13vw,11rem)] leading-[0.9]">
-          <span class="line-reveal block" style="--line-delay:1.5s"><span>{H.hero?.titleLine1 || 'REAL'}</span></span>
-          <span class="line-reveal block" style="--line-delay:1.6s"><span>{H.hero?.titleLine2 || 'GOES'}</span></span>
-          <span class="line-reveal block" style="--line-delay:1.7s">
-            <span>{H.hero?.titleLine3 || 'VIRAL'}<span class="inline-block align-top text-[var(--electric)]">.</span></span>
-          </span>
-        </h1>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end mt-auto">
-        <p class="md:col-span-5 quote-big text-[var(--ink)]">
-          {H.hero?.tagline || 'Agenzia di comunicazione & marketing.'}
-        </p>
-        <div class="md:col-span-4">
-          <a href={H.hero?.ctaHref || '#contatti'} class="btn-primary magnetic-btn" data-cursor="prenota">
-            {H.hero?.ctaLabel || 'Prenota una Call'} <span class="btn-arrow">↗</span>
-          </a>
-        </div>
-        <a href={H.hero?.scrollHref || '#manifesto'} class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
-          <span class="mono-label">{H.hero?.scrollLabel || 'Scroll'}</span>
-          <ArrowDown class="w-4 h-4 animate-bounce" />
-        </a>
-      </div>
-    </div>
-  </section>
+  <NovaHero client:load />
 
   <!-- Marquee -->
   <div class="marquee section-dark">
@@ -191,54 +209,87 @@ const link = (path: string) => {
   </div>
 
   <!-- =======================================================================
-       MANIFESTO / ABOUT (con CTA arcobaleno)
+       PROBLEMA — il cliente deve immedesimarsi subito
        ======================================================================= -->
-  <section id="manifesto" class="section">
-    <div class="container-custom grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-      <div class="lg:col-span-4 reveal-left">
-        <p class="eyebrow">{manifesto.eyebrow}</p>
+  <section id="problema" class="section">
+    <div class="container-custom">
+      <div class="max-w-5xl">
+        <h2 class="section-title whitespace-pre-line reveal">
+          {problem.title}
+        </h2>
       </div>
 
-      <div class="lg:col-span-8 reveal">
-        <h2 class="section-title whitespace-pre-line">
-          {manifesto.title}
-        </h2>
-        <p class="quote-big mt-8 text-[var(--muted)] max-w-2xl">
-          {manifesto.body}
+      <ul class="problem-list mt-20 stagger-children">
+        {problem.points.map((p: string) => (
+          <li class="problem-item">
+            <span class="problem-x" aria-hidden="true">✕</span>
+            <span>{p}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="problem-turn-row mt-16 reveal">
+        <p class="problem-turn">
+          {problem.turn}
         </p>
-
-        {manifesto.tagline && (
-          <p class="mt-8 inline-flex items-start gap-3 max-w-2xl">
-            <span class="mono-label text-[var(--electric)] mt-2 shrink-0">— REAL · VIRAL</span>
-            <span class="quote-big text-[var(--ink)]">{manifesto.tagline}</span>
-          </p>
+        {problem.ctaLabel && (
+          <a
+            href={problem.ctaHref || '#contatti'}
+            class="btn-rainbow shrink-0"
+            data-cursor="parliamone"
+            aria-label={problem.ctaLabel}
+          >
+            <span class="btn-rainbow-inner">
+              {problem.ctaLabel}
+              <span class="btn-rainbow-arrow" aria-hidden="true">↗</span>
+            </span>
+          </a>
         )}
+      </div>
+    </div>
+  </section>
 
-        {manifesto.ctaLabel && (
-          <div class="mt-10">
-            <a
-              href={manifesto.ctaHref || '#contatti'}
-              class="btn-rainbow"
-              data-cursor="prenota"
-              aria-label={manifesto.ctaLabel}
-            >
-              <span class="btn-rainbow-inner">
-                {manifesto.ctaLabel}
-                <span class="btn-rainbow-arrow" aria-hidden="true">↗</span>
-              </span>
-            </a>
-          </div>
-        )}
-
-        <!-- KPIs -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-14 stagger-children">
-          {manifesto.kpis.map((k: any) => (
-            <div class="kpi">
-              <span class="num mono-num" data-counter={k.num} data-suffix={k.suffix}>0{k.suffix}</span>
-              <span class="label">{k.label}</span>
-            </div>
-          ))}
+  <!-- =======================================================================
+       SERVIZI — con icone animate
+       ======================================================================= -->
+  <section id="servizi" class="section">
+    <div class="container-custom">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
+        <div class="lg:col-span-5 reveal-left">
+          <h2 class="section-title">{H.servicesSection?.title || 'Quello che facciamo, ogni giorno.'}</h2>
         </div>
+        <div class="lg:col-span-7 reveal">
+          <p class="quote-big scrub-text text-[var(--ink)] whitespace-pre-line">
+            {H.servicesSection?.intro || 'Un reparto marketing completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand.'}
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-[var(--hairline)] stagger-children">
+        {servicesList.map((s: any) => (
+          <a href="#contatti" class="service-card" data-cursor="richiedi">
+            <div class="flex items-baseline justify-between gap-4">
+              <span class="mono-label text-[var(--muted)]">{s.num}</span>
+              <span class="sv-arrow mono" aria-hidden="true">↗</span>
+            </div>
+            <div class="sv-head mt-4 flex items-start gap-4">
+              {s.icon && s.icon !== 'none' && (
+                <span class="sv-icon-wrap text-[var(--ink)]">
+                  <ServiceIcons name={s.icon} />
+                </span>
+              )}
+              <h3 class="sv-title">{s.title}</h3>
+            </div>
+            <p class="text-[var(--muted)] mt-3 max-w-md">{s.desc}</p>
+            {s.bullets && s.bullets.length > 0 && (
+              <ul class="sv-bullets mt-6">
+                {s.bullets.map((b: string) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            )}
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -246,12 +297,11 @@ const link = (path: string) => {
   <!-- =======================================================================
        PORTFOLIO — griglia compatta con video hover
        ======================================================================= -->
-  <section id="portfolio" class="section-tight section-dark">
+  <section id="portfolio" class="section-tight section-dark noise-overlay">
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">{H.portfolioSection?.eyebrow || '02 — Portfolio'}</p>
-          <h2 class="section-title mt-4 max-w-3xl">
+          <h2 class="section-title max-w-3xl">
             {H.portfolioSection?.title || 'I lavori migliori, cliente per cliente.'}
           </h2>
         </div>
@@ -461,127 +511,56 @@ const link = (path: string) => {
   </script>
 
   <!-- =======================================================================
-       SERVIZI — con icone animate
-       ======================================================================= -->
-  <section id="servizi" class="section">
-    <div class="container-custom">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-12">
-        <div class="lg:col-span-5 reveal-left">
-          <p class="eyebrow">{H.servicesSection?.eyebrow || '03 — Servizi'}</p>
-          <h2 class="section-title mt-4">{H.servicesSection?.title || 'Quello che facciamo, ogni giorno.'}</h2>
-        </div>
-        <div class="lg:col-span-7 reveal lg:pt-20">
-          <p class="quote-big text-[var(--muted)] whitespace-pre-line">
-            {H.servicesSection?.intro || 'Un reparto marketing esterno, completo. Strategia, contenuti, performance.\nNessun pacchetto preconfezionato: solo quello che serve al tuo brand.'}
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-[var(--hairline)] stagger-children">
-        {servicesList.map((s: any) => (
-          <a href="#contatti" class="service-card" data-cursor="richiedi">
-            <div class="flex items-baseline justify-between gap-4">
-              <span class="mono-label text-[var(--muted)]">{s.num}</span>
-              <span class="sv-arrow mono" aria-hidden="true">↗</span>
-            </div>
-            <div class="sv-head mt-4 flex items-start gap-4">
-              {s.icon && s.icon !== 'none' && (
-                <span class="sv-icon-wrap text-[var(--ink)]">
-                  <ServiceIcons name={s.icon} />
-                </span>
-              )}
-              <h3 class="sv-title">{s.title}</h3>
-            </div>
-            <p class="text-[var(--muted)] mt-3 max-w-md">{s.desc}</p>
-            {s.bullets && s.bullets.length > 0 && (
-              <ul class="sv-bullets mt-6">
-                {s.bullets.map((b: string) => (
-                  <li>{b}</li>
-                ))}
-              </ul>
-            )}
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- =======================================================================
-       TEAM
-       ======================================================================= -->
-  <section id="team" class="section section-dark">
-    <div class="container-custom">
-      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
-        <div class="reveal-left">
-          <p class="eyebrow">{H.teamSection?.eyebrow || '04 — Team'}</p>
-          <h2 class="section-title mt-4 max-w-3xl">
-            {H.teamSection?.title || 'Persone vere dietro ogni post.'}
-          </h2>
-        </div>
-        <p class="mono-label text-white/60 max-w-xs">
-          {H.teamSection?.subtitle || 'Un team piccolo, selezionato, ossessionato dal risultato.'}
-        </p>
-      </div>
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
-        {team.map((m: any) => (
-          <div class="portfolio-card !aspect-[3/4] bg-[var(--ink-soft)]">
-            {m.photo ? (
-              <Image
-                src={m.photo}
-                alt={m.name}
-                width={500}
-                height={667}
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            ) : (
-              <div class="w-full h-full flex items-center justify-center">
-                <span class="h-display text-[clamp(3rem,10vw,6rem)] text-white/20 select-none">{m.initials}</span>
-              </div>
-            )}
-            <div class="meta" style="transform: translateY(0); opacity: 1;">
-              <div>
-                <span class="tag">{m.role}</span>
-                <span class="title block mt-1">{m.name}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- =======================================================================
-       RECENSIONI — con link Google
+       RECENSIONI — proof reale da Google (media 5,0 su 159 recensioni)
        ======================================================================= -->
   <section id="recensioni" class="section">
     <div class="container-custom">
-      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
-        <div class="reveal-left">
-          <p class="eyebrow">{H.reviewsSection?.eyebrow || '05 — Recensioni'}</p>
-          {googleReviewsUrl ? (
-            <a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" class="section-title mt-4 max-w-3xl block hover:opacity-70 transition-opacity" data-cursor="vedi su google">
-              {H.reviewsSection?.title || 'Lo dicono i nostri clienti.'}
+      <div class="reviews-proof">
+        <div class="reviews-rating reveal-left">
+          <div class="rating-badge">
+            <span class="rating-num">{reviewsAgg.rating}</span>
+            <span class="rating-stars" role="img" aria-label={`${reviewsAgg.rating} stelle su 5`}>
+              <Star class="w-5 h-5" fill="currentColor" strokeWidth={0} />
+              <Star class="w-5 h-5" fill="currentColor" strokeWidth={0} />
+              <Star class="w-5 h-5" fill="currentColor" strokeWidth={0} />
+              <Star class="w-5 h-5" fill="currentColor" strokeWidth={0} />
+              <Star class="w-5 h-5" fill="currentColor" strokeWidth={0} />
+            </span>
+            <span class="rating-google">su Google</span>
+          </div>
+          <p class="rating-meta">
+            Media reale su <strong>{reviewsAgg.count} recensioni</strong> verificate.
+          </p>
+          <h2 class="section-title mt-8 max-w-2xl whitespace-pre-line">
+            {H.reviewsSection?.title || 'Non lo diciamo noi.\nLo dicono i clienti, su Google.'}
+          </h2>
+          {googleReviewsUrl && (
+            <a
+              href={googleReviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-viral mt-10"
+              data-cursor="leggi su google"
+            >
+              Leggi le recensioni su Google <span class="btn-arrow">↗</span>
             </a>
-          ) : (
-            <h2 class="section-title mt-4 max-w-3xl">{H.reviewsSection?.title || 'Lo dicono i nostri clienti.'}</h2>
           )}
         </div>
-        {googleReviewsUrl && (
-          <a
-            href={googleReviewsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-outline"
-            data-cursor="vedi tutte"
-          >
-            Tutte su Google <span class="btn-arrow">↗</span>
-          </a>
+
+        {kpis.length > 0 && (
+          <div class="reviews-kpis stagger-children">
+            {kpis.map((k: any) => (
+              <div class="kpi">
+                <span class="num mono-num" data-counter={k.num} data-suffix={k.suffix}>0{k.suffix}</span>
+                <span class="label">{k.label}</span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-b border-[var(--hairline)] stagger-children">
+      {reviews.length > 0 && (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border-t border-b border-[var(--hairline)] stagger-children mt-16">
         {reviews.map((r: any) => {
           const href = r.googleUrl || googleReviewsUrl;
           return href ? (
@@ -630,6 +609,52 @@ const link = (path: string) => {
           );
         })}
       </div>
+      )}
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       TEAM
+       ======================================================================= -->
+  <section id="team" class="section section-dark noise-overlay">
+    <div class="container-custom">
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
+        <div class="reveal-left">
+          <h2 class="section-title max-w-3xl">
+            {H.teamSection?.title || 'Persone vere dietro ogni post.'}
+          </h2>
+        </div>
+        <p class="mono-label text-white/60 max-w-xs" data-parallax="0.18">
+          {H.teamSection?.subtitle || 'Un team piccolo, selezionato, ossessionato dal risultato.'}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" data-team-grid>
+        {team.map((m: any) => (
+          <div class="portfolio-card !aspect-[3/4] bg-[var(--ink-soft)]" data-tilt>
+            {m.photo ? (
+              <Image
+                src={m.photo}
+                alt={m.name}
+                width={500}
+                height={667}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="h-display text-[clamp(3rem,10vw,6rem)] text-white/20 select-none">{m.initials}</span>
+              </div>
+            )}
+            <div class="meta" style="transform: translateY(0); opacity: 1;">
+              <div>
+                <span class="tag">{m.role}</span>
+                <span class="title block mt-1">{m.name}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -640,8 +665,7 @@ const link = (path: string) => {
     <div class="container-custom">
       <div class="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div class="reveal-left">
-          <p class="eyebrow">{H.articlesSection?.eyebrow || '06 — Articoli'}</p>
-          <h2 class="section-title mt-4 max-w-3xl">{H.articlesSection?.title || 'Interviste & approfondimenti.'}</h2>
+          <h2 class="section-title max-w-3xl">{H.articlesSection?.title || 'Interviste & approfondimenti.'}</h2>
         </div>
         <a href={H.articlesSection?.ctaHref || '#contatti'} class="btn-outline" data-cursor="scrivici">
           {H.articlesSection?.ctaLabel || 'Suggeriscine uno'} <span class="btn-arrow">↗</span>
@@ -710,11 +734,10 @@ const link = (path: string) => {
     <div class="container-custom relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
         <div class="lg:col-span-6 reveal-left">
-          <p class="eyebrow text-white/70">{H.contact?.eyebrow || '07 — Contatti'}</p>
-          <h2 class="section-title mt-4 text-[var(--paper)]">
+          <h2 class="section-title text-[var(--paper)]">
             {H.contact?.title || 'Prenota una call.'}
           </h2>
-          <p class="quote-big mt-6 text-white/85 max-w-xl">
+          <p class="quote-big scrub-text mt-6 text-white/85 max-w-xl">
             {H.contact?.description || 'Raccontaci il progetto: ti rispondiamo entro 24 ore.'}
           </p>
 
