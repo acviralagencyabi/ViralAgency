@@ -131,6 +131,13 @@ const accessKey = settings.form?.web3formsKey || '';
         successMsg?.classList.remove('hidden');
         errorMsg?.classList.add('hidden');
         setTimeout(() => successMsg?.classList.add('hidden'), 5000);
+  if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submit_contact', {
+        event_category: 'Lead',
+        event_label: 'Form contatti',
+      });
+    }
+}
       } else {
         throw new Error('Form submission failed');
       }
