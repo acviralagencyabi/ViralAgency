@@ -844,4 +844,30 @@ const heroEchoes = [1, 2, 3, 4, 5];
     </div>
   </section>
 
+
+<script>
+  // Tracciamento WhatsApp
+  document.querySelectorAll('a[data-cursor="whatsapp"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click_whatsapp', {
+          event_category: 'Lead',
+          event_label: 'WhatsApp contact',
+        });
+      }
+    });
+  });
+
+  // Tracciamento telefono
+  document.querySelectorAll('a[data-cursor="chiamaci"]').forEach((el) => {
+    el.addEventListener('click', () => {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click_phone', {
+          event_category: 'Lead',
+          event_label: 'Phone contact',
+        });
+      }
+    });
+  });
+</script>
 </Layout>
