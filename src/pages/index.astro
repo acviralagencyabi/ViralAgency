@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import ServiceIcons from '../components/ServiceIcons.astro';
-import NovaHero from '../components/nova/NovaHero';
 import { ArrowDown, Instagram, Facebook, Phone, Mail, MessageCircle, Star } from 'lucide-astro';
 import { cleanPhoneHref, whatsappHref } from '../lib/contact';
 
@@ -183,12 +182,46 @@ const heroDefinitionHtml = heroKeywords.reduce((html, kw) => {
 const heroEchoes = [1, 2, 3, 4, 5];
 ---
 
-<Layout title={homepage.seo.title} description={homepage.seo.description} heroVideo={true}>
+<Layout title={homepage.seo.title} description={homepage.seo.description} >
 
-  <!-- =======================================================================
-       HERO — NOVA_AI cinematic intro (scroll-scrubbed video)
+    <!-- =======================================================================
+       HERO — minimale
        ======================================================================= -->
-  <NovaHero client:load />
+  <section id="home" class="min-h-screen flex flex-col justify-between pt-28 pb-10 md:pt-36" style="background: #DBEAFE;">
+    <div class="container-custom flex-1 flex flex-col">
+      <div class="flex flex-wrap items-start justify-between gap-4 mb-auto">
+        <p class="mono-label text-[var(--muted)]">
+          {H.hero?.badge || '01 / HOMEPAGE'}
+        </p>
+        <p class="mono-label text-[var(--muted)] hidden md:block text-right whitespace-pre-line">
+          {H.hero?.location || 'BOLOGNA · MODENA — IT\nMOTOR VALLEY'}
+        </p>
+      </div>
+      <div class="my-auto py-10 md:py-16">
+        <h1 class="h-display text-[clamp(3rem,13vw,11rem)] leading-[0.9]">
+          <span class="line-reveal block" style="--line-delay:1.5s"><span>{H.hero?.titleLine1 || 'REAL'}</span></span>
+          <span class="line-reveal block" style="--line-delay:1.6s"><span>{H.hero?.titleLine2 || 'GOES'}</span></span>
+          <span class="line-reveal block" style="--line-delay:1.7s">
+            <span>{H.hero?.titleLine3 || 'VIRAL'}<span class="inline-block align-top text-[var(--electric)]">.</span></span>
+          </span>
+        </h1>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-end mt-auto">
+        <p class="md:col-span-5 quote-big text-[var(--ink)]">
+          {H.hero?.tagline || 'Agenzia di comunicazione & marketing.'}
+        </p>
+        <div class="md:col-span-4">
+          <a href={H.hero?.ctaHref || '#contatti'} class="btn-primary magnetic-btn" data-cursor="prenota">
+            {H.hero?.ctaLabel || 'Prenota una Call'} <span class="btn-arrow">↗</span>
+          </a>
+        </div>
+        <a href={H.hero?.scrollHref || '#manifesto'} class="md:col-span-3 flex items-center justify-start md:justify-end gap-3 text-[var(--muted)] hover:text-[var(--ink)] transition-colors" aria-label="Scorri per esplorare">
+          <span class="mono-label">{H.hero?.scrollLabel || 'Scroll'}</span>
+          <ArrowDown class="w-4 h-4 animate-bounce" />
+        </a>
+      </div>
+    </div>
+  </section>
 
   <!-- Marquee -->
   <div class="marquee section-dark">
