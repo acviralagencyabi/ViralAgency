@@ -193,10 +193,19 @@ const schemaOrg = {
         const cursorLabel = cursor?.querySelector<HTMLSpanElement>('.label');
 
         if (cursor) {
-          // No inertia: cursor follows the mouse 1:1.
-          document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-          });
+                 // Inertia: cursor eases toward the mouse (lerp factor 0.18).
+        let tx = 0, ty = 0, cx = 0, cy = 0;
+        document.addEventListener('mousemove', (e) => {
+          tx = e.clientX;
+          ty = e.clientY;
+        });
+        function rafCursor() {
+          cx += (tx - cx) * 0.18;
+          cy += (ty - cy) * 0.18;
+          cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+          requestAnimationFrame(rafCursor);
+        }
+        requestAnimationFrame(rafCursor);
 
           document.addEventListener('mouseleave', () => (cursor.style.opacity = '0'));
           document.addEventListener('mouseenter', () => (cursor.style.opacity = '1'));
