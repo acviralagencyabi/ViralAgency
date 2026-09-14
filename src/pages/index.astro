@@ -892,7 +892,7 @@ const heroEchoes = [1, 2, 3, 4, 5];
   });
 
   // Tracciamento telefono
-  document.querySelectorAll('a[data-cursor="chiamaci"]').forEach((el) => {
+ document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
     el.addEventListener('click', () => {
       if (typeof gtag !== 'undefined') {
         gtag('event', 'click_phone', {
