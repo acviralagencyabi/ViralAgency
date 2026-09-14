@@ -62,7 +62,7 @@ const locationWhatsappUrl = (loc: any) =>
       <!-- Brand -->
       <div class="col-span-2">
         <p class="mono-label text-white/60 mb-3">Brand</p>
-        <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto" />
+        <Image src={logoFull} alt={globalSettings.companyName} width={320} height={140} class="h-20 w-auto" format="webp" quality={90} loading="lazy" />
         <p class="mono-label text-white/40 mt-4">
           {globalSettings.companyName} — {footerTagline}
         </p>

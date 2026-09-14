@@ -77,8 +77,16 @@ const schemaOrg = {
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <!-- NOVA_AI hero display font -->
-    <link href="https://db.onlinewebfonts.com/c/4556933d6966c60eda45bebad34d9c90?family=Flexo+Soft+Medium" rel="stylesheet" />
+    <!-- NOVA_AI hero display font — caricato in modo non-blocking (preload + swap onload) -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://db.onlinewebfonts.com/c/4556933d6966c60eda45bebad34d9c90?family=Flexo+Soft+Medium"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link href="https://db.onlinewebfonts.com/c/4556933d6966c60eda45bebad34d9c90?family=Flexo+Soft+Medium" rel="stylesheet" />
+    </noscript>
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
