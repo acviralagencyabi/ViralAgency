@@ -2427,3 +2427,20 @@ body.body-nova .nav-root.is-scrolled:not(.is-over-hero) {
   outline: 2px solid var(--electric);
   outline-offset: 3px;
 }
+
+/* =========================================================================
+   Homepage hero — mobile (< 768px)
+   1. Titolo più grande per dominare il viewport azzurro
+      (clamp desktop 13vw → 18vw mobile, ~+38% a 390px, cappato a 6rem).
+   2. min-height a 85vh (invece di 100vh Tailwind) così il marquee nero
+      "REAL GOES VIRAL" resta sempre visibile in basso al primo colpo
+      d'occhio, senza dover scrollare. Su desktop il layout è invariato.
+   ========================================================================= */
+@media (max-width: 768px) {
+  #home {
+    min-height: 85vh;
+  }
+  #home h1.h-display {
+    font-size: clamp(3rem, 18vw, 6rem);
+  }
+}
